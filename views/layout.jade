@@ -1,7 +1,14 @@
 doctype html
-html
+html(ng-app='myApp', lang='en')
   head
-    title= title
-    link(rel='stylesheet', href='/stylesheets/style.css')
+    title= 'LED Control Panel'
+    meta(name='viewport', content='width=device-width', initial-scale='1')
+    script(src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.min.js")
+    script(src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.6/angular-route.min.js")
+    script(src='https://ajax.googleapis.com/ajax/libs/angularjs/1.4.6/angular-animate.js')
+    //script(src='javascripts/1_angular_app.js')
+    script(src='scripts/app.js')
+    base(href='/')
+
   body
     block content
