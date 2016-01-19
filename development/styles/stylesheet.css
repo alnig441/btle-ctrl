@@ -1,0 +1,16 @@
+body {
+    margin: auto;
+
+}
+
+ul {
+    margin: auto;
+    display: table;
+    background-color: #00B7FF;
+    padding: 10px;
+    list-style: none;
+}
+
+li, input {
+    display: inline;
+}

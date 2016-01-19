@@ -2,7 +2,7 @@ module.exports = function(grunt) {
 
     grunt.initConfig({
         jshint: {
-            files: ['gruntfile.js', paths.from.scripts ],
+            files: ['gruntfile.js', paths.from.scripts],
             options: {
                 globals: {
                     jquery: true
@@ -12,11 +12,25 @@ module.exports = function(grunt) {
 
         watch: {
             scripts: {
-                files: [paths.from.scripts, paths.from.templates, paths.from.styles],
-                tasks: ['jshint', 'jade', 'concat', 'uglify'],
+                files: [paths.from.scripts],
+                tasks: ['jshint', 'concat', 'uglify'],
                 options: {
                     spawn: false
                 }
+            },
+            templates: {
+                files: [paths.from.templates],
+                tasks: ['jshint', 'jade'],
+                options: {
+                    spawn: false
+                }
+            },
+            styles: {
+                files: [paths.from.styles],
+                tasks: ['jshint','cssmin'],
+                options: {
+                    spawn: false
+                    }
             }
         },
 
@@ -52,6 +66,18 @@ module.exports = function(grunt) {
                     './public/scripts/app.min.js': ['./public/scripts/app.js']
                 }
             }
+        },
+
+        cssmin: {
+            target: {
+                files: [{
+                    expand: true,
+                    cwd: './development/styles/',
+                    src: '*.css',
+                    dest: paths.to.styles,
+                    ext: '.min.css'
+                }]
+            }
         }
 
     });
@@ -61,11 +87,12 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-uglify');
+    grunt.loadNpmTasks('grunt-contrib-cssmin');
 
     grunt.registerTask('default', ['jade', 'jshint', 'concat', 'uglify']);
 };
 
 var paths = {
     from: {scripts: './development/scripts/*.js', templates: './development/templates/*.jade', styles: './development/styles/*.css', images: './development/images/*.*'},
-    to: {scripts: './public/scripts/app.js', templates: './public/views/', styles: './public/styles/', images: './public/images/'}
+    to: {scripts: './public/scripts/app.js', templates: './public/views/', styles: './public/stylesheets/', images: './public/images/'}
 };
