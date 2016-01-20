@@ -4,13 +4,42 @@ body {
 }
 
 ul {
-    margin: auto;
-    display: table;
-    background-color: #00B7FF;
-    padding: 10px;
     list-style: none;
+    margin:auto;
+    padding:0px;
+    width: 350px;
 }
 
-li, input {
+.login {
+    margin: auto;
+    display: table;
+    background-color: #A7D0FA;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.login input {
     display: inline;
+    width: 75px;
+}
+
+.panel {
+    display:inline-block;
+    margin: auto;
+    list-style:none;
+}
+
+.outer{
+    margin: 0px;
+    /*width: 250px;*/
+}
+
+.room {
+    diplay:inline;
+    width: 75px;
+    height: 75px;
+    margin: 10px;
+    padding: 0px;
+    border: 1px solid;
+    border-radius: 5px;
 }

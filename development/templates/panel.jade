@@ -1,9 +1,12 @@
 ul(ng-controller='loginCtrl')
-    li Admin:
+    li.login Admin:
         input(type='text', placeholder='username', ng-model='form.username')
         input(type='password', ng-model='form.password')
         input(type='submit', ng-click='submit()')
 ul
-    li
-        label(for='selector') Select Room
-        select(name='selector')
+    .outer
+        li.panel
+            button.room
+        li.panel
+            button.room
+
