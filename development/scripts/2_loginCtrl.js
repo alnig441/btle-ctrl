@@ -12,4 +12,8 @@ app.controller('loginCtrl',['$scope', '$http', '$location', function($scope, $ht
                 else{$location.path('/panel');}
             });
     };
+
+    $scope.logout = function(){
+        $location.path('/panel');
+    };
 }]);

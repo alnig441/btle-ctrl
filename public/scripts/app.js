@@ -29,6 +29,10 @@ app.config(function($routeProvider, $locationProvider){
                 else{$location.path('/panel');}
             });
     };
+
+    $scope.logout = function(){
+        $location.path('/panel');
+    };
 }]);
 ;app.controller('adminCtrl',['$scope', '$http', '$location', function($scope, $http, $location){
 

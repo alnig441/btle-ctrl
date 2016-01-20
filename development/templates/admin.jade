@@ -1,4 +1,15 @@
-ul
-    li Scan Device
-    li Add Device
-    li Remove Device
+ul(ng-controller='loginCtrl')
+    li.navigate Admin:
+        button(ng-click='logout()') log out
+table
+    tr
+        td
+            button.outer SCAN
+        td
+            button.outer ADD
+    tr
+        td
+            button.outer UPDATE
+        td
+            button.outer REMOVE
+

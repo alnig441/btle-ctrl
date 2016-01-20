@@ -1,12 +1,16 @@
 ul(ng-controller='loginCtrl')
-    li.login Admin:
+    li.navigate Admin:
         input(type='text', placeholder='username', ng-model='form.username')
         input(type='password', ng-model='form.password')
         input(type='submit', ng-click='submit()')
-ul
-    .outer
-        li.panel
-            button.room
-        li.panel
-            button.room
-
+    table
+        tr
+            td
+                button.outer ON/OFF
+            td
+                button.outer OPTIONS
+        tr
+            td
+                button.outer ON/OFF
+            td
+                button.outer OPTIONS

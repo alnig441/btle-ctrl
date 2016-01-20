@@ -10,7 +10,7 @@ ul {
     width: 350px;
 }
 
-.login {
+.navigate {
     margin: auto;
     display: table;
     background-color: #A7D0FA;
@@ -18,28 +18,33 @@ ul {
     border-radius: 5px;
 }
 
-.login input {
+.navigate input {
     display: inline;
     width: 75px;
 }
 
-.panel {
-    display:inline-block;
+table {
+    display: table;
     margin: auto;
-    list-style:none;
+    margin-top: 25px;
+    padding: 15px;
+    border: 2px solid;
+    border-radius: 5px;
 }
 
-.outer{
-    margin: 0px;
-    /*width: 250px;*/
-}
-
-.room {
-    diplay:inline;
-    width: 75px;
-    height: 75px;
-    margin: 10px;
-    padding: 0px;
+td {
+    margin: 20px;
+    padding: 10px;
     border: 1px solid;
     border-radius: 5px;
+}
+
+.outer {
+    width: 75px;
+    height: 75px;
+    border-radius: 5px;
+}
+
+.adv {
+    
 }
