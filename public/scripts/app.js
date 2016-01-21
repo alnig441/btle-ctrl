@@ -22,7 +22,6 @@ app.config(function($routeProvider, $locationProvider){
     $scope.submit = function(){
         $http.post('/login/authenticate', $scope.form)
             .then(function(response){
-                console.log('response from post: ', response);
                 if(response.data === true){
                     $location.path('/admin');
                 }
@@ -36,9 +35,35 @@ app.config(function($routeProvider, $locationProvider){
 }]);
 ;app.controller('adminCtrl',['$scope', '$http', '$location', function($scope, $http, $location){
 
-    $scope.mac = [];
+    $scope.scanDev = function(){
+        $http.get('/admin/')
+            .then(function(response){
+                console.log('svar fra hcitool: ', response.data);
+            });
+
+    };
+
+    $scope.addDev = function(){
+
+    };
+
+    $scope.updateDev = function(){
+
+    };
+
+    $scope.deleteDev = function(){
+
+    };
 
 }]);
 ;app.controller('panelCtrl',['$scope', '$http', '$location', function($scope, $http, $location){
+
+    $scope.newState = function(){
+
+    };
+
+    $scope.showOptions = function(){
+
+    };
 
 }]);

@@ -1,15 +1,15 @@
 ul(ng-controller='loginCtrl')
     li.navigate Admin:
         button(ng-click='logout()') log out
-table
+table(ng-controller='adminCtrl')
     tr
         td
-            button.outer SCAN
+            button.outer(ng-click='scanDev()') SCAN
         td
-            button.outer ADD
+            button.outer(ng-click='addDev()') ADD
     tr
         td
-            button.outer UPDATE
+            button.outer(ng-click='updateDev()') UPDATE
         td
-            button.outer REMOVE
+            button.outer(ng-click='deleteDev()') REMOVE
 
