@@ -9,18 +9,29 @@ router.put('/', function(req, res, error){
 
 });
 
-router.get('/', function(req, res, error){
+router.get('/reset', function(req, res, error){
+
+    console.log('...resetting...');
+
+    var child = spawn('sudo', ['hciconfig', '-a', 'hci1', 'reset']);
+
+    child.on('exit', function(code){
+        res.send('child process exit code: ', code);
+    })
+});
+
+router.get('/scan', function(req, res, error){
 
     var arr = [];
 
     console.log('..scanning..');
 
     var reset = spawn('sudo', ['hciconfig', '-a','hci1', 'reset']);
-    var chilid = spawn('sudo', ['hcitool', 'lescan']);
+    var child = spawn('sudo', ['hcitool', 'lescan']);
 
     child.stdout.on('data', function(data){
         arr = data.toString().split(/\n/);
-        res.send(array);
+        res.send(arr);
         child.kill();
     });
 
