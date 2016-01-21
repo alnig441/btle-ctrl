@@ -12,7 +12,7 @@ router.get('/', function(req, res, error){
 
     console.log('..scanning..');
 
-    var child = spawn('hcitool', ['lescan']);
+    var child = spawn('sudo', ['hcitool', 'lescan']);
 
     child.stdout.on('data', function(data){
         console.log(data.toString());
