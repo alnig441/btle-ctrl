@@ -5,9 +5,12 @@ app.controller('adminCtrl',['$scope', '$http', '$location', function($scope, $ht
             .then(function(response){
                 console.log(response);
             })
-        $http.get('/admin/scan')
             .then(function(response){
-                console.log('svar fra hcitool: ', response.data);
+                $http.get('/admin/scan')
+                    .then(function(response){
+                        console.log(response);
+                    });
+
             });
 
     };

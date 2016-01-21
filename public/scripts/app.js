@@ -34,9 +34,16 @@ app.config(function($routeProvider, $locationProvider){
 ;app.controller('adminCtrl',['$scope', '$http', '$location', function($scope, $http, $location){
 
     $scope.scanDev = function(){
-        $http.get('/admin')
+        $http.get('/admin/reset')
             .then(function(response){
-                console.log('svar fra hcitool: ', response.data);
+                console.log(response);
+            })
+            .then(function(response){
+                $http.get('/admin/scan')
+                    .then(function(response){
+                        console.log(response);
+                    });
+
             });
 
     };

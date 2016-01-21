@@ -17,7 +17,7 @@ router.get('/reset', function(req, res, error){
 
     child.on('exit', function(code){
         res.send('child process exit code: ', code);
-    })
+    });
 });
 
 router.get('/scan', function(req, res, error){
