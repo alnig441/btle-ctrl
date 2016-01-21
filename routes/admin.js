@@ -17,14 +17,15 @@ router.get('/', function(req, res, error){
     var child = spawn('sudo', ['hcitool', 'lescan']);
 
     child.stdout.on('data', function(data){
-        console.log(data.toString());
         arr = data.toString().split(/\n/);
         child.kill();
     });
 
     child.on('exit', function(code){
         console.log('spawned process ended on exit code: ', code);
-    })
+    });
+
+    console.log('this is from hcitool: ', arr);
 
 });
 
