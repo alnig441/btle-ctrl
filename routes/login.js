@@ -8,8 +8,6 @@ var connectionString = process.env.DATABASE_URL || 'postgres://localhost:5432/bt
 router.post('/authenticate',
     function(req, res){
 
-        console.log('authenticate: ', req.body);
-
         pg.connect(connectionString, function (err, client, done) {
 
             var query = client.query("SELECT * FROM USERS WHERE username='" + req.body.username +"'", function(error, result) {
@@ -17,8 +15,6 @@ router.post('/authenticate',
                     res.send(error.detail);
                 }
                 else if (result.rowCount > 0) {
-
-                    console.log(result);
 
                     user = result.rows[0];
 

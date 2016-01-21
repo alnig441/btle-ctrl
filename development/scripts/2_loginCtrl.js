@@ -1,7 +1,5 @@
 app.controller('loginCtrl',['$scope', '$http', '$location', function($scope, $http, $location){
 
-    console.log('loginCtrl: ', $scope);
-
     $scope.submit = function(){
         $http.post('/login/authenticate', $scope.form)
             .then(function(response){
