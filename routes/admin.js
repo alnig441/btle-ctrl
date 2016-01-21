@@ -26,7 +26,6 @@ router.get('/scan', function(req, res, error){
 
     console.log('..scanning..');
 
-    var reset = spawn('sudo', ['hciconfig', '-a','hci1', 'reset']);
     var child = spawn('sudo', ['hcitool', 'lescan']);
 
     child.stdout.on('data', function(data){
