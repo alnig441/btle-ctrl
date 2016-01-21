@@ -10,12 +10,16 @@ router.put('/', function(req, res, error){
 
 router.get('/', function(req, res, error){
 
+    var arr = [];
+
     console.log('..scanning..');
 
     var child = spawn('sudo', ['hcitool', 'lescan']);
 
     child.stdout.on('data', function(data){
         console.log(data.toString());
+        arr = data.toString().split(/\n/);
+        child.kill();
     });
 
     child.on('exit', function(code){
