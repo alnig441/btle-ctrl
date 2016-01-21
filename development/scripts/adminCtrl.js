@@ -1,7 +1,7 @@
 app.controller('adminCtrl',['$scope', '$http', '$location', function($scope, $http, $location){
 
     $scope.scanDev = function(){
-        $http.get('/admin/')
+        $http.get('/admin/exec')
             .then(function(response){
                 console.log('svar fra hcitool: ', response.data);
             });
