@@ -3,11 +3,21 @@ var express = require('express'),
 var pg = require('pg');
 var spawn = require('child_process').spawn;
 var exec = require('child_process').exec;
+var call = require('../public/scripts/myFunctions.min.js');
+
 var connectionString = process.env.DATABASE_URL || 'postgres://localhost:5432/btle-ctrl';
 
 router.put('/', function(req, res, error){
 
 });
+
+router.get('/test', function(req, res, error){
+    var tmp = ['ab', 'ab', 'ab', 'bc', 'ab', 'cd', 'bc', 'ab'];
+
+    var x = call.cleanArray(tmp);
+    console.log(x);
+})
+
 
 router.get('/reset', function(req, res, error){
 
@@ -30,6 +40,7 @@ router.get('/scan', function(req, res, error){
 
     child.stdout.on('data', function(data){
         arr = data.toString().split(/\n/);
+
         res.send(arr);
         child.kill();
     });

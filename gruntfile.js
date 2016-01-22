@@ -31,6 +31,13 @@ module.exports = function(grunt) {
                 options: {
                     spawn: false
                     }
+            },
+            modules: {
+                files: [paths.from.modules],
+                tasks: ['jshint', 'uglify'],
+                options: {
+                    spawn: false
+                }
             }
         },
 
@@ -56,14 +63,15 @@ module.exports = function(grunt) {
         },
 
         uglify: {
-            options: {
-                compress: {
-                    drop_console: true
-                }
-            },
+            //options: {
+            //    compress: {
+            //        drop_console: true
+            //    }
+            //},
             my_target: {
                 files: {
-                    './public/scripts/app.min.js': ['./public/scripts/app.js']
+                    './public/scripts/app.min.js': ['./public/scripts/app.js'],
+                    './public/scripts/myFunctions.min.js': ['./development/modules/myFunctions.js']
                 }
             }
         },
@@ -93,6 +101,6 @@ module.exports = function(grunt) {
 };
 
 var paths = {
-    from: {scripts: './development/scripts/*.js', templates: './development/templates/*.jade', styles: './development/styles/*.css', images: './development/images/*.*'},
+    from: {scripts: './development/scripts/*.js', templates: './development/templates/*.jade', styles: './development/styles/*.css', images: './development/images/*.*', modules: './development/modules/*.js'},
     to: {scripts: './public/scripts/app.js', templates: './public/views/', styles: './public/stylesheets/', images: './public/images/'}
 };
