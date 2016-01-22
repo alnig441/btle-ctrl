@@ -1,22 +1,20 @@
 var call = {
     cleanArray: function(array){
 
-        var compArray = array.sort();
+        array.push('zzzzzzzzzzzzzzz');
 
+        var y = [];
 
-        console.log(array, array.length);
+        array.sort().reduce(function(prev, curr, index, array){
+            prev = array[index -1];
 
-        array.reduce(function(previousValue, currentValue, currentIndex){
-            if(previousValue !== currentValue){
-                console.log(currentIndex);
-                //compArray.shift();
-                compArray.splice(currentIndex -1, 1);
-                console.log(compArray.length);
+            if(prev != curr){
+                y.push(prev);
             }
-        }, compArray[0]);
 
-        return compArray;
+        });
 
+        return y;
     }
 };
 

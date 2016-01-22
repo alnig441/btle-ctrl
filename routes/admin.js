@@ -11,14 +11,6 @@ router.put('/', function(req, res, error){
 
 });
 
-router.get('/test', function(req, res, error){
-    var tmp = ['ab', 'ab', 'ab', 'bc', 'ab', 'cd', 'bc', 'ab'];
-
-    var x = call.cleanArray(tmp);
-    console.log(x);
-})
-
-
 router.get('/reset', function(req, res, error){
 
     console.log('...resetting...');
@@ -41,7 +33,8 @@ router.get('/scan', function(req, res, error){
     child.stdout.on('data', function(data){
         arr = data.toString().split(/\n/);
 
-        res.send(arr);
+        res.send(call.cleanArray(arr));
+
         child.kill();
     });
 

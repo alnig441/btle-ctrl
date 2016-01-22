@@ -2,3 +2,4 @@ node_modules/
 ./development
 paths.exit.templates/
 gulpfile.js
+routes/test.js
