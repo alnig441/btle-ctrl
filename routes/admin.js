@@ -13,16 +13,9 @@ router.put('/', function(req, res, error){
 
 router.get('/test', function(req, res, error){
 
-    var x = ["49:EC:41:9A:67:35 (unknown)",
-            "B4",
-            "B4:99:4C:59:67:C4 (unknown)",
-            "B4:99:4C:59:67:C4 RGBLightOne",
-            "LE Scan ..."
-    ];
-
     console.log(call.cleanArray(x));
 
-})
+});
 
 router.get('/reset', function(req, res, error){
 
