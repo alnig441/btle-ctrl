@@ -1,1 +1,3 @@
-p ...loading scan view pane...
+ul(ng-repeat='device in devices')
+    button.myButton(ng-click='addDev("add")') Add Device
+    li Device: {{ device.mac }}

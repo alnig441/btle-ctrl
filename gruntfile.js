@@ -97,7 +97,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
 
-    grunt.registerTask('default', ['jade', 'jshint', 'concat', 'uglify']);
+    grunt.registerTask('default', ['jade', 'jshint', 'concat', 'uglify', 'watch']);
 };
 
 var paths = {

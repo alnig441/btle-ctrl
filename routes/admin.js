@@ -30,9 +30,28 @@ router.get('/reset', function(req, res, error){
 
 router.get('/scan', function(req, res, error){
 
+    /*FOR TESTING ONLY*/
+    //var test = [
+    //    'LE Scan',
+    //    'B4:99:4C:64:80:B4 (unknown)',
+    //    'B4:99:4C:64:80:B4 RGBLightOne',
+    //    'B4:99:4C:64:80:B4 (unknown)',
+    //    'B4:99:4C:64:80:B4 RGBLightOne',
+    //    'B4:99:4C:64:80:B4 (unknown)',
+    //    'B4:99:4C:59:67:C4 (unknown)',
+    //    'B4:99:4C:59:67:C4 RGBLightOne',
+    //    'B4:99:4C:59:67:C4 (unknown)',
+    //    'B4:99:4C:59:67:C4 RGBLightOne'
+    //    ];
+
     var arr = [];
 
     console.log('..scanning..');
+
+    /*FOR TESTING ONLY*/
+    //arr = test.toString().split(/\n/);
+    //res.send(call.cleanArray(arr));
+
 
     var child = spawn('sudo', ['hcitool', 'lescan']);
 

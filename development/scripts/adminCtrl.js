@@ -9,6 +9,7 @@ app.controller('adminCtrl',['$scope','$rootScope', '$http', '$location', '$compi
     };
     $rootScope.template.url = $rootScope.template.default;
 
+    $rootScope.devices = [];
 
     $scope.scanDev = function(url){
 
@@ -16,13 +17,12 @@ app.controller('adminCtrl',['$scope','$rootScope', '$http', '$location', '$compi
 
         $http.get('/admin/scan', $scope)
             .then(function(response){
-                //$scope.devices = response.data;
-                //console.log(response);
+                $rootScope.devices = response.data;
             })
             .then(function(){
                 $http.get('/admin/reset')
                     .then(function(response){
-                        //console.log(response);
+                        console.log(response);
                     });
 
             });

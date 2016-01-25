@@ -1,6 +1,7 @@
 var call = {
     cleanArray: function(array){
         var y = [];
+        var z = [];
         var tmp = [];
         var x = array.toString().replace(/\s/g, ',');
 
@@ -25,7 +26,12 @@ var call = {
 
         });
 
-        array = y;
+        y.forEach(function(elem, index, arr){
+            elem = {mac: elem};
+            z.push(elem);
+        });
+
+        array = z;
 
         return array;
     }

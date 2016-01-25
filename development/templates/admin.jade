@@ -14,7 +14,7 @@ table(ng-controller='adminCtrl')
         td
             button.outer(ng-click='deleteDev("delete")') REMOVE
 
-table(id='viewPane', ng-model='template')
+table(id='viewPane')
     tr
         td(id='loadPane', ng-include='template.url')
 
