@@ -1,5 +1,7 @@
 var call = {
     cleanArray: function(array){
+
+        var tmp = [];
         var x = array.toString().replace(/\s/g, ',');
 
         array = x.split(',');
@@ -13,7 +15,7 @@ var call = {
         });
 
         array = x;
-        x = [];
+        //x = [];
 
         array.push({mac: 'zzzzzzzzzzzzzzz'});
 
@@ -21,12 +23,12 @@ var call = {
             prev = array[index -1];
 
             if(prev.mac != curr.mac){
-                x.push(prev);
+                tmp.push(prev);
             }
 
         });
 
-        array = x;
+        array = tmp;
 
         return array;
     }
