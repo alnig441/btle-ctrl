@@ -3,14 +3,10 @@ ul(ng-controller='loginCtrl')
         input(type='text', placeholder='username', ng-model='form.username')
         input(type='password', ng-model='form.password')
         input(type='submit', ng-click='submit()')
+
     table(ng-controller='panelCtrl')
-        tr
+        tr(ng-repeat='panel in panels')
             td
-                button.outer(ng-click='newState()') ON/OFF
-            td
-                button.outer(ng-click='showOptions()') OPTIONS
-        tr
-            td
-                button.outer(ng-click='newState()') ON/OFF
+                button.outer(ng-click='newState()') {{panel.device.location}} ON/OFF
             td
                 button.outer(ng-click='showOptions()') OPTIONS
