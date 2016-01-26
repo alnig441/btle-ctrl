@@ -9,13 +9,13 @@ var call = {
 
         array.forEach(function(elem, ind, arr){
             if(elem.length == 17){
-                elem = {mac: elem};
+                //elem = {mac: elem};
                 x.push(elem);
             }
         });
 
         array = x;
-        //x = [];
+        x = [];
 
         array.push({mac: 'zzzzzzzzzzzzzzz'});
 
@@ -28,7 +28,12 @@ var call = {
 
         });
 
-        array = tmp;
+        tmp.forEach(function(elem, index, array){
+            elem = {mac: elem};
+            x.push(elem);
+        });
+
+        array = x;
 
         return array;
     }
