@@ -31,57 +31,28 @@ app.config(function($routeProvider, $locationProvider){
         $location.path('/panel');
     };
 }]);
-;app.controller('adminCtrl',['$scope','$rootScope', '$http', '$location', '$compile', function($scope, $rootScope, $http, $location, $compile){
-
-    $rootScope.template = {
-        default: '/views/default.html',
-        scan: '/views/scanDev.html',
-        add: '/views/addDev.html',
-        update: '/views/updDev.html',
-        delete: '/views/delDev.html'
-    };
-    $rootScope.template.url = $rootScope.template.default;
-
-    $rootScope.devices = [];
+;app.controller('adminCtrl',['$scope','$rootScope', '$http', function($scope, $rootScope, $http){
 
     $scope.scanDev = function(url){
 
-        $rootScope.template.url = $rootScope.template[url];
-
-        $http.get('/admin/scan', $scope)
-            .then(function(response){
-                $rootScope.devices = response.data;
-            })
-            .then(function(){
-                $http.get('/admin/reset')
-                    .then(function(response){
-                        console.log(response);
-                    });
-
-            });
-
     };
-
-
 
     $scope.addDev = function(url){
 
-        $rootScope.template.url = $rootScope.template[url];
     };
 
     $scope.updateDev = function(url){
-
-        $rootScope.template.url = $rootScope.template[url];
 
     };
 
     $scope.deleteDev = function(url){
 
-        $rootScope.template.url = $rootScope.template[url];
-
     };
 
 }]);
+;/**
+ * Created by allannielsen on 1/26/16.
+ */
 ;app.controller('panelCtrl',['$scope', '$http', '$location', function($scope, $http, $location){
 
     $scope.newState = function(){
@@ -92,8 +63,64 @@ app.config(function($routeProvider, $locationProvider){
 
     };
 
-}]);;app.controller('viewPaneCtrl',['$scope', '$rootScope', '$http', '$location', function($scope, $rootScope, $http, $location){
-    $scope.template.url = '/views/scanDev.html';
-    console.log($scope.template[url]);
+}]);;app.controller('viewPaneCtrl',['$scope', '$rootScope', '$http', function($scope, $rootScope, $http){
+
+    $rootScope.template = {
+        default: '/views/default.html',
+        scan: '/views/scanDev.html',
+        add: '/views/addDev.html',
+        update: '/views/updDev.html',
+        delete: '/views/delDev.html'
+    };
+    $rootScope.template.url = $rootScope.template.default;
+
+    $scope.switch = function(url){
+
+        $rootScope.template.url = $rootScope.template[url];
+
+        if(url == 'scan'){
+
+            $http.get('/admin/scan', $scope)
+                .then(function(response){
+                    $rootScope.devices = response.data;
+                })
+                .then(function(){
+                    $http.get('/admin/reset')
+                        .then(function(response){
+                            console.log(response);
+                        });
+
+                });
+
+        }
+
+        if(url == 'add'){
+
+        }
+
+        if(url == 'delete'){
+
+            $http.get('/admin/test', $scope)
+                .then(function(response){
+                    $rootScope.devices = response.data;
+                });
+
+        }
+
+        if(url == 'update'){
+
+            $http.get('/admin/test', $scope)
+                .then(function(response){
+                    $rootScope.devices = response.data;
+                });
+
+        }
+
+        if(url == 'test'){
+
+
+        }
+    };
+
 
 }]);
