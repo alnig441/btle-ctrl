@@ -72,8 +72,22 @@ router.get('/scan', function(req, res, error){
 
 router.post('/', function(req, res, error){
 
-    console.log('from admin post: ', req.body);
-    res.send('test post');
+    console.log('from admin post: ', req.body.location);
+
+    pg.connect(connectionString, function(err, client, done){
+        if(err){console.log(err);}
+
+        var query = client.query("INSERT INTO devices(mac, location, device_on) values($1, $2, $3)", [req.body.mac, req.body.location, true], function(error, result){
+            if(error){console.log(error.detail);}
+        });
+
+        query.on('end', function(result){
+            client.end();
+            res.send('device ' + req.body.mac + ' created');
+
+        });
+    })
+
 
 });
 

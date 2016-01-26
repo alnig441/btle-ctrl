@@ -1,14 +1,14 @@
-p ...loading add view pane....
+p Add Device
 
-form(ng-submit='addDev()')
+form(ng-controller='adminCtrl', ng-submit='submit("add")')
     ul
         li
             label(for='location') Device Location
         li
-            input(type='text', name='location', ng-model='device.location', ng-init='device.mac')
+            input(type='text', name='location', ng-model='form.device.location')
         li
             label(for='mac') Device MAC
         li
-            input(type='text', name='mac', ng-model='device.mac')
+            input(type='text', name='mac', ng-model='form.device.mac', ng-init='form.device.mac')
         li
             input(type='submit', value='submit')

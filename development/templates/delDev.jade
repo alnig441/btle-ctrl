@@ -1,1 +1,5 @@
-p ...loading delete view pane...
+p Delete Device
+
+ul(ng-controller='adminCtrl', ng-repeat='device in devices')
+    li Device: {{ device.location }}
+    button.myButton(ng-click='delDev()') Delete Device
