@@ -1,21 +1,20 @@
 var call = {
     cleanArray: function(array){
 
-        var tmp = [];
-        var x = array.toString().replace(/\s/g, ',');
+        var tmpString = array.toString().replace(/\s/g, ',');
+        var tmpArray = [];
 
-        array = x.split(',');
-        x = [];
+        array = tmpString.split(',');
 
         array.forEach(function(elem, ind, arr){
             if(elem.length == 17){
-                //elem = {mac: elem};
-                x.push(elem);
+                elem = {mac: elem};
+                tmpArray.push(elem);
             }
         });
 
-        array = x;
-        x = [];
+        array = tmpArray;
+        tmpArray = [];
 
         array.push({mac: 'zzzzzzzzzzzzzzz'});
 
@@ -23,17 +22,17 @@ var call = {
             prev = array[index -1];
 
             if(prev.mac != curr.mac){
-                tmp.push(prev);
+                tmpArray.push(prev);
             }
 
         });
 
-        tmp.forEach(function(elem, index, array){
-            elem = {mac: elem};
-            x.push(elem);
-        });
+        //tmp.forEach(function(elem, index, array){
+        //    elem = {mac: elem};
+        //    x.push(elem);
+        //});
 
-        array = x;
+        array = tmpArray;
 
         return array;
     }
