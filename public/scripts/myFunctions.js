@@ -8,7 +8,6 @@ var call = {
 
         array.forEach(function(elem, ind, arr){
             if(elem.length == 17){
-                elem = {mac: elem};
                 tmpArray.push(elem);
             }
         });
@@ -21,16 +20,12 @@ var call = {
         array.sort().reduce(function(prev, curr, index, array){
             prev = array[index -1];
 
-            if(prev.mac != curr.mac){
+            if(prev != curr){
+                prev = {mac: prev};
                 tmpArray.push(prev);
             }
 
         });
-
-        //tmp.forEach(function(elem, index, array){
-        //    elem = {mac: elem};
-        //    x.push(elem);
-        //});
 
         array = tmpArray;
 

@@ -34,7 +34,7 @@ module.exports = function(grunt) {
             },
             modules: {
                 files: [paths.from.modules],
-                tasks: ['jshint', 'uglify'],
+                tasks: ['jshint', 'uglify', 'copy'],
                 options: {
                     spawn: false
                 }
@@ -46,7 +46,7 @@ module.exports = function(grunt) {
                 files: [
                     {expand: true, cwd: './development/modules/' ,src: '*.js', dest: paths.to.modules, filter: 'isFile'}
                 ]
-            },
+            }
         },
 
 
@@ -80,7 +80,7 @@ module.exports = function(grunt) {
             my_target: {
                 files: {
                     './public/scripts/angular_app.min.js': ['./public/scripts/app.js'],
-                    //'./public/scripts/myFunctions.min.js': ['./development/modules/myFunctions.js']
+                    './public/scripts/myFunctions.min.js': ['./development/modules/myFunctions.js']
                 }
             }
         },
@@ -107,7 +107,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-contrib-copy');
 
-    grunt.registerTask('default', ['jade', 'jshint', 'concat', 'uglify', 'watch']);
+    grunt.registerTask('default', ['jade', 'jshint', 'concat', 'uglify', 'watch' ,'copy']);
 };
 
 var paths = {
