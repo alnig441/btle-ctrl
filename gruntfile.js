@@ -41,6 +41,15 @@ module.exports = function(grunt) {
             }
         },
 
+        copy: {
+            main: {
+                files: [
+                    {expand: true, cwd: './development/modules/' ,src: '*.js', dest: paths.to.modules, filter: 'isFile'}
+                ]
+            },
+        },
+
+
         jade: {
             html: {
                 files: {
@@ -96,11 +105,12 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
+    grunt.loadNpmTasks('grunt-contrib-copy');
 
     grunt.registerTask('default', ['jade', 'jshint', 'concat', 'uglify', 'watch']);
 };
 
 var paths = {
     from: {scripts: './development/scripts/*.js', templates: './development/templates/*.jade', styles: './development/styles/*.css', images: './development/images/*.*', modules: './development/modules/*.js'},
-    to: {scripts: './public/scripts/angular_app.js', templates: './public/views/', styles: './public/stylesheets/', images: './public/images/'}
+    to: {scripts: './public/scripts/angular_app.js', templates: './public/views/', styles: './public/stylesheets/', images: './public/images/', modules: './public/scripts/'}
 };
