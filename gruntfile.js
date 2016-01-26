@@ -80,7 +80,7 @@ module.exports = function(grunt) {
             my_target: {
                 files: {
                     './public/scripts/angular_app.min.js': ['./public/scripts/app.js'],
-                    './public/scripts/myFunctions.min.js': ['./development/modules/myFunctions.js']
+                    //'./public/scripts/myFunctions.min.js': ['./development/modules/myFunctions.js']
                 }
             }
         },
