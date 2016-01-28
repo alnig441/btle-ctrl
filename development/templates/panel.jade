@@ -4,9 +4,4 @@ ul(ng-controller='loginCtrl')
         input(type='password', ng-model='form.password')
         input(type='submit', ng-click='submit()')
 
-    table(ng-controller='panelCtrl')
-        tr(ng-repeat='panel in panels')
-            td
-                button.outer(ng-click='newState()') {{panel.device.location}} ON/OFF
-            td
-                button.outer(ng-click='showOptions()') OPTIONS
+    div(ng-include='template')

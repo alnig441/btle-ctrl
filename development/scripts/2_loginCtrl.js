@@ -1,4 +1,6 @@
-app.controller('loginCtrl',['$scope', '$http', '$location', function($scope, $http, $location){
+app.controller('loginCtrl',['$scope', '$rootScope', '$http', '$location', function($scope, $rootScope, $http, $location){
+
+    $rootScope.template = '/views/default.html';
 
     $scope.submit = function(){
         $http.post('/login/authenticate', $scope.form)

@@ -14,8 +14,6 @@ table(ng-controller='viewPaneCtrl')
         td
             button.outer(ng-click='switch("delete")') REMOVE
 
-table(id='viewPane')
-    tr
-        td(id='loadPane', ng-include='template.url')
+div(ng-include='template.url')
 
 

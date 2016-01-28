@@ -1,4 +1,4 @@
-app.controller('panelCtrl',['$scope', '$http', '$location', function($scope, $http, $location){
+app.controller('panelCtrl',['$scope', '$rootScope', '$http', '$location', function($scope, $rootScope, $http, $location){
 
     $http.get('/panel')
         .then(function(response){
@@ -20,8 +20,9 @@ app.controller('panelCtrl',['$scope', '$http', '$location', function($scope, $ht
 
     };
 
-    $scope.showOptions = function(){
-
+    $scope.showOptions = function(url){
+        console.log(url);
+        $rootScope.template = url;
     };
 
 }]);

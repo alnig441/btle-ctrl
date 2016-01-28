@@ -21,7 +21,7 @@ app.controller('adminCtrl',['$scope','$rootScope', '$http', function($scope, $ro
 
     $scope.submit = function(str){
 
-        console.log('form submission from: ', str, $scope.form);
+        console.log('form submission from: ', str, this.installation);
 
         if(str == 'add'){
 
@@ -34,6 +34,14 @@ app.controller('adminCtrl',['$scope','$rootScope', '$http', function($scope, $ro
 
         if(str == 'delete'){
 
+            $http.delete('/admin/' + this.installation.device.mac)
+                .then(function(response){
+                    $http.get('/panel')
+                        .then(function(response){
+                            $rootScope.installations = response.data;
+                            console.log(response);
+                        });
+                });
 
         }
 

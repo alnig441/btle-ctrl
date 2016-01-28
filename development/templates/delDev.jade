@@ -1,5 +1,6 @@
-p Delete Device
-
-ul(ng-controller='adminCtrl', ng-repeat='device in devices')
-    li Device: {{ device.location }}
-    button.myButton(ng-click='delDev()') Delete Device
+table(id='viewPane')
+    tr
+        td(id='loadPane')
+            ul(ng-controller='adminCtrl', ng-repeat='installation in installations')
+                li Device: {{ installation.device.location }}
+                button.myButton(ng-click='submit("delete")') Delete Device

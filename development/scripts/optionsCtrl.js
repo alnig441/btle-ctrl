@@ -1,3 +1,8 @@
-/**
- * Created by allannielsen on 1/27/16.
- */
+app.controller('optionsCtrl',['$scope', '$rootScope', '$http', '$location', function($scope, $rootScope, $http, $location){
+
+    $scope.apply = function(url){
+
+        $rootScope.template = url;
+    };
+
+}]);

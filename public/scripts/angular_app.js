@@ -15,7 +15,9 @@ app.config(function($routeProvider, $locationProvider){
 });
 
 
-;app.controller('loginCtrl',['$scope', '$http', '$location', function($scope, $http, $location){
+;app.controller('loginCtrl',['$scope', '$rootScope', '$http', '$location', function($scope, $rootScope, $http, $location){
+
+    $rootScope.template = '/views/default.html';
 
     $scope.submit = function(){
         $http.post('/login/authenticate', $scope.form)
@@ -54,7 +56,7 @@ app.config(function($routeProvider, $locationProvider){
 
     $scope.submit = function(str){
 
-        console.log('form submission from: ', str, $scope.form);
+        console.log('form submission from: ', str, this.installation);
 
         if(str == 'add'){
 
@@ -67,6 +69,14 @@ app.config(function($routeProvider, $locationProvider){
 
         if(str == 'delete'){
 
+            $http.delete('/admin/' + this.installation.device.mac)
+                .then(function(response){
+                    $http.get('/panel')
+                        .then(function(response){
+                            $rootScope.installations = response.data;
+                            console.log(response);
+                        });
+                });
 
         }
 
@@ -80,7 +90,14 @@ app.config(function($routeProvider, $locationProvider){
 ;/**
  * Created by allannielsen on 1/26/16.
  */
-;app.controller('panelCtrl',['$scope', '$http', '$location', function($scope, $http, $location){
+;app.controller('optionsCtrl',['$scope', '$rootScope', '$http', '$location', function($scope, $rootScope, $http, $location){
+
+    $scope.apply = function(url){
+
+        $rootScope.template = url;
+    };
+
+}]);;app.controller('panelCtrl',['$scope', '$rootScope', '$http', '$location', function($scope, $rootScope, $http, $location){
 
     $http.get('/panel')
         .then(function(response){
@@ -102,8 +119,9 @@ app.config(function($routeProvider, $locationProvider){
 
     };
 
-    $scope.showOptions = function(){
-
+    $scope.showOptions = function(url){
+        console.log(url);
+        $rootScope.template = url;
     };
 
 }]);;app.controller('viewPaneCtrl',['$scope', '$rootScope', '$http', function($scope, $rootScope, $http){
@@ -115,7 +133,6 @@ app.config(function($routeProvider, $locationProvider){
         update: '/views/updDev.html',
         delete: '/views/delDev.html'
     };
-    $rootScope.template.url = $rootScope.template.default;
 
     $scope.switch = function(url){
 
@@ -143,19 +160,15 @@ app.config(function($routeProvider, $locationProvider){
 
         if(url == 'delete'){
 
-            $http.get('/admin/test', $scope)
+            $http.get('/panel')
                 .then(function(response){
-                    $rootScope.devices = response.data;
+                    $rootScope.installations = response.data;
+                    console.log('from delete: ', $rootScope.installations);
                 });
 
         }
 
         if(url == 'update'){
-
-            $http.get('/admin/test', $scope)
-                .then(function(response){
-                    $rootScope.devices = response.data;
-                });
 
         }
 

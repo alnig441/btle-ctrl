@@ -7,7 +7,6 @@ app.controller('viewPaneCtrl',['$scope', '$rootScope', '$http', function($scope,
         update: '/views/updDev.html',
         delete: '/views/delDev.html'
     };
-    $rootScope.template.url = $rootScope.template.default;
 
     $scope.switch = function(url){
 
@@ -35,19 +34,15 @@ app.controller('viewPaneCtrl',['$scope', '$rootScope', '$http', function($scope,
 
         if(url == 'delete'){
 
-            $http.get('/admin/test', $scope)
+            $http.get('/panel')
                 .then(function(response){
-                    $rootScope.devices = response.data;
+                    $rootScope.installations = response.data;
+                    console.log('from delete: ', $rootScope.installations);
                 });
 
         }
 
         if(url == 'update'){
-
-            $http.get('/admin/test', $scope)
-                .then(function(response){
-                    $rootScope.devices = response.data;
-                });
 
         }
 

@@ -1,3 +1,6 @@
-ul(ng-repeat='device in devices')
-    button.myButton(ng-click='addDev()') Add Device
-    li Device: {{ device.mac }}
+table(id='viewPane')
+    tr
+        td(id='loadPane')
+            ul(ng-repeat='device in devices')
+                button.myButton(ng-click='addDev()') Add Device
+                li Device: {{ device.mac }}

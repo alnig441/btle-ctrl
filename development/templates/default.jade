@@ -1,2 +1,7 @@
-p ...loading...
+table(ng-controller='panelCtrl')
+    tr(ng-repeat='panel in panels')
+        td
+            button.outer(ng-click='newState()') {{panel.device.location}} ON/OFF
+        td
+            button.outer(ng-click='showOptions("/views/options.html")') OPTIONS
 
