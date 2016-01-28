@@ -1,4 +1,12 @@
 table(id='viewPane')
     tr
         td(id='loadPane')
-            p Update Device
+            ul(ng-repeat='installation in installations', ng-controller='adminCtrl')
+                li
+                    label(for='location') Device Location: {{installation.device.location}}
+                li
+                    input(type='text', name='location', ng-model='installation.device.location')
+                li
+                    button.myButton(ng-click='submit("update")') Update
+
+

@@ -1,1 +1,1 @@
-<table id="viewPane"><tr><td id="loadPane"><p>Update Device</p></td></tr></table>
+<table id="viewPane"><tr><td id="loadPane"><ul ng-repeat="installation in installations" ng-controller="adminCtrl"><li><label for="location">Device Location: {{installation.device.location}}</label></li><li><input type="text" name="location" ng-model="installation.device.location"/></li><li><button ng-click="submit(&quot;update&quot;)" class="myButton">Update</button></li></ul></td></tr></table>

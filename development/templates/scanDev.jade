@@ -3,4 +3,5 @@ table(id='viewPane')
         td(id='loadPane')
             ul(ng-repeat='device in devices')
                 button.myButton(ng-click='addDev()') Add Device
+                button.myButton(ng-click='testDev()') Test Device
                 li Device: {{ device.mac }}

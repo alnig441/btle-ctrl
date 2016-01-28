@@ -54,5 +54,5 @@ p {
 }
 
 .myButton {
-    display: table;
+    display: inline;
 }

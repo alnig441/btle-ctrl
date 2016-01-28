@@ -30,6 +30,8 @@ app.controller('viewPaneCtrl',['$scope', '$rootScope', '$http', function($scope,
 
         if(url == 'add'){
 
+            console.log('from viewPaneCtrl add');
+
         }
 
         if(url == 'delete'){
@@ -37,19 +39,20 @@ app.controller('viewPaneCtrl',['$scope', '$rootScope', '$http', function($scope,
             $http.get('/panel')
                 .then(function(response){
                     $rootScope.installations = response.data;
-                    console.log('from delete: ', $rootScope.installations);
                 });
 
         }
 
         if(url == 'update'){
 
+            $http.get('/panel')
+                .then(function(response){
+                    $rootScope.installations = response.data;
+                });
+
+
         }
 
-        if(url == 'test'){
-
-
-        }
     };
 
 

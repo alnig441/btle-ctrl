@@ -1,9 +1,5 @@
 app.controller('adminCtrl',['$scope','$rootScope', '$http', function($scope, $rootScope, $http){
 
-    $scope.scanDev = function(url){
-
-    };
-
     $scope.addDev = function(){
 
         $scope.form = this;
@@ -11,17 +7,9 @@ app.controller('adminCtrl',['$scope','$rootScope', '$http', function($scope, $ro
 
     };
 
-    $scope.updateDev = function(url){
-
-    };
-
-    $scope.deleteDev = function(url){
-
-    };
-
     $scope.submit = function(str){
 
-        console.log('form submission from: ', str, this.installation);
+        console.log('form submission from: ', str, this.installation, $scope);
 
         if(str == 'add'){
 
@@ -46,6 +34,11 @@ app.controller('adminCtrl',['$scope','$rootScope', '$http', function($scope, $ro
         }
 
         if(str == 'update'){
+
+            $http.post('/admin/update', this.installation.device)
+                .then(function(response){
+                    console.log(response);
+                });
 
         }
 

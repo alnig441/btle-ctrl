@@ -35,10 +35,6 @@ app.config(function($routeProvider, $locationProvider){
 }]);
 ;app.controller('adminCtrl',['$scope','$rootScope', '$http', function($scope, $rootScope, $http){
 
-    $scope.scanDev = function(url){
-
-    };
-
     $scope.addDev = function(){
 
         $scope.form = this;
@@ -46,17 +42,9 @@ app.config(function($routeProvider, $locationProvider){
 
     };
 
-    $scope.updateDev = function(url){
-
-    };
-
-    $scope.deleteDev = function(url){
-
-    };
-
     $scope.submit = function(str){
 
-        console.log('form submission from: ', str, this.installation);
+        console.log('form submission from: ', str, this.installation, $scope);
 
         if(str == 'add'){
 
@@ -81,6 +69,11 @@ app.config(function($routeProvider, $locationProvider){
         }
 
         if(str == 'update'){
+
+            $http.post('/admin/update', this.installation.device)
+                .then(function(response){
+                    console.log(response);
+                });
 
         }
 
@@ -112,7 +105,6 @@ app.config(function($routeProvider, $locationProvider){
     $http.get('/panel')
         .then(function(response){
             $scope.panels = response.data;
-            console.log($scope.panels);
         });
 
     $scope.newState = function(){
@@ -166,6 +158,8 @@ app.config(function($routeProvider, $locationProvider){
 
         if(url == 'add'){
 
+            console.log('from viewPaneCtrl add');
+
         }
 
         if(url == 'delete'){
@@ -173,19 +167,20 @@ app.config(function($routeProvider, $locationProvider){
             $http.get('/panel')
                 .then(function(response){
                     $rootScope.installations = response.data;
-                    console.log('from delete: ', $rootScope.installations);
                 });
 
         }
 
         if(url == 'update'){
 
+            $http.get('/panel')
+                .then(function(response){
+                    $rootScope.installations = response.data;
+                });
+
+
         }
 
-        if(url == 'test'){
-
-
-        }
     };
 
 

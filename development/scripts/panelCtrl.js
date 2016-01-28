@@ -3,7 +3,6 @@ app.controller('panelCtrl',['$scope', '$rootScope', '$http', '$location', functi
     $http.get('/panel')
         .then(function(response){
             $scope.panels = response.data;
-            console.log($scope.panels);
         });
 
     $scope.newState = function(){

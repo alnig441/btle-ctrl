@@ -78,7 +78,7 @@ router.post('/', function(req, res, error){
         if(err){console.log(err);}
 
         var query = client.query("INSERT INTO devices(mac, location, device_on) values($1, $2, $3)", [req.body.mac, req.body.location, true], function(error, result){
-            if(error){console.log(error.detail);}
+            if(error){console.log('there was an error when adding: ', error);}
         });
 
         query.on('end', function(result){
@@ -105,6 +105,25 @@ router.delete('/:mac?', function(req, res, error){
             res.send('user '+ req.params.mac + ' deleted');
         })
     })
+
+});
+
+router.post('/update', function(req, res, error){
+
+    console.log('admin put: ', req.body);
+
+    pg.connect(connectionString, function(err, client, done){
+
+        var query = client.query("UPDATE devices SET location='" + req.body.location +  "' WHERE mac='" + req.body.mac + "'", function(error, result){
+            if(error){console.log('there was an error ', error.detail);}
+        });
+
+        query.on('end', function(result){
+            client.end();
+            res.send('Location changed for device ' + req.body.mac);
+        })
+    })
+
 
 });
 

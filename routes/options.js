@@ -2,7 +2,6 @@ var express = require('express'),
     router = express.Router();
 var pg = require('pg');
 var spawn = require('child_process').spawn;
-var exec = require('child_process').exec;
 var call = require('../public/scripts/myFunctions.min.js');
 var schedule = require('node-schedule');
 
@@ -12,9 +11,22 @@ router.get('/', function(req, res, error){
 
     console.log('in options router');
 
-   var test = schedule.scheduleJob('15 * * * *', function(){
-       console.log('Testing Scheduler!');
-   });
+    var rule = new schedule.RecurrenceRule();
+    rule.second = 15;
+
+    var j = schedule.scheduleJob(rule, function(){
+        var date = new Date();
+        console.log('My arse is pining for a chocolate whip!', new Date());
+    });
+    var x = j.pendingInvocations();
+
+    j.on('scheduled',function(arg){
+        console.log('job scheduled', arg);
+    });
+
+    j.on('run', function(arg){
+        console.log('my job ran', arg);
+    });
 
 });
 
