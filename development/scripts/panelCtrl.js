@@ -21,7 +21,7 @@ app.controller('panelCtrl',['$scope', '$rootScope', '$http', '$location', functi
     };
 
     $scope.showOptions = function(url){
-        console.log(url);
+        console.log('from panelCtrl: ', url);
         $rootScope.template = url;
     };
 
