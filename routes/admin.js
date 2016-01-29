@@ -11,9 +11,53 @@ router.put('/', function(req, res, error){
 
 });
 
-router.get('/test', function(req, res, error){
+router.post('/test', function(req, res, error){
 
-    console.log('this is from test');
+    console.log('this is from test', req.body);
+
+    var flipSwitch = {
+        on: '58010301ff00ffffff',
+        off: '58010301ff00000000',
+        gattArgs: [
+            '-i',
+            'hci1',
+            '-b',
+            req.body.mac,
+            '--char-write',
+            '-a',
+            '0x0028',
+            '-n'
+        ],
+        state: req.body.state
+    };
+
+    switch (flipSwitch.state) {
+        case true:
+            flipSwitch.gattArgs.push(flipSwitch.off);
+            flipSwitch.state = false;
+            break;
+        case false:
+            flipSwitch.gattArgs.push(flipSwitch.on);
+            flipSwitch.state = true;
+            break;
+    };
+
+    console.log(flipSwitch.gattArgs[8], flipSwitch.state);
+
+    var child = spawn('gatttool', flipSwitch.gattArgs);
+
+    child.stdout.on('data', function(data){
+
+        res.send(data);
+
+        child.kill();
+    });
+
+    child.on('exit', function(code){
+        console.log('spawned process ended on exit code: ', code);
+    });
+
+    res.send(flipSwitch.state);
 
 });
 

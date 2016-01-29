@@ -44,13 +44,18 @@ app.config(function($routeProvider, $locationProvider){
 
     $scope.testDev = function(){
 
-        console.log('in testDev');
+        var device = {
+            mac: this.device.mac,
+            state: true
+        };
 
         var x = setInterval(runTest, 1000);
+        var state;
 
         function runTest() {
-            $http.get('/admin/test')
+            $http.post('/admin/test/', device )
                 .then(function (response) {
+                    device.state = response.data;
 
                 });
         }
