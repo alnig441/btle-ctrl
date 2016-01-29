@@ -7,6 +7,29 @@ app.controller('adminCtrl',['$scope','$rootScope', '$http', function($scope, $ro
 
     };
 
+    $scope.testDev = function(){
+
+        console.log('in testDev');
+
+        var x = setInterval(runTest, 1000);
+
+        function runTest() {
+            $http.get('/admin/test')
+                .then(function (response) {
+
+                });
+        }
+
+        var y = setTimeout(killX, 5000);
+
+        function killX(){
+            console.log('test interval cleared');
+            clearInterval(x);
+        }
+
+
+    };
+
     $scope.submit = function(str){
 
         console.log('form submission from: ', str, this.installation, $scope);
