@@ -5,19 +5,19 @@ app.config(function($routeProvider, $locationProvider){
     $routeProvider
         .when('/admin', {
             templateUrl: 'views/admin.html',
-            controller: 'adminCtrl'
+            controller: 'adminViewCtrl'
         })
-        .when('/panel',{
-            templateUrl: 'views/panel.html',
-            controller: 'panelCtrl'
+        .when('/default',{
+            templateUrl: 'views/default.html',
+            controller: 'panelViewCtrl'
         })
-        .otherwise({redirectTo: '/panel'});
+        .otherwise({redirectTo: '/default'});
 });
 
 
 ;app.controller('loginCtrl',['$scope', '$rootScope', '$http', '$location', function($scope, $rootScope, $http, $location){
 
-    $rootScope.template = '/views/default.html';
+    $rootScope.template = '/views/panel.html';
 
     $scope.submit = function(){
         $http.post('/login/authenticate', $scope.form)
@@ -25,12 +25,12 @@ app.config(function($routeProvider, $locationProvider){
                 if(response.data === true){
                     $location.path('/admin');
                 }
-                else{$location.path('/panel');}
+                else{$location.path('/default');}
             });
     };
 
     $scope.logout = function(){
-        $location.path('/panel');
+        $location.path('/default');
     };
 }]);
 ;app.controller('adminCtrl',['$scope','$rootScope', '$http', function($scope, $rootScope, $http){
@@ -108,56 +108,10 @@ app.config(function($routeProvider, $locationProvider){
     };
 
 }]);
-;/**
- * Created by allannielsen on 1/26/16.
- */
-;app.controller('optionsCtrl',['$scope', '$rootScope', '$http', '$location', function($scope, $rootScope, $http, $location){
-
-    $scope.setSchedule = function(){
-
-        console.log('in optionsCtrl');
-
-        $http.get('/options')
-            .then(function(response){
-                console.log(response);
-            });
-    };
-
-    $scope.apply = function(url){
-
-        $rootScope.template = url;
-    };
-
-}]);;app.controller('panelCtrl',['$scope', '$rootScope', '$http', '$location', function($scope, $rootScope, $http, $location){
-
-    $http.get('/panel')
-        .then(function(response){
-            $scope.panels = response.data;
-        });
-
-    $scope.newState = function(){
-
-        $scope.device = this.panel.device;
-
-        $http.put('/panel', $scope.device)
-            .then(function(response){
-                $http.get('/panel')
-                    .then(function(response){
-                        $scope.panels = response.data;
-                    });
-            });
-
-    };
-
-    $scope.showOptions = function(url){
-        console.log('from panelCtrl: ', url);
-        $rootScope.template = url;
-    };
-
-}]);;app.controller('viewPaneCtrl',['$scope', '$rootScope', '$http', function($scope, $rootScope, $http){
+;app.controller('adminViewCtrl',['$scope', '$rootScope', '$http', function($scope, $rootScope, $http){
 
     $rootScope.template = {
-        default: '/views/default.html',
+        default: '/views/panel.html',
         scan: '/views/scanDev.html',
         add: '/views/addDev.html',
         update: '/views/updDev.html',
@@ -186,7 +140,7 @@ app.config(function($routeProvider, $locationProvider){
 
         if(url == 'add'){
 
-            console.log('from viewPaneCtrl add');
+            console.log('from adminViewCtrl add');
 
         }
 
@@ -211,5 +165,65 @@ app.config(function($routeProvider, $locationProvider){
 
     };
 
+
+}]);
+;app.controller('optionsCtrl',['$scope', '$rootScope', '$http', '$location', function($scope, $rootScope, $http, $location){
+
+    $scope.setSchedule = function(){
+
+        console.log('in optionsCtrl');
+
+        $http.get('/options')
+            .then(function(response){
+                console.log(response);
+            });
+    };
+
+    $scope.apply = function(url){
+
+        $rootScope.template = url;
+    };
+
+}]);;app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', function($scope, $rootScope, $http, $location){
+
+
+    $rootScope.panelTemplate = {
+        dim: '/views/dim.html',
+        schedule: '/views/schedule.html',
+        colour: '/views/colour.html',
+        options: '/views/options.html',
+        apply: '/views/default.html'
+    };
+
+    $http.get('/panel')
+        .then(function(response){
+            $scope.panels = response.data;
+            //console.log($scope.panels);
+        });
+
+    $scope.newState = function(){
+
+        $scope.device = this.panel.device;
+
+        $http.put('/panel', $scope.device)
+            .then(function(response){
+                $http.get('/panel')
+                    .then(function(response){
+                        $scope.panels = response.data;
+                    });
+            });
+
+    };
+
+    $scope.showOptions = function(url){
+        $rootScope.template = $rootScope.panelTemplate[url];
+    };
+
+    $scope.switch = function(url){
+
+        console.log('panelViewCtrl switch: ', url);
+        $rootScope.template = $rootScope.panelTemplate[url];
+
+    };
 
 }]);

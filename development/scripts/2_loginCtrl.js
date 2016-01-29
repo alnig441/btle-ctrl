@@ -1,6 +1,6 @@
 app.controller('loginCtrl',['$scope', '$rootScope', '$http', '$location', function($scope, $rootScope, $http, $location){
 
-    $rootScope.template = '/views/default.html';
+    $rootScope.template = '/views/panel.html';
 
     $scope.submit = function(){
         $http.post('/login/authenticate', $scope.form)
@@ -8,11 +8,11 @@ app.controller('loginCtrl',['$scope', '$rootScope', '$http', '$location', functi
                 if(response.data === true){
                     $location.path('/admin');
                 }
-                else{$location.path('/panel');}
+                else{$location.path('/default');}
             });
     };
 
     $scope.logout = function(){
-        $location.path('/panel');
+        $location.path('/default');
     };
 }]);

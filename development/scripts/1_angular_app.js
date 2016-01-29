@@ -5,13 +5,13 @@ app.config(function($routeProvider, $locationProvider){
     $routeProvider
         .when('/admin', {
             templateUrl: 'views/admin.html',
-            controller: 'adminCtrl'
+            controller: 'adminViewCtrl'
         })
-        .when('/panel',{
-            templateUrl: 'views/panel.html',
-            controller: 'panelCtrl'
+        .when('/default',{
+            templateUrl: 'views/default.html',
+            controller: 'panelViewCtrl'
         })
-        .otherwise({redirectTo: '/panel'});
+        .otherwise({redirectTo: '/default'});
 });
 
 

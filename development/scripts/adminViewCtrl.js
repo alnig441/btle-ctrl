@@ -1,7 +1,7 @@
-app.controller('viewPaneCtrl',['$scope', '$rootScope', '$http', function($scope, $rootScope, $http){
+app.controller('adminViewCtrl',['$scope', '$rootScope', '$http', function($scope, $rootScope, $http){
 
     $rootScope.template = {
-        default: '/views/default.html',
+        default: '/views/panel.html',
         scan: '/views/scanDev.html',
         add: '/views/addDev.html',
         update: '/views/updDev.html',
@@ -30,7 +30,7 @@ app.controller('viewPaneCtrl',['$scope', '$rootScope', '$http', function($scope,
 
         if(url == 'add'){
 
-            console.log('from viewPaneCtrl add');
+            console.log('from adminViewCtrl add');
 
         }
 

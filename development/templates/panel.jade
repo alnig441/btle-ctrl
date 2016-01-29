@@ -1,7 +1,7 @@
-ul(ng-controller='loginCtrl')
-    li.navigate Admin:
-        input(type='text', placeholder='username', ng-model='form.username')
-        input(type='password', ng-model='form.password')
-        input(type='submit', ng-click='submit()')
+table(ng-controller='panelViewCtrl')
+    tr(ng-repeat='panel in panels')
+        td
+            button.outer(ng-click='newState()') {{panel.device.location}} ON/OFF
+        td
+            button.outer(ng-click='showOptions("options")') OPTIONS
 
-    div(ng-include='template')

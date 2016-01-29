@@ -1,12 +1,12 @@
-table(ng-controller='optionsCtrl')
+table(ng-controller='panelViewCtrl')
     tr
         td
-            button.outer(ng-click='') Dim
+            button.outer(ng-click='switch("dim")') Dim
         td
-            button.outer(ng-click="setSchedule()") Schedule
+            button.outer(ng-click='switch("schedule")') Schedule
     tr
         td
-            button.outer Colour
+            button.outer(ng-click='switch("colour")') Colour
         td
-            button.outer(ng-click='apply("/views/default.html")') Apply
+            button.outer(ng-click='switch("apply")') Apply
 
