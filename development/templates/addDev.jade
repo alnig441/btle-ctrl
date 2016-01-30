@@ -1,7 +1,7 @@
-table(id='viewPane')
+table(id='viewPane', ng-controller='adminCtrl')
     tr
         td(id='loadPane')
-            form(ng-controller='adminCtrl', ng-submit='submit("add")')
+            form(ng-submit='submit("add")')
                 ul
                     li
                         label(for='location') Device Location

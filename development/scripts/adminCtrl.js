@@ -2,7 +2,9 @@ app.controller('adminCtrl',['$scope','$rootScope', '$http', function($scope, $ro
 
     $scope.addDev = function(){
 
-        $scope.form = this;
+        console.log('in adminCtrl addDev', this);
+        $rootScope.form = this;
+        console.log('HEJ DER!', $rootScope.form);
         $rootScope.template.url = $rootScope.template.add;
 
     };

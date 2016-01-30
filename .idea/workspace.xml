@@ -2,17 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="95122da9-fbae-4397-9692-e2312a5cdde2" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/development/templates/colour.jade" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/development/templates/dim.jade" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/development/scripts/1_angular_app.js" afterPath="$PROJECT_DIR$/development/scripts/1_angular_app.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/development/scripts/optionsCtrl.js" afterPath="$PROJECT_DIR$/development/scripts/optionsCtrl.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/development/templates/default.jade" afterPath="$PROJECT_DIR$/development/templates/default.jade" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/development/templates/schedule.jade" afterPath="$PROJECT_DIR$/development/templates/schedule.jade" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/development/scripts/adminCtrl.js" afterPath="$PROJECT_DIR$/development/scripts/adminCtrl.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/development/templates/addDev.jade" afterPath="$PROJECT_DIR$/development/templates/addDev.jade" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/development/templates/scanDev.jade" afterPath="$PROJECT_DIR$/development/templates/scanDev.jade" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/scripts/angular_app.js" afterPath="$PROJECT_DIR$/public/scripts/angular_app.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/views/default.html" afterPath="$PROJECT_DIR$/public/views/default.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/views/schedule.html" afterPath="$PROJECT_DIR$/public/views/schedule.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/layout.jade" afterPath="$PROJECT_DIR$/views/layout.jade" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/views/addDev.html" afterPath="$PROJECT_DIR$/public/views/addDev.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/views/scanDev.html" afterPath="$PROJECT_DIR$/public/views/scanDev.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/routes/admin.js" afterPath="$PROJECT_DIR$/routes/admin.js" />
     </list>
     <ignored path="btle-ctrl.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -33,71 +30,51 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="optionsCtrl.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/development/scripts/optionsCtrl.js">
+      <file leaf-file-name="adminCtrl.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/development/scripts/adminCtrl.js">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="19" column="6" selection-start-line="19" selection-start-column="6" selection-end-line="19" selection-end-column="6" />
+              <caret line="22" column="47" selection-start-line="22" selection-start-column="47" selection-end-line="22" selection-end-column="47" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="schedule.jade" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/development/templates/schedule.jade">
+      <file leaf-file-name="admin.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/routes/admin.js">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="18" column="46" selection-start-line="18" selection-start-column="46" selection-end-line="18" selection-end-column="46" />
+              <caret line="95" column="38" selection-start-line="95" selection-start-column="38" selection-end-line="95" selection-end-column="38" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="default.jade" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/development/templates/default.jade">
+      <file leaf-file-name="scanDev.jade" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/development/templates/scanDev.jade">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="8" column="0" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
+              <caret line="7" column="0" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="layout.jade" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/views/layout.jade">
+      <file leaf-file-name="addDev.jade" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/development/templates/addDev.jade">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.49751243">
-              <caret line="20" column="40" selection-start-line="20" selection-start-column="40" selection-end-line="20" selection-end-column="40" />
+            <state vertical-scroll-proportion="0.3482587">
+              <caret line="14" column="39" selection-start-line="14" selection-start-column="39" selection-end-line="14" selection-end-column="39" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="1_angular_app.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/development/scripts/1_angular_app.js">
+      <file leaf-file-name="adminViewCtrl.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/development/scripts/adminViewCtrl.js">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="9" column="26" selection-start-line="9" selection-start-column="26" selection-end-line="9" selection-end-column="26" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="panelViewCtrl.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/development/scripts/panelViewCtrl.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="25" column="54" selection-start-line="25" selection-start-column="54" selection-end-line="25" selection-end-column="54" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="options.jade" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/development/templates/options.jade">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="12" column="0" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
+              <caret line="3" column="37" selection-start-line="3" selection-start-column="37" selection-end-line="3" selection-end-column="37" />
               <folding />
             </state>
           </provider>
@@ -149,16 +126,12 @@
         <option value="$PROJECT_DIR$/bin/www" />
         <option value="$PROJECT_DIR$/development/scripts/devAddCtrl.js" />
         <option value="$PROJECT_DIR$/development/modules/myFunctions.js" />
-        <option value="$PROJECT_DIR$/development/templates/addDev.jade" />
         <option value="$PROJECT_DIR$/app.js" />
         <option value="$PROJECT_DIR$/development/modules/buildPgQuery.js" />
         <option value="$PROJECT_DIR$/routes/panel.js" />
         <option value="$PROJECT_DIR$/development/scripts/panelCtrl.js" />
         <option value="$PROJECT_DIR$/development/styles/stylesheet.css" />
         <option value="$PROJECT_DIR$/development/templates/updDev.jade" />
-        <option value="$PROJECT_DIR$/development/templates/scanDev.jade" />
-        <option value="$PROJECT_DIR$/development/scripts/adminCtrl.js" />
-        <option value="$PROJECT_DIR$/routes/admin.js" />
         <option value="$PROJECT_DIR$/development/templates/delDev.jade" />
         <option value="$PROJECT_DIR$/routes/options.js" />
         <option value="$PROJECT_DIR$/development/scripts/modalCtrl.js" />
@@ -178,6 +151,10 @@
         <option value="$PROJECT_DIR$/development/templates/default.jade" />
         <option value="$PROJECT_DIR$/development/scripts/1_angular_app.js" />
         <option value="$PROJECT_DIR$/views/layout.jade" />
+        <option value="$PROJECT_DIR$/routes/admin.js" />
+        <option value="$PROJECT_DIR$/development/templates/scanDev.jade" />
+        <option value="$PROJECT_DIR$/development/scripts/adminCtrl.js" />
+        <option value="$PROJECT_DIR$/development/templates/addDev.jade" />
       </list>
     </option>
   </component>
@@ -599,14 +576,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/views/scanDev.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="22" selection-start-line="0" selection-start-column="22" selection-end-line="0" selection-end-column="22" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/package.json">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.2589792">
@@ -753,14 +722,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/development/templates/addDev.jade">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="9" column="22" selection-start-line="9" selection-start-column="22" selection-end-line="9" selection-end-column="22" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/routes/users.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -809,22 +770,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/development/templates/admin.jade">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.2238806">
-          <caret line="9" column="54" selection-start-line="9" selection-start-column="54" selection-end-line="9" selection-end-column="54" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/development/scripts/adminCtrl.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.47263682">
-          <caret line="19" column="28" selection-start-line="19" selection-start-column="28" selection-end-line="19" selection-end-column="28" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/development/templates/updDev.jade">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.29850745">
@@ -833,34 +778,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/development/templates/scanDev.jade">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.09950249">
-          <caret line="4" column="51" selection-start-line="4" selection-start-column="51" selection-end-line="4" selection-end-column="51" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/development/scripts/adminViewCtrl.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.07462686">
-          <caret line="3" column="37" selection-start-line="3" selection-start-column="37" selection-end-line="3" selection-end-column="37" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/development/scripts/2_loginCtrl.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.4477612">
           <caret line="18" column="0" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/routes/admin.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="1.6716418">
-          <caret line="90" column="17" selection-start-line="90" selection-start-column="17" selection-end-line="90" selection-end-column="17" />
           <folding />
         </state>
       </provider>
@@ -963,8 +884,64 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/views/layout.jade">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.49751243">
+        <state vertical-scroll-proportion="0.0">
           <caret line="20" column="40" selection-start-line="20" selection-start-column="40" selection-end-line="20" selection-end-column="40" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/development/templates/admin.jade">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="9" column="54" selection-start-line="9" selection-start-column="54" selection-end-line="9" selection-end-column="54" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/development/scripts/adminViewCtrl.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="3" column="37" selection-start-line="3" selection-start-column="37" selection-end-line="3" selection-end-column="37" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/views/scanDev.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="22" selection-start-line="0" selection-start-column="22" selection-end-line="0" selection-end-column="22" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/routes/admin.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="95" column="38" selection-start-line="95" selection-start-column="38" selection-end-line="95" selection-end-column="38" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/development/scripts/adminCtrl.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="22" column="47" selection-start-line="22" selection-start-column="47" selection-end-line="22" selection-end-column="47" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/development/templates/scanDev.jade">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="7" column="0" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/development/templates/addDev.jade">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.3482587">
+          <caret line="14" column="39" selection-start-line="14" selection-start-column="39" selection-end-line="14" selection-end-column="39" />
           <folding />
         </state>
       </provider>
