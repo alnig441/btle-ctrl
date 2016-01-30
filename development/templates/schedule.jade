@@ -1,7 +1,19 @@
 table(ng-controller='optionsCtrl')
     tr
         td
-            input
+            li
+                label Time
+                input(type='time')
         td
-            input
+            li
+                label
+                input(type='date')
+    tr
+        td Daily
+            input(type='checkbox')
+        td Weekly
+            input(type='checkbox')
+
+    tr
         td
+            button(ng-click='return()') Return

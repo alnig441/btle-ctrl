@@ -1,4 +1,4 @@
-var app = angular.module('myApp', ['ngRoute','ngAnimate']);
+var app = angular.module('myApp', ['ngMaterial','ngRoute','ngAnimate']);
 
 app.config(function($routeProvider, $locationProvider){
     $locationProvider.html5Mode(true);
@@ -182,6 +182,10 @@ app.config(function($routeProvider, $locationProvider){
     $scope.apply = function(url){
 
         $rootScope.template = url;
+    };
+
+    $scope.return = function(){
+        $rootScope.template = "/views/panel.html";
     };
 
 }]);;app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', function($scope, $rootScope, $http, $location){

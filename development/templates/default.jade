@@ -1,7 +1,8 @@
 ul(ng-controller='loginCtrl')
-    li.navigate Admin:
-        input(type='text', placeholder='username', ng-model='form.username')
-        input(type='password', ng-model='form.password')
-        input(type='submit', ng-click='submit()')
+    div(md-toolbar)
+        li.navigate Admin:
+            input(type='text', placeholder='username', ng-model='form.username')
+            input(type='password', ng-model='form.password')
+            input(type='submit', ng-click='submit()')
 
     div(ng-include='template')

@@ -15,4 +15,8 @@ app.controller('optionsCtrl',['$scope', '$rootScope', '$http', '$location', func
         $rootScope.template = url;
     };
 
+    $scope.return = function(){
+        $rootScope.template = "/views/panel.html";
+    };
+
 }]);
