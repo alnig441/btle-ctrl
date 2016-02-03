@@ -1,8 +1,24 @@
-ul(ng-controller='loginCtrl')
-    div(md-toolbar)
-        li.navigate Admin:
-            input(type='text', placeholder='username', ng-model='form.username')
-            input(type='password', ng-model='form.password')
-            input(type='submit', ng-click='submit()')
+//div(layout='row')
+//    div(flex)
+//div(layout-sm='column')
+//    div(flex)
+//        ul(ng-controller='loginCtrl')
+//            md-fab-toolbar(md-open="demo.isOpen", count="demo.count", md-direction="{{demo.selectedDirection}}")
+//                md-fab-trigger(class="align-with-text")
+//                    md-button(aria-label="menu", class="md-fab md-primary")
+//                        md-icon(md-svg-src="/icons/ic_lock_open_black_24px.svg")
+//                md-toolbar.navigate
+//                    md-fab-actions(class="md-toolbar-tools")
+//                        input(type='text', placeholder='username', ng-model='form.username')
+//                        input(type='password', placeholder='password', ng-model='form.password')
+//                        input(type='submit', ng-click='submit()')
 
-    div(ng-include='template')
+div.md-padding(ng-controller="loginCtrl", id="popupContainer", ng-cloak)
+    div.dialog-demo-content(layout="row", layout-wrap, layout-margin)
+        md-button.md-primary.md-raised(flex="100", flex-gt-md="auto")
+            md-icon(md-svg-icon="/icons/ic_lock_open_black_24px.svg", ng-click="showAdvanced($event)")
+                div.hide-gt-sm(layout='row', layout-align='center center, flex='100')
+                    md-checkbox(ng-model="customFullscreen", aria-label="Fullscreen Custom Dialog") Custom Dialog Fullscreen
+
+    div(flex, ng-include='template')
+

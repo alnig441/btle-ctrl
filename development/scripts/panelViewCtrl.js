@@ -1,6 +1,5 @@
 app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', function($scope, $rootScope, $http, $location){
 
-
     $rootScope.panelTemplate = {
         dim: '/views/dim.html',
         schedule: '/views/schedule.html',
@@ -12,7 +11,6 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', fu
     $http.get('/panel')
         .then(function(response){
             $scope.panels = response.data;
-            //console.log($scope.panels);
         });
 
     $scope.newState = function(){
@@ -35,7 +33,6 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', fu
 
     $scope.switch = function(url){
 
-        console.log('panelViewCtrl switch: ', url);
         $rootScope.template = $rootScope.panelTemplate[url];
 
     };

@@ -18,6 +18,8 @@ router.post('/authenticate',
 
                     user = result.rows[0];
 
+                    console.log(result.rows[0]);
+
                     if(req.body.password !== user.password){
                         res.send(false);
                     }

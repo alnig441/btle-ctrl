@@ -1,5 +1,8 @@
 body {
     margin: auto;
+    font-family: Roboto,"Helvetica Neue",sans-serif;
+    font-size: 16px;
+    /*width: 450px;*/
 
 }
 
@@ -7,7 +10,7 @@ ul {
     list-style: none;
     margin:auto;
     padding:0px;
-    width: 350px;
+    /*width: 350px;*/
 }
 
 .navigate {
@@ -19,8 +22,10 @@ ul {
 }
 
 .navigate input {
-    display: inline;
-    width: 75px;
+    display: inline-flex;
+    margin: auto;
+    text-align: center;
+    width: auto;
 }
 
 table {
@@ -40,8 +45,10 @@ td {
 }
 
 .outer {
-    width: 75px;
-    height: 75px;
+    width: 100%;
+    height: 100%;
+    padding:none;
+    margin: none;
     border-radius: 5px;
 }
 
@@ -55,4 +62,27 @@ p {
 
 .myButton {
     display: inline;
+}
+
+.layout-padding {
+    list-style: none;
+}
+
+/* ANGULAR MATERIAL DESIGN */
+
+.fabToolbardemoBasicUsage md-fab-toolbar.md-right md-fab-trigger.align-with-text {
+    left: 7px; }
+
+md-toolbar md-fab-actions {
+    border-radius: 25%;
+    font-size: 12px;
+}
+
+md-button {
+    padding: none;
+    margin: none;
+}
+
+.md-inline-form {
+    margin:auto;
 }

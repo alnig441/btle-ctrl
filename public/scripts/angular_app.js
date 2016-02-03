@@ -1,6 +1,15 @@
 var app = angular.module('myApp', ['ngMaterial','ngRoute','ngAnimate']);
 
-app.config(function($routeProvider, $locationProvider){
+app.config(function($routeProvider, $locationProvider, $mdThemingProvider){
+
+    $mdThemingProvider.theme('default')
+        .primaryPalette('deep-orange',{
+            'default': '500',
+            'hue-1': '100',
+            'hue-2': '900'
+        })
+        .accentPalette('blue-grey');
+
     $locationProvider.html5Mode(true);
     $routeProvider
         .when('/admin', {
@@ -12,14 +21,25 @@ app.config(function($routeProvider, $locationProvider){
             controller: 'panelViewCtrl'
         })
         .otherwise({redirectTo: '/default'});
+
+
+
+
 });
 
 
-;app.controller('loginCtrl',['$scope', '$rootScope', '$http', '$location', function($scope, $rootScope, $http, $location){
+;app.controller('loginCtrl',['$scope', '$rootScope', '$http', '$location', '$mdDialog', '$mdMedia', function ($scope, $rootScope, $http, $location, $mdDialog, $mdMedia){
+
+    console.log('in loginCtrl');
 
     $rootScope.template = '/views/panel.html';
 
+    $rootScope.edinaa = {};
+
+    $rootScope.form = {};
+
     $scope.submit = function(){
+
         $http.post('/login/authenticate', $scope.form)
             .then(function(response){
                 if(response.data === true){
@@ -32,8 +52,67 @@ app.config(function($routeProvider, $locationProvider){
     $scope.logout = function(){
         $location.path('/default');
     };
+
+    //$scope.isOpen = false;
+    //$scope.demo = {
+    //    isOpen: false,
+    //    count: 0,
+    //    selectedDirection: 'right'
+    //};
+
+
+    $scope.customFullscreen = $mdMedia('xs') || $mdMedia('sm');
+    $scope.showAlert = function(ev) {
+        // Appending dialog to document.body to cover sidenav in docs app
+        // Modal dialogs should fully cover application
+        // to prevent interaction outside of dialog
+        $mdDialog.show(
+            $mdDialog.alert()
+                .parent(angular.element(document.querySelector('#popupContainer')))
+                .clickOutsideToClose(true)
+                .title('This is an alert title')
+                .textContent('You can specify some description text in here.')
+                .ariaLabel('Alert Dialog Demo')
+                .ok('Got it!')
+                .targetEvent(ev)
+        );
+    };
+
+    $scope.showAdvanced = function(ev) {
+        var useFullScreen = ($mdMedia('sm') || $mdMedia('xs'))  && $scope.customFullscreen;
+        $mdDialog.show({
+                controller: DialogController,
+                templateUrl: '/views/login.html',
+                parent: angular.element(document.body),
+                targetEvent: ev,
+                clickOutsideToClose:true,
+                fullscreen: useFullScreen
+            })
+            .then(function(answer) {
+                $scope.status = 'You said the information was "' + answer + '".';
+            }, function() {
+                $scope.status = 'You cancelled the dialog.';
+            });
+        $scope.$watch(function() {
+            return $mdMedia('xs') || $mdMedia('sm');
+        }, function(wantsFullScreen) {
+            $scope.customFullscreen = (wantsFullScreen === true);
+        });
+    };
+
 }]);
-;app.controller('adminCtrl',['$scope','$rootScope', '$http', function($scope, $rootScope, $http){
+
+function DialogController($scope, $mdDialog) {
+    $scope.hide = function() {
+        $mdDialog.hide();
+    };
+    $scope.cancel = function() {
+        $mdDialog.cancel();
+    };
+    $scope.answer = function(answer) {
+        $mdDialog.hide(answer);
+    };
+};app.controller('adminCtrl',['$scope','$rootScope', '$http', function($scope, $rootScope, $http){
 
     $scope.addDev = function(){
 
@@ -171,17 +250,29 @@ app.config(function($routeProvider, $locationProvider){
 }]);
 ;app.controller('optionsCtrl',['$scope', '$rootScope', '$http', '$location', function($scope, $rootScope, $http, $location){
 
-    $scope.setSchedule = function(){
+    $scope.setSchedule = function(url){
 
-        console.log('in optionsCtrl');
+        $http.get('http://api.sunrise-sunset.org/json?lat=44.891123.7201600&lng=-93.359752&formatted=0').then(function(response){
+            $rootScope.edina = response.data.results;
+            var date = new Date($rootScope.edina.sunset);
+            console.log('Sunset in Edina today: ', date);
+        }).then(function(response){
+            $http.post('/options/sun', $rootScope.edina).then(function(response){
+                console.log('response from options/sun', response);
+            });
+        });
 
         $http.get('/options')
             .then(function(response){
                 console.log(response);
             });
+
+        $rootScope.template = '/views/panel.html';
+
     };
 
     $scope.apply = function(url){
+
 
         $rootScope.template = url;
     };
@@ -191,7 +282,6 @@ app.config(function($routeProvider, $locationProvider){
     };
 
 }]);;app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', function($scope, $rootScope, $http, $location){
-
 
     $rootScope.panelTemplate = {
         dim: '/views/dim.html',
@@ -204,7 +294,6 @@ app.config(function($routeProvider, $locationProvider){
     $http.get('/panel')
         .then(function(response){
             $scope.panels = response.data;
-            //console.log($scope.panels);
         });
 
     $scope.newState = function(){
@@ -227,7 +316,6 @@ app.config(function($routeProvider, $locationProvider){
 
     $scope.switch = function(url){
 
-        console.log('panelViewCtrl switch: ', url);
         $rootScope.template = $rootScope.panelTemplate[url];
 
     };

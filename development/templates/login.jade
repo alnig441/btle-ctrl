@@ -1,0 +1,13 @@
+md-dialog(aria-label="Administrator Login", ng-cloak)
+    form
+        md-toolbar
+            div.md-toolbar-tools
+                h2 Administrator Login
+        md-dialog-content
+            div.md-dialog-content
+                input(type='text')
+                input(type='password')
+        md-dialog-actions(layout="row")
+            span(flex)
+            md-button(ng-click="answer('not useful')") Login
+            md-button(ng-click="answer('useful')", style="margin-right:20px;") Cancel

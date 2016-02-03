@@ -1,19 +1,39 @@
-table(ng-controller='optionsCtrl')
-    tr
-        td
-            li
-                label Time
-                input(type='time')
-        td
-            li
-                label
-                input(type='date')
-    tr
-        td Daily
-            input(type='checkbox')
-        td Weekly
-            input(type='checkbox')
+div(class='md-inline-form', layout='column', ng-cloak, ng-controller='optionsCtrl')
+    md-content(layout-gt-sm='row', layout-padding)
+        div
+            md-input-container
+                md-checkbox Turn OFF @ Sunrise
+            md-input-container
+                md-checkbox Turn ON @ Sunset
+        div
+            md-input-container
+                md-checkbox Repeat Daily
+            md-input-container
+                md-checkbox Repeat Weekly
 
-    tr
-        td
-            button(ng-click='return()') Return
+            //tr
+                //    td
+                //        li
+                //            label Turn off @ Sunset
+                //            input(type='checkbox')
+                //    td
+                //        li
+                //            label Turn on @ Sunrise
+                //            input(type='checkbox')
+                //tr
+                //    td
+                //        li
+                //            label Time
+                //            input(type='time')
+                //    td
+                //        li
+                //            label Date
+                //            input(type='date')
+                //tr
+                //    td Daily
+                //        input(type='checkbox')
+                //    td Weekly
+                //        input(type='checkbox')
+                //tr
+                //    td
+                //        button(ng-click='setSchedule()') Apply

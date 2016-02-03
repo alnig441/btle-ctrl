@@ -52,7 +52,8 @@ module.exports = function(grunt) {
             main: {
                 files: [
                     {expand: true, cwd: './development/modules/' ,src: '*.js', dest: paths.to.modules, filter: 'isFile'},
-                    {expand: true, cwd: './node_modules/angular-ui-bootstrap/dist/' ,src: '*tpls.js', dest: paths.to.vendors, filter: 'isFile'}
+                    {expand: true, cwd: './node_modules/angular-ui-bootstrap/dist/' ,src: '*tpls.js', dest: paths.to.vendors, filter: 'isFile'},
+                    {expand: true, cwd: './development/icons/' ,src: '*.svg', dest: paths.to.icons, filter: 'isFile'},
                 ]
             }
         },
@@ -119,6 +120,6 @@ module.exports = function(grunt) {
 };
 
 var paths = {
-    from: {scripts: './development/scripts/*.js', templates: './development/templates/*.jade', styles: './development/styles/*.css', images: './development/images/*.*', modules: './development/modules/*.js'},
-    to: {scripts: './public/scripts/angular_app.js', templates: './public/views/', styles: './public/stylesheets/', images: './public/images/', modules: './public/scripts/', vendors: './public/vendors/'}
+    from: {scripts: './development/scripts/*.js', templates: './development/templates/*.jade', styles: './development/styles/*.css', icons: './development/icons/*.svg', modules: './development/modules/*.js'},
+    to: {scripts: './public/scripts/angular_app.js', templates: './public/views/', styles: './public/stylesheets/', icons: './public/icons/', modules: './public/scripts/', vendors: './public/vendors/'}
 };

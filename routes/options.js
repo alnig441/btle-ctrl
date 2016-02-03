@@ -30,4 +30,11 @@ router.get('/', function(req, res, error){
 
 });
 
+router.post('/sun', function(req, res, error){
+
+    console.log('in options route sun ', req.body);
+    res.sendStatus(200);
+
+});
+
 module.exports = router;

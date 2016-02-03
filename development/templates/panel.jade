@@ -1,7 +1,7 @@
 table(ng-controller='panelViewCtrl')
     tr(ng-repeat='panel in panels')
-        td
-            button.outer(ng-click='newState()') {{panel.device.location}} ON/OFF
-        td
-            button.outer(ng-click='showOptions("options")') OPTIONS
+        td(class='md-accent')
+            md-button.outer(ng-click='newState()') {{panel.device.location}} ON/OFF
+        td(class='md-primary-hue-1')
+            md-button.outer(ng-click='showOptions("options")') OPTIONS
 
