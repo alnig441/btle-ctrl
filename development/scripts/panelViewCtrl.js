@@ -5,6 +5,7 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', fu
         schedule: '/views/schedule.html',
         colour: '/views/colour.html',
         options: '/views/options.html',
+        profiles: '/views/profiles.html',
         apply: '/views/default.html'
     };
 
@@ -28,11 +29,12 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', fu
     };
 
     $scope.showOptions = function(url){
+        console.log('..changing to options view..');
         $rootScope.template = $rootScope.panelTemplate[url];
     };
 
     $scope.switch = function(url){
-
+        console.log('..loading option '+ url +' ..');
         $rootScope.template = $rootScope.panelTemplate[url];
 
     };

@@ -4,6 +4,7 @@ var pg = require('pg');
 var spawn = require('child_process').spawn;
 var call = require('../public/scripts/myFunctions.min.js');
 var schedule = require('node-schedule');
+var ayb = require('all-your-base');
 
 var connectionString = process.env.DATABASE_URL || 'postgres://localhost:5432/btle-ctrl';
 
@@ -33,6 +34,22 @@ router.get('/', function(req, res, error){
 router.post('/sun', function(req, res, error){
 
     console.log('in options route sun ', req.body);
+    res.sendStatus(200);
+
+});
+
+router.post('/colour', function(req, res, error){
+
+    console.log('in optiona colour route ', req.body);
+
+    var hex = '#';
+
+    for(var colour in req.body){
+        hex += ayb.decToHex(req.body[colour]);
+    }
+
+
+
     res.sendStatus(200);
 
 });

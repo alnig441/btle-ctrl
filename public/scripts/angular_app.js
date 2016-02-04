@@ -236,15 +236,31 @@ function DialogController($scope, $mdDialog, $http, $location) {
 
     };
 
-    $scope.apply = function(url){
+    $scope.apply = function(option){
+        console.log('in options ctrl - function apply', $scope);
 
+        if(option === 'colour'){
 
-        $rootScope.template = url;
+            $http.post('/options/colour', $scope.color)
+                .then(function(response){
+                    console.log('from options route');
+                });
+
+        }
+
+        $rootScope.template = "/views/panel.html";
     };
 
     $scope.return = function(){
         $rootScope.template = "/views/panel.html";
     };
+
+    $scope.color = {
+        red: Math.floor(Math.random() * 255),
+        green: Math.floor(Math.random() * 255),
+        blue: Math.floor(Math.random() * 255)
+    };
+
 
 }]);;app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', function($scope, $rootScope, $http, $location){
 
@@ -253,6 +269,7 @@ function DialogController($scope, $mdDialog, $http, $location) {
         schedule: '/views/schedule.html',
         colour: '/views/colour.html',
         options: '/views/options.html',
+        profiles: '/views/profiles.html',
         apply: '/views/default.html'
     };
 
@@ -276,11 +293,12 @@ function DialogController($scope, $mdDialog, $http, $location) {
     };
 
     $scope.showOptions = function(url){
+        console.log('..changing to options view..');
         $rootScope.template = $rootScope.panelTemplate[url];
     };
 
     $scope.switch = function(url){
-
+        console.log('..loading option '+ url +' ..');
         $rootScope.template = $rootScope.panelTemplate[url];
 
     };

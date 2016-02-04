@@ -6,6 +6,7 @@
     "start": "node ./bin/www"
   },
   "dependencies": {
+    "all-your-base": "^0.3.0",
     "angular": "^1.4.8",
     "angular-ui-bootstrap": "^1.1.1",
     "body-parser": "~1.13.2",

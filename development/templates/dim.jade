@@ -1,2 +1,13 @@
-table
-    p .. loading dim ..
+div(ng-controller="optionsCtrl", ng-cloak)
+    md-content(style="margin: 16px; padding:16px")
+        h3 DIM
+            span(ng-attr-style="border: 1px solid #333; background: rgb({{color.red}},{{color.green}},{{color.blue}})", layout, layout-align="center center")
+        div(layout)
+            div(flex="10", layout, layout-align="center center")
+                span.md-body-1
+            md-slider(flex min="0", max="255", ng-model="color.red", aria-label="red", id="red-slider", class)
+            div(flex="20", layout, layout-align="center center")
+                input(flex, type="number", ng-model="", aria-label="red", aria-controls="red-slider")
+    md-button(ng-click='apply()') Apply
+
+
