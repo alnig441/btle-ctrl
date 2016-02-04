@@ -42,11 +42,44 @@ router.post('/colour', function(req, res, error){
 
     console.log('in optiona colour route ', req.body);
 
-    var hex = '#';
+    var chgColour = {
+        gattArgs: [
+            '-i',
+            'hci1',
+            '-b',
+            req.body.mac,
+            '--char-write',
+            '-a',
+            '0x0028',
+            '-n'
+        ]
+    };
 
-    for(var colour in req.body){
-        hex += ayb.decToHex(req.body[colour]);
+
+    var hex = '58010301ff00';
+
+    for(var i in req.body.colour){
+        if(req.body.colour[i] < 16){
+            hex += '0';
+        }
+        hex += ayb.decToHex(req.body.colour[i]);
     }
+
+    chgColour.gattArgs.push(hex);
+    console.log(chgColour.gattArgs);
+
+    var child = spawn('gatttool', chgColour.gattArgs);
+
+    child.stdout.on('data', function(data){
+
+        res.send(data);
+
+        child.kill();
+    });
+
+    child.on('exit', function(code){
+        console.log('spawned process ended on exit code: ', code);
+    });
 
 
 

@@ -3,8 +3,10 @@ div#panel(ng-controller='panelViewCtrl)
         md-whiteframe.md-whiteframe-1dp(flex-sm="45", flex-gt-sm="35", flex-gt-md="25", layout, layout-align="center center")
             span
                 .md-whiteframe-3dp
-                    button.md-background(ng-click='newState()', layout, layout-align="center center") {{panel.device.location}}
-        md-whiteframe.md-whiteframe-1dp.md-accent(flex-sm="45", flex-gt-sm="35", flex-gt-md="25", layout, layout-align="center center")
-            span
-                .md-whiteframe-3dp
-                    button(ng-click='showOptions("options")') Options
+                    button(ng-click='newState()', layout, layout-align="center center") {{panel.device.location}}
+                    button(ng-click='showOptions("options")', layout, layout-align="center center") Options
+
+        //md-whiteframe.md-whiteframe-1dp.md-accent(flex-sm="45", flex-gt-sm="35", flex-gt-md="25", layout, layout-align="center center")
+        //    span
+        //        .md-whiteframe-3dp
+        //            button(ng-click='showOptions("options")') Options

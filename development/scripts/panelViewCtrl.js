@@ -18,6 +18,8 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', fu
 
         $scope.device = this.panel.device;
 
+        console.log('newState ', this);
+
         $http.put('/panel', $scope.device)
             .then(function(response){
                 $http.get('/panel')
@@ -29,7 +31,8 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', fu
     };
 
     $scope.showOptions = function(url){
-        console.log('..changing to options view..');
+        console.log('..changing to options view..', this);
+        $rootScope.activeDevice = this.panel.device;
         $rootScope.template = $rootScope.panelTemplate[url];
     };
 

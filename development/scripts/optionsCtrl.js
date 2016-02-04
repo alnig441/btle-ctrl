@@ -22,13 +22,15 @@ app.controller('optionsCtrl',['$scope', '$rootScope', '$http', '$location', func
     };
 
     $scope.apply = function(option){
-        console.log('in options ctrl - function apply', $scope);
+        console.log('in options ctrl - function apply',option, $rootScope);
+
+        $rootScope.activeDevice.colour = $scope.color;
 
         if(option === 'colour'){
 
-            $http.post('/options/colour', $scope.color)
+            $http.post('/options/colour', $rootScope.activeDevice)
                 .then(function(response){
-                    console.log('from options route');
+                    console.log('from options route', response);
                 });
 
         }

@@ -237,13 +237,15 @@ function DialogController($scope, $mdDialog, $http, $location) {
     };
 
     $scope.apply = function(option){
-        console.log('in options ctrl - function apply', $scope);
+        console.log('in options ctrl - function apply',option, $rootScope);
+
+        $rootScope.activeDevice.colour = $scope.color;
 
         if(option === 'colour'){
 
-            $http.post('/options/colour', $scope.color)
+            $http.post('/options/colour', $rootScope.activeDevice)
                 .then(function(response){
-                    console.log('from options route');
+                    console.log('from options route', response);
                 });
 
         }
@@ -282,6 +284,8 @@ function DialogController($scope, $mdDialog, $http, $location) {
 
         $scope.device = this.panel.device;
 
+        console.log('newState ', this);
+
         $http.put('/panel', $scope.device)
             .then(function(response){
                 $http.get('/panel')
@@ -293,7 +297,8 @@ function DialogController($scope, $mdDialog, $http, $location) {
     };
 
     $scope.showOptions = function(url){
-        console.log('..changing to options view..');
+        console.log('..changing to options view..', this);
+        $rootScope.activeDevice = this.panel.device;
         $rootScope.template = $rootScope.panelTemplate[url];
     };
 
