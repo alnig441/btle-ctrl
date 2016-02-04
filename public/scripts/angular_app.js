@@ -1,14 +1,18 @@
 var app = angular.module('myApp', ['ngMaterial','ngRoute','ngAnimate']);
 
-app.config(function($routeProvider, $locationProvider, $mdThemingProvider){
+app.config(function($routeProvider, $locationProvider, $mdThemingProvider, $mdIconProvider){
 
     $mdThemingProvider.theme('default')
         .primaryPalette('deep-orange',{
-            'default': '500',
+            'default': '700',
             'hue-1': '100',
             'hue-2': '900'
         })
-        .accentPalette('blue-grey');
+        .backgroundPalette('blue-grey', {
+            'default': '100',
+            'hue-1': '50',
+            'hue-2': '900'
+    });
 
     $locationProvider.html5Mode(true);
     $routeProvider
@@ -22,8 +26,8 @@ app.config(function($routeProvider, $locationProvider, $mdThemingProvider){
         })
         .otherwise({redirectTo: '/default'});
 
-
-
+    $mdIconProvider
+        .defaultIconSet('https://fonts.googleapis.com/icon?family=Material+Icons');       // Register a default set of SVG icons
 
 });
 
@@ -44,7 +48,7 @@ app.config(function($routeProvider, $locationProvider, $mdThemingProvider){
         var useFullScreen = ($mdMedia('sm') || $mdMedia('xs'))  && $scope.customFullscreen;
         $mdDialog.show({
                 controller: DialogController,
-                templateUrl: '/views/login.html',
+                templateUrl: '/views/loginDialog.html',
                 parent: angular.element(document.body),
                 targetEvent: ev,
                 clickOutsideToClose:true,

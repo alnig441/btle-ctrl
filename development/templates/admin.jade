@@ -1,6 +1,7 @@
-ul(ng-controller='loginCtrl')
-    li.navigate Admin:
-        button(ng-click='logout()') log out
+div.md-padding(ng-controller="loginCtrl", id="popupContainer", ng-cloak)
+    div.dialog-demo-content(layout="row", layout-wrap, layout-margin)
+        md-button.md-primary.md-raised(flex="100", flex-gt-md="auto")
+            md-icon(ng-click="logout()") lock_outline
 
 table(ng-controller='adminViewCtrl')
     tr

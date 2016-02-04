@@ -14,7 +14,7 @@ app.controller('loginCtrl',['$scope', '$rootScope', '$http', '$location', '$mdDi
         var useFullScreen = ($mdMedia('sm') || $mdMedia('xs'))  && $scope.customFullscreen;
         $mdDialog.show({
                 controller: DialogController,
-                templateUrl: '/views/login.html',
+                templateUrl: '/views/loginDialog.html',
                 parent: angular.element(document.body),
                 targetEvent: ev,
                 clickOutsideToClose:true,

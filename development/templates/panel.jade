@@ -1,7 +1,17 @@
-table(ng-controller='panelViewCtrl')
-    tr(ng-repeat='panel in panels')
-        td(class='md-accent')
-            md-button.outer(ng-click='newState()') {{panel.device.location}} ON/OFF
-        td(class='md-primary-hue-1')
-            md-button.outer(ng-click='showOptions("options")') OPTIONS
+//table(ng-controller='panelViewCtrl')
+//    tr(ng-repeat='panel in panels')
+//        td(class='md-accent')
+//            md-button.outer(ng-click='newState()') {{panel.device.location}} ON/OFF
+//        td(class='md-primary-hue-1')
+//            md-button.outer(ng-click='showOptions("options")') OPTIONS
 
+div#panel(ng-controller='panelViewCtrl)
+    div(layout="row", layout-padding layout-wrap, layout-fill, style="padding: 5px, margin: auto;", ng-cloak, ng-repeat='panel in panels')
+        md-whiteframe.md-whiteframe-1dp(flex-sm="45", flex-gt-sm="35", flex-gt-md="25", layout, layout-align="center center")
+            span
+                .md-whiteframe-3dp
+                    button.md-background(ng-click='newState()', layout, layout-align="center center") {{panel.device.location}}
+        md-whiteframe.md-whiteframe-1dp.md-accent(flex-sm="45", flex-gt-sm="35", flex-gt-md="25", layout, layout-align="center center")
+            span
+                .md-whiteframe-3dp
+                    button(ng-click='showOptions("options")') Options
