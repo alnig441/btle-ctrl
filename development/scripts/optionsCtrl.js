@@ -38,7 +38,7 @@ app.controller('optionsCtrl',['$scope', '$rootScope', '$http', '$location', func
         $rootScope.template = "/views/panel.html";
     };
 
-    $scope.return = function(){
+    $scope.cancel = function(){
         $rootScope.template = "/views/panel.html";
     };
 

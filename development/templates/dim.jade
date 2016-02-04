@@ -8,6 +8,9 @@ div(ng-controller="optionsCtrl", ng-cloak)
             md-slider(flex min="0", max="255", ng-model="color.red", aria-label="red", id="red-slider", class)
             div(flex="20", layout, layout-align="center center")
                 input(flex, type="number", ng-model="", aria-label="red", aria-controls="red-slider")
-    md-button(ng-click='apply()') Apply
+    md-button(ng-click='apply("dim")') Apply
+        md-icon done
+    md-button(ng-click='cancel()') Cancel
+        md-icon cancel
 
 

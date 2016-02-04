@@ -253,7 +253,7 @@ function DialogController($scope, $mdDialog, $http, $location) {
         $rootScope.template = "/views/panel.html";
     };
 
-    $scope.return = function(){
+    $scope.cancel = function(){
         $rootScope.template = "/views/panel.html";
     };
 
