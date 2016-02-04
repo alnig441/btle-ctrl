@@ -78,7 +78,7 @@ md-toolbar md-fab-actions {
     font-size: 12px;
 }
 
-#panel button {
+#panel button, #admin button {
     padding: none;
     margin: auto;
     whitespace: normal;
