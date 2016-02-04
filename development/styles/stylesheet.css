@@ -79,6 +79,7 @@ md-toolbar md-fab-actions {
 }
 
 #panel button, #admin button {
+    display: inline-flex;
     padding: none;
     margin: auto;
     whitespace: normal;
