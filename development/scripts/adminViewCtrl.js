@@ -134,7 +134,9 @@ app.controller('adminViewCtrl',['$scope', '$rootScope', '$http', '$mdMedia', '$m
 
 function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, $mdMedia) {
 
-    $scope.submit = function(ev, choice){
+    $scope.submit = function(choice, ev){
+
+        console.log('in AdminDialogController ', choice, $scope);
 
         if(choice === 'add_from_scan') {
 
@@ -158,6 +160,37 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
             }, function(wantsFullScreen) {
                 $scope.customFullscreen = (wantsFullScreen === true);
             });
+        }
+
+        if(choice === 'delete') {
+
+            $http.delete('/admin/' + this.installation.device.mac)
+                .then(function(response){
+                    $http.get('/panel')
+                        .then(function(response){
+                            $rootScope.installations = response.data;
+                            console.log(response);
+                        });
+                });
+
+        }
+
+        if(choice === 'update') {
+
+            $http.post('/admin/update', this.installation.device)
+                .then(function(response){
+                    console.log(response);
+                });
+
+        }
+
+        if(choice === 'add') {
+
+            $http.post('/admin', this.form.device)
+                .then(function(response){
+                    console.log(response);
+                });
+
         }
 
         $mdDialog.hide();

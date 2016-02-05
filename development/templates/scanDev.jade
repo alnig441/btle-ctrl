@@ -14,7 +14,7 @@ md-dialog(ng-controller='adminViewCtrl', aria-label="List dialog")
         md-list.md-dialog-content
             md-list-item(ng-repeat="device in devices")
                 p {{device.mac}}
-                md-button.md-primary(ng-click="submit($event, 'add_from_scan')") add
+                md-button.md-primary(ng-click="submit('add_from_scan', $event)") add
                     md-icon done
                 md-button.md-primary(ng-click='testDev()') test
                     md-icon lightbulb_outline
