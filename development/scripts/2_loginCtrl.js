@@ -1,8 +1,24 @@
 app.controller('loginCtrl',['$scope', '$rootScope', '$http', '$location', '$mdDialog', '$mdMedia', function ($scope, $rootScope, $http, $location, $mdDialog, $mdMedia){
 
-    $rootScope.template = '/views/panel.html';
+    console.log('in login Ctrl - rootScopes ', $rootScope);
 
-    $rootScope.edinaa = {};
+
+    $rootScope.template = {
+        dim: '/views/dim.html',
+        schedule: '/views/schedule.html',
+        colour: '/views/colour.html',
+        options: '/views/options.html',
+        profiles: '/views/profiles.html',
+        apply: '/views/default.html',
+        default: '/views/panel.html',
+        scan: '/views/scanDev.html',
+        add: '/views/addDev.html',
+        update: '/views/updDev.html',
+        delete: '/views/delDev.html'
+    };
+
+
+    $rootScope.template.url = '/views/panel.html';
 
     $scope.logout = function(){
         $location.path('/default');
@@ -29,7 +45,10 @@ app.controller('loginCtrl',['$scope', '$rootScope', '$http', '$location', '$mdDi
 
 }]);
 
-function LoginDialogController($scope, $mdDialog, $http, $location) {
+function LoginDialogController($scope, $mdDialog, $http, $location, $rootScope) {
+
+    console.log('in LoginDialogCtrl - rootScope: ', $rootScope);
+
     $scope.login = function() {
         $http.post('/login/authenticate', $scope.form)
             .then(function(response){

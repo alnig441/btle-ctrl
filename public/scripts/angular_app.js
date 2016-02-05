@@ -34,9 +34,25 @@ app.config(function($routeProvider, $locationProvider, $mdThemingProvider, $mdIc
 
 ;app.controller('loginCtrl',['$scope', '$rootScope', '$http', '$location', '$mdDialog', '$mdMedia', function ($scope, $rootScope, $http, $location, $mdDialog, $mdMedia){
 
-    $rootScope.template = '/views/panel.html';
+    console.log('in login Ctrl - rootScopes ', $rootScope);
 
-    $rootScope.edinaa = {};
+
+    $rootScope.template = {
+        dim: '/views/dim.html',
+        schedule: '/views/schedule.html',
+        colour: '/views/colour.html',
+        options: '/views/options.html',
+        profiles: '/views/profiles.html',
+        apply: '/views/default.html',
+        default: '/views/panel.html',
+        scan: '/views/scanDev.html',
+        add: '/views/addDev.html',
+        update: '/views/updDev.html',
+        delete: '/views/delDev.html'
+    };
+
+
+    $rootScope.template.url = '/views/panel.html';
 
     $scope.logout = function(){
         $location.path('/default');
@@ -63,7 +79,10 @@ app.config(function($routeProvider, $locationProvider, $mdThemingProvider, $mdIc
 
 }]);
 
-function LoginDialogController($scope, $mdDialog, $http, $location) {
+function LoginDialogController($scope, $mdDialog, $http, $location, $rootScope) {
+
+    console.log('in LoginDialogCtrl - rootScope: ', $rootScope);
+
     $scope.login = function() {
         $http.post('/login/authenticate', $scope.form)
             .then(function(response){
@@ -77,139 +96,10 @@ function LoginDialogController($scope, $mdDialog, $http, $location) {
     $scope.dismiss = function() {
         $mdDialog.cancel();
     };
-};app.controller('adminCtrl',['$scope','$rootScope', '$http', function($scope, $rootScope, $http){
+};app.controller('adminViewCtrl',['$scope', '$rootScope', '$http', '$mdMedia', '$mdDialog', function($scope, $rootScope, $http, $mdMedia, $mdDialog){
 
-    $scope.addDev = function(){
+    console.log('in adminViewCtrl - rootScope: ', $rootScope);
 
-        console.log('in adminCtrl addDev', this);
-        $rootScope.form = this;
-        console.log('HEJ DER!', $rootScope.form);
-        $rootScope.template.url = $rootScope.template.add;
-
-    };
-
-    $scope.testDev = function(){
-
-        var device = {
-            mac: this.device.mac,
-            state: true
-        };
-
-        var x = setInterval(runTest, 1000);
-        var state;
-
-        function runTest() {
-            $http.post('/admin/test/', device )
-                .then(function (response) {
-                    device.state = response.data;
-
-                });
-        }
-
-        var y = setTimeout(killX, 5000);
-
-        function killX(){
-            console.log('test interval cleared');
-            clearInterval(x);
-        }
-
-
-    };
-
-    $scope.submit = function(str){
-
-        console.log('form submission from: ', str, this.installation, $scope);
-
-        if(str == 'add'){
-
-            $http.post('/admin', $scope.form.device)
-                .then(function(response){
-                    console.log(response);
-                });
-
-        }
-
-        if(str == 'delete'){
-
-            $http.delete('/admin/' + this.installation.device.mac)
-                .then(function(response){
-                    $http.get('/panel')
-                        .then(function(response){
-                            $rootScope.installations = response.data;
-                            console.log(response);
-                        });
-                });
-
-        }
-
-        if(str == 'update'){
-
-            $http.post('/admin/update', this.installation.device)
-                .then(function(response){
-                    console.log(response);
-                });
-
-        }
-
-    };
-
-}]);
-;app.controller('adminViewCtrl',['$scope', '$rootScope', '$http', '$mdMedia', '$mdDialog', function($scope, $rootScope, $http, $mdMedia, $mdDialog){
-
-    //$rootScope.template = {
-    //    default: '/views/panel.html',
-    //    scan: '/views/scanDev.html',
-    //    add: '/views/addDev.html',
-    //    update: '/views/updDev.html',
-    //    delete: '/views/delDev.html'
-    //};
-
-    //$scope.switch = function(url){
-    //
-    //    $rootScope.template.url = $rootScope.template[url];
-    //
-    //    if(url == 'scan'){
-    //
-    //        $http.get('/admin/scan', $scope)
-    //            .then(function(response){
-    //                $rootScope.devices = response.data;
-    //            })
-    //            .then(function(){
-    //                $http.get('/admin/reset')
-    //                    .then(function(response){
-    //                        console.log(response);
-    //                    });
-    //
-    //            });
-    //
-    //    }
-    //
-    //    if(url == 'add'){
-    //
-    //        console.log('from adminViewCtrl add');
-    //
-    //    }
-    //
-    //    if(url == 'delete'){
-    //
-    //        $http.get('/panel')
-    //            .then(function(response){
-    //                $rootScope.installations = response.data;
-    //            });
-    //
-    //    }
-    //
-    //    if(url == 'update'){
-    //
-    //        $http.get('/panel')
-    //            .then(function(response){
-    //                $rootScope.installations = response.data;
-    //            });
-    //
-    //
-    //    }
-    //
-    //};
 
     $scope.customFullscreen = $mdMedia('xs') || $mdMedia('sm');
 
@@ -220,7 +110,7 @@ function LoginDialogController($scope, $mdDialog, $http, $location) {
             scope: $scope,
             preserveScope: true,
             controller: AdminDialogController,
-            templateUrl: $rootScope.panelTemplate[option],
+            templateUrl: $rootScope.template[option],
             parent: angular.element(document.body),
             targetEvent: ev,
             clickOutsideToClose:true,
@@ -290,6 +180,9 @@ function LoginDialogController($scope, $mdDialog, $http, $location) {
 
 function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, $mdMedia) {
 
+    console.log('in adminDialogCtrl - rootScope: ', $rootScope);
+
+
     $scope.submit = function(choice, ev){
 
         console.log('in AdminDialogController ', choice, $scope);
@@ -305,7 +198,7 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
                 scope: $scope,
                 preserveScope: true,
                 controller: AdminDialogController,
-                templateUrl: $rootScope.panelTemplate.add,
+                templateUrl: $rootScope.template.add,
                 parent: angular.element(document.body),
                 targetEvent: ev,
                 clickOutsideToClose:true,
@@ -384,46 +277,61 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
     };
 };app.controller('optionsCtrl',['$scope', '$rootScope', '$http', '$location', function($scope, $rootScope, $http, $location){
 
-    $scope.setSchedule = function(url){
+    console.log('in options ctrl - rootScope: ', $rootScope);
 
-        $http.get('http://api.sunrise-sunset.org/json?lat=44.891123.7201600&lng=-93.359752&formatted=0').then(function(response){
-            $rootScope.edina = response.data.results;
-            var date = new Date($rootScope.edina.sunset);
-            console.log('Sunset in Edina today: ', date);
-        }).then(function(response){
-            $http.post('/options/sun', $rootScope.edina).then(function(response){
-                console.log('response from options/sun', response);
-            });
-        });
-
-        $http.get('/options')
-            .then(function(response){
-                console.log(response);
-            });
-
-        $rootScope.template = '/views/panel.html';
-
-    };
+    //$scope.setSchedule = function(url){
+    //
+    //    $http.get('http://api.sunrise-sunset.org/json?lat=44.891123.7201600&lng=-93.359752&formatted=0').then(function(response){
+    //        $rootScope.edina = response.data.results;
+    //        var date = new Date($rootScope.edina.sunset);
+    //        console.log('Sunset in Edina today: ', date);
+    //    }).then(function(response){
+    //        $http.post('/options/sun', $rootScope.edina).then(function(response){
+    //            console.log('response from options/sun', response);
+    //        });
+    //    });
+    //
+    //    $http.get('/options')
+    //        .then(function(response){
+    //            console.log(response);
+    //        });
+    //
+    //    $rootScope.template = '/views/panel.html';
+    //
+    //};
 
     $scope.apply = function(option){
         console.log('in options ctrl - function apply',option, $rootScope);
 
-        $rootScope.activeDevice.colour = $scope.color;
+        $rootScope.scheduleDevice.colour = $scope.color;
 
         if(option === 'colour'){
 
-            $http.post('/options/colour', $rootScope.activeDevice)
+            $http.post('/options/colour', $rootScope.scheduleDevice)
                 .then(function(response){
                     console.log('from options route', response);
                 });
 
         }
 
-        $rootScope.template = "/views/panel.html";
+        if(option === 'schedule') {
+
+            $http.get('http://api.sunrise-sunset.org/json?lat=44.891123.7201600&lng=-93.359752&formatted=0').then(function(response){
+                $rootScope.scheduleDevice.sunset = response.data.results.sunset;
+                $rootScope.scheduleDevice.sunrise = response.data.results.sunrise;
+            }).then(function(response){
+                $http.post('/options/schedule', $rootScope.scheduleDevice).then(function(response){
+                    console.log('response from options/schedule', response);
+                });
+            });
+
+        }
+
+        $rootScope.template.url = "/views/panel.html";
     };
 
     $scope.cancel = function(){
-        $rootScope.template = "/views/panel.html";
+        $rootScope.template.url = "/views/panel.html";
     };
 
     $scope.color = {
@@ -435,20 +343,7 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
 
 }]);;app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', function($scope, $rootScope, $http, $location){
 
-    //$rootScope.template = {
-    $rootScope.panelTemplate = {
-        dim: '/views/dim.html',
-        schedule: '/views/schedule.html',
-        colour: '/views/colour.html',
-        options: '/views/options.html',
-        profiles: '/views/profiles.html',
-        apply: '/views/default.html',
-        default: '/views/panel.html',
-        scan: '/views/scanDev.html',
-        add: '/views/addDev.html',
-        update: '/views/updDev.html',
-        delete: '/views/delDev.html'
-    };
+    console.log('in panelViewCtrl - rootScope: ', $rootScope);
 
     $http.get('/panel')
         .then(function(response){
@@ -473,15 +368,13 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
 
     $scope.showOptions = function(url){
         console.log('..changing to options view..', this);
-        $rootScope.activeDevice = this.panel.device;
-        //$rootScope.template = $rootScope.template[url];
-        $rootScope.template = $rootScope.panelTemplate[url];
+        $rootScope.scheduleDevice = this.panel.device;
+        $rootScope.template.url = $rootScope.template[url];
     };
 
     $scope.switch = function(url){
         console.log('..loading option '+ url +' ..');
-        //$rootScope.template = $rootScope.template[url];
-        $rootScope.template = $rootScope.panelTemplate[url];
+        $rootScope.template.url = $rootScope.template[url];
 
     };
 

@@ -31,9 +31,69 @@ router.get('/', function(req, res, error){
 
 });
 
-router.post('/sun', function(req, res, error){
+router.post('/schedule', function(req, res, error){
 
-    console.log('in options route sun ', req.body);
+    var sunrise = new Date(req.body.sunrise);
+    var sunset = new Date(req.body.sunset);
+
+    var flipSwitch = {
+        gattArgs: [
+            '-i',
+            'hci1',
+            '-b',
+            req.body.mac,
+            '--char-write',
+            '-a',
+            '0x0028',
+            '-n'
+        ]
+    };
+
+
+    console.log('TADA!!', sunset.getMonth()-1, typeof sunset.getMonth());
+
+
+    if((req.body.offAtSunrise || req.body.onAtSunset) && req.body.recurDaily) {
+        console.log('its a hit!!');
+    //write code to reschedule device acitivity every day at sunset or sunrise
+    }
+
+    if(req.body.onAtSunset) {
+
+        flipSwitch.gattArgs.push('58010301ff00ffffff');
+
+        console.log('on at sunset ', flipSwitch.gattArgs);
+
+        var job = schedule.scheduleJob(sunrise.getFullYear(), sunrise.getMonth()-1, sunrise.getDate(), sunrise.getHours(), sunrise.getMinutes(), sunrise.getSeconds(), function(){
+
+            var child = spawn('gatttool', flipSwitch.gattArgs);
+
+            child.stdout.on('data', function(data){
+
+                res.send(data);
+
+                child.kill();
+            });
+
+            child.on('exit', function(code){
+                console.log('spawned process ended on exit code: ', code);
+            });
+
+
+        });
+
+        job.on('scheduled',function(arg){
+            console.log('job scheduled', arg);
+        });
+
+        job.on('run', function(arg){
+            console.log('my job ran', arg);
+        });
+
+
+    }
+
+
     res.sendStatus(200);
 
 });

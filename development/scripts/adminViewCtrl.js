@@ -1,59 +1,7 @@
 app.controller('adminViewCtrl',['$scope', '$rootScope', '$http', '$mdMedia', '$mdDialog', function($scope, $rootScope, $http, $mdMedia, $mdDialog){
 
-    //$rootScope.template = {
-    //    default: '/views/panel.html',
-    //    scan: '/views/scanDev.html',
-    //    add: '/views/addDev.html',
-    //    update: '/views/updDev.html',
-    //    delete: '/views/delDev.html'
-    //};
+    console.log('in adminViewCtrl - rootScope: ', $rootScope);
 
-    //$scope.switch = function(url){
-    //
-    //    $rootScope.template.url = $rootScope.template[url];
-    //
-    //    if(url == 'scan'){
-    //
-    //        $http.get('/admin/scan', $scope)
-    //            .then(function(response){
-    //                $rootScope.devices = response.data;
-    //            })
-    //            .then(function(){
-    //                $http.get('/admin/reset')
-    //                    .then(function(response){
-    //                        console.log(response);
-    //                    });
-    //
-    //            });
-    //
-    //    }
-    //
-    //    if(url == 'add'){
-    //
-    //        console.log('from adminViewCtrl add');
-    //
-    //    }
-    //
-    //    if(url == 'delete'){
-    //
-    //        $http.get('/panel')
-    //            .then(function(response){
-    //                $rootScope.installations = response.data;
-    //            });
-    //
-    //    }
-    //
-    //    if(url == 'update'){
-    //
-    //        $http.get('/panel')
-    //            .then(function(response){
-    //                $rootScope.installations = response.data;
-    //            });
-    //
-    //
-    //    }
-    //
-    //};
 
     $scope.customFullscreen = $mdMedia('xs') || $mdMedia('sm');
 
@@ -64,7 +12,7 @@ app.controller('adminViewCtrl',['$scope', '$rootScope', '$http', '$mdMedia', '$m
             scope: $scope,
             preserveScope: true,
             controller: AdminDialogController,
-            templateUrl: $rootScope.panelTemplate[option],
+            templateUrl: $rootScope.template[option],
             parent: angular.element(document.body),
             targetEvent: ev,
             clickOutsideToClose:true,
@@ -134,6 +82,9 @@ app.controller('adminViewCtrl',['$scope', '$rootScope', '$http', '$mdMedia', '$m
 
 function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, $mdMedia) {
 
+    console.log('in adminDialogCtrl - rootScope: ', $rootScope);
+
+
     $scope.submit = function(choice, ev){
 
         console.log('in AdminDialogController ', choice, $scope);
@@ -149,7 +100,7 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
                 scope: $scope,
                 preserveScope: true,
                 controller: AdminDialogController,
-                templateUrl: $rootScope.panelTemplate.add,
+                templateUrl: $rootScope.template.add,
                 parent: angular.element(document.body),
                 targetEvent: ev,
                 clickOutsideToClose:true,
