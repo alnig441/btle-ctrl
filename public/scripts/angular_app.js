@@ -352,6 +352,33 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
         $mdDialog.hide();
     };
 
+    $scope.testDev = function() {
+
+        var device = {
+            mac: this.device.mac,
+            state: true
+        };
+
+        var x = setInterval(runTest, 1000);
+        var state;
+
+        function runTest() {
+            $http.post('/admin/test/', device )
+                .then(function (response) {
+                    device.state = response.data;
+
+                });
+        }
+
+        var y = setTimeout(killX, 6000);
+
+        function killX(){
+            console.log('test interval cleared');
+            clearInterval(x);
+        }
+
+    };
+
     $scope.dismiss = function() {
         $mdDialog.cancel();
     };
