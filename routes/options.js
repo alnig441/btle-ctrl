@@ -64,7 +64,7 @@ router.post('/schedule', function(req, res, error){
 
         console.log('on at sunset ', flipSwitch.gattArgs);
 
-        var job = schedule.scheduleJob(sunrise.getFullYear(), sunrise.getMonth()-1, sunrise.getDate(), sunrise.getHours(), sunrise.getMinutes(), sunrise.getSeconds(), function(){
+        var job = schedule.scheduleJob(sunset, function(){
 
             //var child = spawn('gatttool', flipSwitch.gattArgs);
             //
