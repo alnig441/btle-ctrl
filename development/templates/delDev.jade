@@ -1,6 +1,14 @@
-table(id='viewPane')
-    tr
-        td(id='loadPane')
-            ul(ng-controller='adminCtrl', ng-repeat='installation in installations')
-                li Device: {{ installation.device.location }}
-                button.myButton(ng-click='submit("delete")') Remove Device
+md-dialog(ng-controller='adminViewCtrl', aria-label="List dialog")
+    md-toolbar
+        div.md-toolbar-tools
+            h2 Delete Device
+    md-dialog-content
+        md-list.md-dialog-content
+            md-list-item(ng-repeat="installation in installations")
+                p {{installation.device.location}}
+                md-button.md-primary(ng-click="submit('delete')")
+                    md-icon done
+
+    md-dialog-actions
+        span(flex)
+        md-button.md-primary(ng-click="dismiss()") Cancel

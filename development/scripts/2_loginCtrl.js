@@ -13,7 +13,7 @@ app.controller('loginCtrl',['$scope', '$rootScope', '$http', '$location', '$mdDi
     $scope.showAdvanced = function(ev) {
         var useFullScreen = ($mdMedia('sm') || $mdMedia('xs'))  && $scope.customFullscreen;
         $mdDialog.show({
-                controller: DialogController,
+                controller: LoginDialogController,
                 templateUrl: '/views/loginDialog.html',
                 parent: angular.element(document.body),
                 targetEvent: ev,
@@ -29,7 +29,7 @@ app.controller('loginCtrl',['$scope', '$rootScope', '$http', '$location', '$mdDi
 
 }]);
 
-function DialogController($scope, $mdDialog, $http, $location) {
+function LoginDialogController($scope, $mdDialog, $http, $location) {
     $scope.login = function() {
         $http.post('/login/authenticate', $scope.form)
             .then(function(response){
@@ -40,7 +40,7 @@ function DialogController($scope, $mdDialog, $http, $location) {
             });
         $mdDialog.hide();
     };
-    $scope.cancel = function() {
+    $scope.dismiss = function() {
         $mdDialog.cancel();
     };
 }

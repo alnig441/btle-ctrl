@@ -10,6 +10,8 @@ var connectionString = process.env.DATABASE_URL || 'postgres://localhost:5432/bt
 
 router.get('/', function(req, res, error){
 
+    console.log('in panel get');
+
     pg.connect(connectionString, function(err, client, done){
 
         var device = [];
@@ -23,7 +25,7 @@ router.get('/', function(req, res, error){
 
         query.on('end',function(result){
             client.end();
-            //console.log(device);
+            console.log(device);
             res.send(device);
         })
 

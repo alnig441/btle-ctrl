@@ -1,15 +1,19 @@
-table(id='viewPane', ng-controller='adminCtrl')
-    tr
-        td(id='loadPane')
-            form(ng-submit='submit("add")')
-                ul
-                    li
-                        label(for='location') Device Location
-                    li
-                        input(type='text', name='location', ng-model='form.device.location')
-                    li
-                        label(for='mac') Device MAC
-                    li
-                        input(type='text', name='mac', ng-model='form.device.mac', ng-init='form.device.mac')
-                    li
-                        input(type='submit', value='submit')
+md-dialog(ng-controller='adminViewCtrl')
+    form
+        md-toolbar
+            div.md-toolbar-tools
+                h2 Add Device
+        md-dialog-content
+            div.md-dialog-content
+                md-input-container.md-block(flex-gt-sm)
+                    label MAC:
+                    input(type='text', ng-model='form.device.mac', ng-init='form.device.mac')
+                md-input-container.md-block(flex-gt-sm)
+                    label Location:
+                    input(type='text',ng-model='form.device.location')
+                md-button.md-primary(ng-click="submit('add')")
+                    md-icon done
+
+        md-dialog-actions
+            span(flex)
+            md-button.md-primary(ng-click="dismiss()") Cancel

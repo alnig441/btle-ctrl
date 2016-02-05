@@ -47,7 +47,7 @@ app.config(function($routeProvider, $locationProvider, $mdThemingProvider, $mdIc
     $scope.showAdvanced = function(ev) {
         var useFullScreen = ($mdMedia('sm') || $mdMedia('xs'))  && $scope.customFullscreen;
         $mdDialog.show({
-                controller: DialogController,
+                controller: LoginDialogController,
                 templateUrl: '/views/loginDialog.html',
                 parent: angular.element(document.body),
                 targetEvent: ev,
@@ -63,7 +63,7 @@ app.config(function($routeProvider, $locationProvider, $mdThemingProvider, $mdIc
 
 }]);
 
-function DialogController($scope, $mdDialog, $http, $location) {
+function LoginDialogController($scope, $mdDialog, $http, $location) {
     $scope.login = function() {
         $http.post('/login/authenticate', $scope.form)
             .then(function(response){
@@ -74,7 +74,7 @@ function DialogController($scope, $mdDialog, $http, $location) {
             });
         $mdDialog.hide();
     };
-    $scope.cancel = function() {
+    $scope.dismiss = function() {
         $mdDialog.cancel();
     };
 };app.controller('adminCtrl',['$scope','$rootScope', '$http', function($scope, $rootScope, $http){
@@ -154,25 +154,122 @@ function DialogController($scope, $mdDialog, $http, $location) {
     };
 
 }]);
-;app.controller('adminViewCtrl',['$scope', '$rootScope', '$http', function($scope, $rootScope, $http){
+;app.controller('adminViewCtrl',['$scope', '$rootScope', '$http', '$mdMedia', '$mdDialog', function($scope, $rootScope, $http, $mdMedia, $mdDialog){
 
-    $rootScope.template = {
-        default: '/views/panel.html',
-        scan: '/views/scanDev.html',
-        add: '/views/addDev.html',
-        update: '/views/updDev.html',
-        delete: '/views/delDev.html'
-    };
+    //$rootScope.template = {
+    //    default: '/views/panel.html',
+    //    scan: '/views/scanDev.html',
+    //    add: '/views/addDev.html',
+    //    update: '/views/updDev.html',
+    //    delete: '/views/delDev.html'
+    //};
 
-    $scope.switch = function(url){
+    //$scope.switch = function(url){
+    //
+    //    $rootScope.template.url = $rootScope.template[url];
+    //
+    //    if(url == 'scan'){
+    //
+    //        $http.get('/admin/scan', $scope)
+    //            .then(function(response){
+    //                $rootScope.devices = response.data;
+    //            })
+    //            .then(function(){
+    //                $http.get('/admin/reset')
+    //                    .then(function(response){
+    //                        console.log(response);
+    //                    });
+    //
+    //            });
+    //
+    //    }
+    //
+    //    if(url == 'add'){
+    //
+    //        console.log('from adminViewCtrl add');
+    //
+    //    }
+    //
+    //    if(url == 'delete'){
+    //
+    //        $http.get('/panel')
+    //            .then(function(response){
+    //                $rootScope.installations = response.data;
+    //            });
+    //
+    //    }
+    //
+    //    if(url == 'update'){
+    //
+    //        $http.get('/panel')
+    //            .then(function(response){
+    //                $rootScope.installations = response.data;
+    //            });
+    //
+    //
+    //    }
+    //
+    //};
 
-        $rootScope.template.url = $rootScope.template[url];
+    $scope.customFullscreen = $mdMedia('xs') || $mdMedia('sm');
 
-        if(url == 'scan'){
+    $scope.showAdvanced = function(ev, option) {
+        var useFullScreen = ($mdMedia('sm') || $mdMedia('xs'))  && $scope.customFullscreen;
+
+        var configDialog = {
+            scope: $scope,
+            preserveScope: true,
+            controller: AdminDialogController,
+            templateUrl: $rootScope.panelTemplate[option],
+            parent: angular.element(document.body),
+            targetEvent: ev,
+            clickOutsideToClose:true,
+            fullscreen: useFullScreen
+        };
+
+        if(option === 'delete' || option === 'update'){
+
+            $http.get('/panel')
+                .then(function(response){
+                    $scope.installations = response.data;
+
+                    $mdDialog.show(configDialog);
+                    $scope.$watch(function() {
+                        return $mdMedia('xs') || $mdMedia('sm');
+                    }, function(wantsFullScreen) {
+                        $scope.customFullscreen = (wantsFullScreen === true);
+                    });
+
+                });
+
+
+
+        }
+
+        if(option === 'add'){
+
+            $mdDialog.show(configDialog);
+            $scope.$watch(function() {
+                return $mdMedia('xs') || $mdMedia('sm');
+            }, function(wantsFullScreen) {
+                $scope.customFullscreen = (wantsFullScreen === true);
+            });
+
+        }
+
+        if(option === 'scan'){
 
             $http.get('/admin/scan', $scope)
                 .then(function(response){
                     $rootScope.devices = response.data;
+
+                    $mdDialog.show(configDialog);
+                    $scope.$watch(function() {
+                        return $mdMedia('xs') || $mdMedia('sm');
+                    }, function(wantsFullScreen) {
+                        $scope.customFullscreen = (wantsFullScreen === true);
+                    });
+
                 })
                 .then(function(){
                     $http.get('/admin/reset')
@@ -184,36 +281,48 @@ function DialogController($scope, $mdDialog, $http, $location) {
 
         }
 
-        if(url == 'add'){
 
-            console.log('from adminViewCtrl add');
-
-        }
-
-        if(url == 'delete'){
-
-            $http.get('/panel')
-                .then(function(response){
-                    $rootScope.installations = response.data;
-                });
-
-        }
-
-        if(url == 'update'){
-
-            $http.get('/panel')
-                .then(function(response){
-                    $rootScope.installations = response.data;
-                });
-
-
-        }
 
     };
 
 
 }]);
-;app.controller('optionsCtrl',['$scope', '$rootScope', '$http', '$location', function($scope, $rootScope, $http, $location){
+
+function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, $mdMedia) {
+
+    $scope.submit = function(ev, choice){
+
+        if(choice === 'add_from_scan') {
+
+            var useFullScreen = ($mdMedia('sm') || $mdMedia('xs'))  && $scope.customFullscreen;
+
+            console.log('adding this device from scan ', this.device);
+            $rootScope.form = this;
+
+            $mdDialog.show({
+                scope: $scope,
+                preserveScope: true,
+                controller: AdminDialogController,
+                templateUrl: $rootScope.panelTemplate.add,
+                parent: angular.element(document.body),
+                targetEvent: ev,
+                clickOutsideToClose:true,
+                fullscreen: useFullScreen
+            });
+            $scope.$watch(function() {
+                return $mdMedia('xs') || $mdMedia('sm');
+            }, function(wantsFullScreen) {
+                $scope.customFullscreen = (wantsFullScreen === true);
+            });
+        }
+
+        $mdDialog.hide();
+    };
+
+    $scope.dismiss = function() {
+        $mdDialog.cancel();
+    };
+};app.controller('optionsCtrl',['$scope', '$rootScope', '$http', '$location', function($scope, $rootScope, $http, $location){
 
     $scope.setSchedule = function(url){
 
@@ -266,13 +375,19 @@ function DialogController($scope, $mdDialog, $http, $location) {
 
 }]);;app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', function($scope, $rootScope, $http, $location){
 
+    //$rootScope.template = {
     $rootScope.panelTemplate = {
         dim: '/views/dim.html',
         schedule: '/views/schedule.html',
         colour: '/views/colour.html',
         options: '/views/options.html',
         profiles: '/views/profiles.html',
-        apply: '/views/default.html'
+        apply: '/views/default.html',
+        default: '/views/panel.html',
+        scan: '/views/scanDev.html',
+        add: '/views/addDev.html',
+        update: '/views/updDev.html',
+        delete: '/views/delDev.html'
     };
 
     $http.get('/panel')
@@ -299,11 +414,13 @@ function DialogController($scope, $mdDialog, $http, $location) {
     $scope.showOptions = function(url){
         console.log('..changing to options view..', this);
         $rootScope.activeDevice = this.panel.device;
+        //$rootScope.template = $rootScope.template[url];
         $rootScope.template = $rootScope.panelTemplate[url];
     };
 
     $scope.switch = function(url){
         console.log('..loading option '+ url +' ..');
+        //$rootScope.template = $rootScope.template[url];
         $rootScope.template = $rootScope.panelTemplate[url];
 
     };
