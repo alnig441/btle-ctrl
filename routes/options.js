@@ -66,18 +66,18 @@ router.post('/schedule', function(req, res, error){
 
         var job = schedule.scheduleJob(sunset, function(){
 
-            //var child = spawn('gatttool', flipSwitch.gattArgs);
-            //
-            //child.stdout.on('data', function(data){
-            //
-            //    res.send(data);
-            //
-            //    child.kill();
-            //});
-            //
-            //child.on('exit', function(code){
-            //    console.log('spawned process ended on exit code: ', code);
-            //});
+            var child = spawn('gatttool', flipSwitch.gattArgs);
+
+            child.stdout.on('data', function(data){
+
+                res.send(data);
+
+                child.kill();
+            });
+
+            child.on('exit', function(code){
+                console.log('spawned process ended on exit code: ', code);
+            });
 
             console.log('the sun has set in Edina at ', sunset);
 

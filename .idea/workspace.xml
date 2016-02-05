@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="95122da9-fbae-4397-9692-e2312a5cdde2" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/routes/options.js" afterPath="$PROJECT_DIR$/routes/options.js" />
     </list>
     <ignored path="btle-ctrl.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -29,7 +28,7 @@
           <file leaf-file-name="options.js" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/routes/options.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.3478261">
+                <state vertical-scroll-proportion="-0.2173913">
                   <caret line="64" column="58" selection-start-line="64" selection-start-column="58" selection-end-line="64" selection-end-column="58" />
                   <folding />
                 </state>
@@ -968,7 +967,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/routes/options.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.3478261">
+        <state vertical-scroll-proportion="-0.2173913">
           <caret line="64" column="58" selection-start-line="64" selection-start-column="58" selection-end-line="64" selection-end-column="58" />
           <folding />
         </state>
