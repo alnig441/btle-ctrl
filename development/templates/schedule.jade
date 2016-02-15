@@ -1,15 +1,36 @@
 div(class='md-inline-form', layout='column', ng-cloak, ng-controller='optionsCtrl')
+    md-toolbar
+        div.md-toolbar-tools
+            h2 Time Of Day
+    md-content(layout-gt-sm='row', layout-padding)
+        md-select(ng-model='selectedHours', placeholder='Hr')
+            md-option(ng-value='hour', ng-repeat='hour in hours') {{hour.name}}
+        md-select(ng-model='selectedMinutes', placeholder='Min')
+            md-option(ng-value='minute', ng-repeat='minute in minutes') {{minute.name}}
     md-content(layout-gt-sm='row', layout-padding)
         div
             md-input-container
                 md-checkbox(ng-model='scheduleDevice.offAtSunrise', value=false) Turn OFF @ Sunrise
             md-input-container
                 md-checkbox(ng-model='scheduleDevice.onAtSunset', value=false) Turn ON @ Sunset
+
+    md-toolbar
+        div.md-toolbar-tools
+            h2 Occurence/Recurrence
+    md-datepicker(ng-model='scheduleDevice.dateBegin', md-placeholder='Begin')
+    md-datepicker(ng-model='scheduleDevice.dateEnd', md-placeholder='End')
+    md-content(layout-gt-sm='row', layout-padding)
         div
             md-input-container
                 md-checkbox(ng-model='scheduleDevice.recurDaily', value=false) Repeat Daily
             md-input-container
                 md-checkbox(ng-model='scheduleDevice.recurWeekly', value=false) Repeat Weekly
+
+    md-toolbar
+        div.md-toolbar-tools
+            h2 Create Profile/Add To Profile
+
+
     md-button(ng-click='apply("schedule")') Apply
         md-icon done
     md-button(ng-click='dismiss()') Cancel

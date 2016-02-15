@@ -66,4 +66,6 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
 
 function OptionsDialogController($scope, $mdDialog, $http, $rootScope, $location, $mdMedia) {
     console.log('..this merely opens the dialog window...');
+
 }
+

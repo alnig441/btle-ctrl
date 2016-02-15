@@ -33,6 +33,8 @@ router.get('/', function(req, res, error){
 
 router.post('/schedule', function(req, res, error){
 
+    console.log('in options/schedule', req.body);
+
     var sunrise = new Date(req.body.sunrise);
     var sunset = new Date(req.body.sunset);
 

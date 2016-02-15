@@ -10,7 +10,7 @@ var connectionString = process.env.DATABASE_URL || 'postgres://localhost:5432/bt
 
 router.get('/', function(req, res, error){
 
-    console.log('in panel get');
+    //console.log('in panel get');
 
     pg.connect(connectionString, function(err, client, done){
 

@@ -63,3 +63,4 @@ function LoginDialogController($scope, $mdDialog, $http, $location, $rootScope) 
         $mdDialog.cancel();
     };
 }
+
