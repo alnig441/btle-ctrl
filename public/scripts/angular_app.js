@@ -275,30 +275,8 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
     $scope.dismiss = function() {
         $mdDialog.cancel();
     };
-};app.controller('optionsCtrl',['$scope', '$rootScope', '$http', '$location', function($scope, $rootScope, $http, $location){
+};app.controller('optionsCtrl',['$scope', '$rootScope', '$http', '$location', '$mdDialog', function($scope, $rootScope, $http, $location, $mdDialog){
 
-    console.log('in options ctrl - rootScope: ', $rootScope);
-
-    //$scope.setSchedule = function(url){
-    //
-    //    $http.get('http://api.sunrise-sunset.org/json?lat=44.891123.7201600&lng=-93.359752&formatted=0').then(function(response){
-    //        $rootScope.edina = response.data.results;
-    //        var date = new Date($rootScope.edina.sunset);
-    //        console.log('Sunset in Edina today: ', date);
-    //    }).then(function(response){
-    //        $http.post('/options/sun', $rootScope.edina).then(function(response){
-    //            console.log('response from options/sun', response);
-    //        });
-    //    });
-    //
-    //    $http.get('/options')
-    //        .then(function(response){
-    //            console.log(response);
-    //        });
-    //
-    //    $rootScope.template = '/views/panel.html';
-    //
-    //};
 
     $scope.apply = function(option){
         console.log('in options ctrl - function apply',option, $rootScope);
@@ -330,18 +308,22 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
         $rootScope.template.url = "/views/panel.html";
     };
 
-    $scope.cancel = function(){
-        $rootScope.template.url = "/views/panel.html";
-    };
-
     $scope.color = {
         red: Math.floor(Math.random() * 255),
         green: Math.floor(Math.random() * 255),
         blue: Math.floor(Math.random() * 255)
     };
 
+    $scope.dismiss = function() {
+        $mdDialog.cancel();
+    };
 
-}]);;app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', function($scope, $rootScope, $http, $location){
+
+
+
+}]);
+
+;app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$mdMedia', '$mdDialog', function($scope, $rootScope, $http, $location, $mdMedia, $mdDialog){
 
     console.log('in panelViewCtrl - rootScope: ', $rootScope);
 
@@ -378,4 +360,35 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
 
     };
 
+    $scope.showAdvOptions = function(ev, option) {
+        var useFullScreen = ($mdMedia('sm') || $mdMedia('xs'))  && $scope.customFullscreen;
+
+        console.log('in showAdvOptions ', this);
+
+        var configDialog = {
+            scope: $scope,
+            preserveScope: true,
+            controller: OptionsDialogController,
+            templateUrl: $rootScope.template[option],
+            parent: angular.element(document.body),
+            targetEvent: ev,
+            clickOutsideToClose:true,
+            fullscreen: useFullScreen
+        };
+
+        $mdDialog.show(configDialog);
+        $scope.$watch(function() {
+            return $mdMedia('xs') || $mdMedia('sm');
+        }, function(wantsFullScreen) {
+            $scope.customFullscreen = (wantsFullScreen === true);
+        });
+
+
+    };
+
+
 }]);
+
+function OptionsDialogController($scope, $mdDialog, $http, $rootScope, $location, $mdMedia) {
+    console.log('..this merely opens the dialog window...');
+}

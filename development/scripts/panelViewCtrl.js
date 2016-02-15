@@ -1,4 +1,4 @@
-app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', function($scope, $rootScope, $http, $location){
+app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$mdMedia', '$mdDialog', function($scope, $rootScope, $http, $location, $mdMedia, $mdDialog){
 
     console.log('in panelViewCtrl - rootScope: ', $rootScope);
 
@@ -35,4 +35,35 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', fu
 
     };
 
+    $scope.showAdvOptions = function(ev, option) {
+        var useFullScreen = ($mdMedia('sm') || $mdMedia('xs'))  && $scope.customFullscreen;
+
+        console.log('in showAdvOptions ', this);
+
+        var configDialog = {
+            scope: $scope,
+            preserveScope: true,
+            controller: OptionsDialogController,
+            templateUrl: $rootScope.template[option],
+            parent: angular.element(document.body),
+            targetEvent: ev,
+            clickOutsideToClose:true,
+            fullscreen: useFullScreen
+        };
+
+        $mdDialog.show(configDialog);
+        $scope.$watch(function() {
+            return $mdMedia('xs') || $mdMedia('sm');
+        }, function(wantsFullScreen) {
+            $scope.customFullscreen = (wantsFullScreen === true);
+        });
+
+
+    };
+
+
 }]);
+
+function OptionsDialogController($scope, $mdDialog, $http, $rootScope, $location, $mdMedia) {
+    console.log('..this merely opens the dialog window...');
+}

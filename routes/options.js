@@ -49,10 +49,6 @@ router.post('/schedule', function(req, res, error){
         ]
     };
 
-
-    console.log('TADA!!', sunset.getMonth()-1, typeof sunset.getMonth());
-
-
     if((req.body.offAtSunrise || req.body.onAtSunset) && req.body.recurDaily) {
         console.log('its a hit!!');
     //write code to reschedule device acitivity every day at sunset or sunrise
@@ -88,7 +84,7 @@ router.post('/schedule', function(req, res, error){
         });
 
         job.on('run', function(arg){
-            console.log('my job ran', arg);
+            console.log('my job ran');
         });
 
 

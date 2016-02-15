@@ -4,23 +4,23 @@ div(ng-controller="optionsCtrl", ng-cloak)
             span(ng-attr-style="border: 1px solid #333; background: rgb({{color.red}},{{color.green}},{{color.blue}})", layout ) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         div(layout)
             div(flex="10", layout, layout-align="center center")
-                span.md-body-1 Red
+                span.md-body-1 R
             md-slider(flex min="0", max="255", ng-model="color.red", aria-label="red", id="red-slider", class)
             div(flex="20", layout, layout-align="center center")
                 input(flex, type="number", ng-model="color.red", aria-label="red", aria-controls="red-slider")
         div(layout)
             div(flex="10", layout, layout-align="center center")
-                span.md-body-1 Green
+                span.md-body-1 G
             md-slider(flex min="0", max="255", ng-model="color.green", aria-label="green", id="green-slider", class)
             div(flex="20", layout, layout-align="center center")
                 input(flex, type="number", ng-model="color.green", aria-label="green", aria-controls="green-slider")
         div(layout)
             div(flex="10", layout, layout-align="center center")
-                span.md-body-1 Blue
+                span.md-body-1 B
             md-slider(flex min="0", max="255", ng-model="color.blue", aria-label="blue", id="blue-slider", class)
             div(flex="20", layout, layout-align="center center")
                 input(flex, type="number", ng-model="color.blue", aria-label="blue", aria-controls="blue-slider")
         md-button(ng-click='apply("colour")') Apply
             md-icon done
-        md-button(ng-click='cancel()') Cancel
+        md-button(ng-click='dismiss()') Cancel
             md-icon cancel
