@@ -1,7 +1,15 @@
-p(ng-controller='optionsCtrl') .. under construction ..
-    md-button(ng-click='apply("profiles")') Apply
-        md-icon done
-    md-button(ng-click='dismiss()') Cancel
-        md-icon cancel
+//p(ng-controller='optionsCtrl') .. under construction ..
+md-dialog(ng-controller='optionsCtrl')
+    md-toolbar
+        div.md-toolbar-tools
+            h2 Create Profile/Add To Profile
+    md-content(style="margin: 16px; padding:16px")
+        div(layout)
+            div(flex="10", layout, layout-align="center center")
+                span.md-body-1
+        md-button(ng-click='apply("profiles")') Apply
+            md-icon done
+        md-button(ng-click='dismiss()') Cancel
+            md-icon cancel
 
 
