@@ -282,11 +282,12 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
     //$scope.scheduleDevice.date = new Date();
 
     $scope.apply = function(option){
-        console.log('in options ctrl - function apply',option, $rootScope);
+        //console.log('in options ctrl - function apply',option, $rootScope);
 
         $rootScope.scheduleDevice.colour = $scope.color;
         $rootScope.scheduleDevice.hour = $scope.selectedHours.value;
         $rootScope.scheduleDevice.minute = $scope.selectedMinutes.value;
+        $rootScope.scheduleDevice.dateBegin = new Date();
 
         if(option === 'colour'){
 
@@ -315,6 +316,7 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
 
     $scope.hours = [
 
+        {name: 'Hr', value: 'null'},
         {name: 0, value: '0'},
         {name: 1, value: '1'},
         {name: 2, value: '2'},
@@ -342,9 +344,10 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
 
     ];
 
-    $scope.selectedHours = {name: 0, value: '0'};
+    $scope.selectedHours = {name: 'Hr', value: 'null'};
 
     $scope.minutes = [
+        {name: 'Min', value: 'null'},
         {name: 0, value: '0'},
         {name: 5, value: '5'},
         {name: 10, value: '10'},
@@ -359,7 +362,7 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
         {name: 55, value: '55'}
     ];
 
-    $scope.selectedMinutes = {name: 0, value: '0'};
+    $scope.selectedMinutes = {name: 'Min', value: 'null'};
 
     $scope.color = {
         red: Math.floor(Math.random() * 255),
