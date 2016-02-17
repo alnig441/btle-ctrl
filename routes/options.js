@@ -31,28 +31,81 @@ router.post('/schedule', function(req, res, error){
         ]
     };
 
-    if(req.body.recurWeekly || req.body.recurDaily){
+    if(req.body.turnOff || req.body.offAtSunrise) {
+        flipSwitch.gattArgs.push(off);
+    }
+    if(req.body.turnOn || req.body.onAtSunset) {
+        flipSwitch.gattArgs.push(on);
+    }
+
+
+    if(req.body.recurWeekly || req.body.recurDaily || req.body.dateEnd !== undefined){
+
+        console.log(req.body.dateEnd);
+
+        var begin = new Date(req.body.dateBegin);
+
+        var recur = new schedule.RecurrenceRule();
+        recur.hour = req.body.hour;
+        recur.minute = req.body.minute;
+
+        if(req.body.recurWeekly){
+            recur.dayOfWeek = begin.getDay();
+        }
+        if(req.body.dateEnd !== undefined){
+            var end = new Date(req.body.dateEnd);
+            recur.dayOfWeek = new schedule.Range(begin.getDay(), end.getDay());
+        }
+
+        console.log('setting up recurring schedule ', req.body, flipSwitch.gattArgs, recur);
 
         if(req.body.onAtSunset || req.body.offAtSunrise){
 
-        }
-
-        else{
-        //    write code for ordinary recurring schedule
+            res.send('write code to schedule recurring sunset/sunrise control');
 
         }
+
+
+        var daily = schedule.scheduleJob(recur, function(){
+
+            var child = spawn('gatttool', flipSwitch.gattArgs);
+
+            child.stdout.on('data', function(data){
+
+                res.send(data);
+
+                child.kill();
+            });
+
+            child.on('exit', function(code){
+                console.log('spawned process ended on exit code: ', code);
+            });
+
+        });
+
+        daily.on('scheduled', function(arg){
+            console.log('job schedule success', arg);
+        });
+
+        daily.on('run', function(arg){
+            console.log('job ran');
+        });
+
+        res.sendStatus(200);
+
     }
 
-    if(req.body.offAtSunrise || req.body.onAtSunset) {
 
-        console.log('schedulling non-recurring sunrise/sunset control');
+    else if(req.body.offAtSunrise || req.body.onAtSunset) {
+
+        console.log('schedulling non-recurring sunrise/sunset control', flipSwitch.gattArgs);
 
         if(req.body.offAtSunrise){
-            flipSwitch.gattArgs.push(off);
+            //flipSwitch.gattArgs.push(off);
             setpoint = new Date(req.body.sunrise);
         }
         else {
-            flipSwitch.gattArgs.push(on);
+            //flipSwitch.gattArgs.push(on);
             setpoint = new Date(req.body.sunset);
         }
 
@@ -86,7 +139,7 @@ router.post('/schedule', function(req, res, error){
 
     else {
 
-        console.log('scheduling regular non-recurring control: ', flipSwitch.gattArgs, setpoint);
+        console.log('scheduling regular non-recurring control', flipSwitch.gattArgs);
 
         setpoint = new Date();
         setpoint.setHours(parseInt(req.body.hour));

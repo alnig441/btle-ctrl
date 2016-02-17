@@ -1,6 +1,6 @@
 app.controller('optionsCtrl',['$scope', '$rootScope', '$http', '$location', '$mdDialog', function($scope, $rootScope, $http, $location, $mdDialog){
 
-    //$scope.scheduleDevice.date = new Date();
+    $rootScope.scheduleDevice.dateBegin = new Date();
 
     $scope.apply = function(option){
         //console.log('in options ctrl - function apply',option, $rootScope);
@@ -8,7 +8,7 @@ app.controller('optionsCtrl',['$scope', '$rootScope', '$http', '$location', '$md
         $rootScope.scheduleDevice.colour = $scope.color;
         $rootScope.scheduleDevice.hour = $scope.selectedHours.value;
         $rootScope.scheduleDevice.minute = $scope.selectedMinutes.value;
-        $rootScope.scheduleDevice.dateBegin = new Date();
+        //$rootScope.scheduleDevice.dateBegin = new Date();
 
         if(option === 'colour'){
 
