@@ -66,7 +66,7 @@ router.post('/schedule', function(req, res, error){
         }
 
 
-        var daily = schedule.scheduleJob(recur, function(){
+        var job = schedule.scheduleJob(recur, function(){
 
             var child = spawn('gatttool', flipSwitch.gattArgs);
 
@@ -83,11 +83,11 @@ router.post('/schedule', function(req, res, error){
 
         });
 
-        daily.on('scheduled', function(arg){
+        job.on('scheduled', function(arg){
             console.log('job schedule success', arg);
         });
 
-        daily.on('run', function(arg){
+        job.on('run', function(arg){
             console.log('job ran');
         });
 
