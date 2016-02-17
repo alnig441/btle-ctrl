@@ -29,8 +29,8 @@
           <file leaf-file-name="options.js" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/routes/options.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.34232715">
-                  <caret line="215" column="0" selection-start-line="215" selection-start-column="0" selection-end-line="215" selection-end-column="0" />
+                <state vertical-scroll-proportion="0.7217538">
+                  <caret line="166" column="41" selection-start-line="166" selection-start-column="41" selection-end-line="166" selection-end-column="41" />
                   <folding />
                 </state>
               </provider>
@@ -943,8 +943,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/routes/options.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.34232715">
-          <caret line="215" column="0" selection-start-line="215" selection-start-column="0" selection-end-line="215" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.7217538">
+          <caret line="166" column="41" selection-start-line="166" selection-start-column="41" selection-end-line="166" selection-end-column="41" />
           <folding />
         </state>
       </provider>

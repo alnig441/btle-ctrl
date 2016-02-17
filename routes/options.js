@@ -41,13 +41,13 @@ router.post('/schedule', function(req, res, error){
 
     if(req.body.recurWeekly || req.body.recurDaily || req.body.dateEnd !== undefined){
 
-        console.log(req.body.dateEnd);
+        console.log(typeof req.body.hour);
 
         var begin = new Date(req.body.dateBegin);
 
         var recur = new schedule.RecurrenceRule();
-        recur.hour = req.body.hour;
-        recur.minute = req.body.minute;
+        recur.hour = parseInt(req.body.hour);
+        recur.minute = parseInt(req.body.minute);
 
         if(req.body.recurWeekly){
             recur.dayOfWeek = begin.getDay();
@@ -57,7 +57,7 @@ router.post('/schedule', function(req, res, error){
             recur.dayOfWeek = new schedule.Range(begin.getDay(), end.getDay());
         }
 
-        console.log('setting up recurring schedule');
+        console.log('setting up recurring schedule', recur);
 
         if(req.body.onAtSunset || req.body.offAtSunrise){
 
@@ -91,14 +91,14 @@ router.post('/schedule', function(req, res, error){
             console.log('job ran');
         });
 
-        res.sendStatus(200);
+        //res.sendStatus(200);
 
     }
 
 
     else if(req.body.offAtSunrise || req.body.onAtSunset) {
 
-        console.log('schedulling non-recurring sunrise/sunset control');
+        console.log('schedulling non-recurring sunrise/sunset control', recur);
 
         if(req.body.offAtSunrise){
             //flipSwitch.gattArgs.push(off);
@@ -139,20 +139,13 @@ router.post('/schedule', function(req, res, error){
 
     else {
 
-        console.log('scheduling regular non-recurring control');
 
         setpoint = new Date();
         setpoint.setHours(parseInt(req.body.hour));
         setpoint.setMinutes(parseInt(req.body.minute));
         setpoint.setSeconds(0);
 
-        if(req.body.turnOn){
-            flipSwitch.gattArgs.push(on);
-        }
-        else if(req.body.turnOff) {
-            flipSwitch.gattArgs.push(off);
-        }
-
+        console.log('scheduling regular non-recurring control');
 
         var job = schedule.scheduleJob(setpoint, function(){
 
@@ -176,7 +169,7 @@ router.post('/schedule', function(req, res, error){
         });
 
         job.on('run', function(arg){
-            console.log('my job ran');
+            console.log('my job ran', arg);
         });
 
     }
