@@ -41,8 +41,6 @@ router.post('/schedule', function(req, res, error){
 
     if(req.body.recurWeekly || req.body.recurDaily || req.body.dateEnd !== undefined){
 
-        console.log(typeof req.body.hour);
-
         var begin = new Date(req.body.dateBegin);
 
         var recur = new schedule.RecurrenceRule();
@@ -83,11 +81,11 @@ router.post('/schedule', function(req, res, error){
 
         });
 
-        job.on('scheduled', function(arg){
-            console.log('job schedule success', arg);
+        job.on('scheduled', function(date){
+            console.log('job schedule success', date);
         });
 
-        job.on('run', function(arg){
+        job.on('run', function(){
             console.log('job ran');
         });
 
@@ -98,16 +96,15 @@ router.post('/schedule', function(req, res, error){
 
     else if(req.body.offAtSunrise || req.body.onAtSunset) {
 
-        console.log('schedulling non-recurring sunrise/sunset control', recur);
 
         if(req.body.offAtSunrise){
-            //flipSwitch.gattArgs.push(off);
             setpoint = new Date(req.body.sunrise);
         }
         else {
-            //flipSwitch.gattArgs.push(on);
             setpoint = new Date(req.body.sunset);
         }
+
+        console.log('schedulling non-recurring sunrise/sunset control', setpoint);
 
         var job = schedule.scheduleJob(setpoint, function(){
 
@@ -126,11 +123,11 @@ router.post('/schedule', function(req, res, error){
 
         });
 
-        job.on('scheduled',function(arg){
-            console.log('job scheduled', arg);
+        job.on('scheduled',function(date){
+            console.log('job scheduled', date);
         });
 
-        job.on('run', function(arg){
+        job.on('run', function(){
             console.log('my job ran');
         });
 
@@ -140,14 +137,17 @@ router.post('/schedule', function(req, res, error){
     else {
 
 
-        setpoint = new Date();
+        setpoint = new Date(req.body.dateBegin);
         setpoint.setHours(parseInt(req.body.hour));
         setpoint.setMinutes(parseInt(req.body.minute));
         setpoint.setSeconds(0);
+        //var date = new Date(setpoint);
 
-        console.log('scheduling regular non-recurring control');
+        console.log('scheduling regular non-recurring control', setpoint);
 
         var job = schedule.scheduleJob(setpoint, function(){
+
+            console.log('write this to console');
 
             var child = spawn('gatttool', flipSwitch.gattArgs);
 
@@ -164,12 +164,12 @@ router.post('/schedule', function(req, res, error){
 
         });
 
-        job.on('scheduled',function(arg){
-            console.log('job scheduled', arg);
+        job.on('scheduled',function(date){
+            console.log('job scheduled', date);
         });
 
-        job.on('run', function(arg){
-            console.log('my job ran', arg);
+        job.on('run', function(){
+            console.log('my job ran');
         });
 
     }
