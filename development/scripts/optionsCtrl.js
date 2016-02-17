@@ -9,6 +9,8 @@ app.controller('optionsCtrl',['$scope', '$rootScope', '$http', '$location', '$md
         $rootScope.scheduleDevice.minute = $scope.selectedMinutes.value;
 
         function setOrRise() {
+
+            console.log('function setOrRise');
             $http.get('http://api.sunrise-sunset.org/json?lat=44.891123.7201600&lng=-93.359752&formatted=0')
                 .then(function (response) {
                     $rootScope.scheduleDevice.sunset = response.data.results.sunset;
@@ -20,7 +22,6 @@ app.controller('optionsCtrl',['$scope', '$rootScope', '$http', '$location', '$md
                     });
                 });
         }
-
 
         if(option === 'colour'){
 
@@ -35,9 +36,17 @@ app.controller('optionsCtrl',['$scope', '$rootScope', '$http', '$location', '$md
 
             if(($rootScope.scheduleDevice.onAtSunset || $rootScope.scheduleDevice.offAtSunrise) && $rootScope.scheduleDevice.recurDaily){
 
-                var x = setInterval(setOrRise, 86400000);
+                var date = new Date();
+                date.setDate(date.getDate()+1);
+                date.setHours(0);
+                date.setMinutes(0);
+                date.setSeconds(0);
 
-                console.log('BINGO DINGO');
+                var delay = date - new Date();
+
+                var timeout = setTimeout(function(){
+                    var x = setInterval(setOrRise, 86400000);
+                }, delay);
 
             }
 
