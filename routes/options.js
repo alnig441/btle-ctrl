@@ -10,8 +10,6 @@ var connectionString = process.env.DATABASE_URL || 'postgres://localhost:5432/bt
 
 router.post('/schedule', function(req, res, error){
 
-    //console.log('in options/schedule', req.body);
-
     var on = '58010301ff00ffffff';
     var off = '58010301ff00000000';
     var sunrise = new Date(req.body.sunrise);
@@ -38,7 +36,7 @@ router.post('/schedule', function(req, res, error){
         flipSwitch.gattArgs.push(on);
     }
 
-
+    //RECURRING SCHEDULE
     if(req.body.recurWeekly || req.body.recurDaily || req.body.dateEnd !== undefined){
 
         var begin = new Date(req.body.dateBegin);
@@ -55,54 +53,75 @@ router.post('/schedule', function(req, res, error){
             recur.dayOfWeek = new schedule.Range(begin.getDay(), end.getDay());
         }
 
-        console.log('setting up recurring schedule', recur);
-
+        //RECURRING - SUNSET/SUNRISE CONTROL
         if(req.body.onAtSunset || req.body.offAtSunrise){
+
+            console.log('setting up recurring schedule - sunset/sunrise control', recur);
+
+            req.body.onAtSunset ? req.body.device_on = true : req.body.device_on = false;
 
             res.send('write code to schedule recurring sunset/sunrise control');
 
         }
 
+        //RECURRING - REGULAR CONTROL
+        else {
+            console.log('setting up recurring schedule - regular control', recur);
 
-        var job = schedule.scheduleJob(recur, function(){
+            req.body.turnOn ? req.body.device_on = true : req.body.device_on = false;
 
-            var child = spawn('gatttool', flipSwitch.gattArgs);
+            var job = schedule.scheduleJob(recur, function(){
 
-            child.stdout.on('data', function(data){
+                var child = spawn('gatttool', flipSwitch.gattArgs);
 
-                res.send(data);
+                child.stdout.on('data', function(data){
 
-                child.kill();
+                    res.send(data);
+
+                    child.kill();
+                });
+
+                child.on('exit', function(code){
+                    console.log('spawned process ended on exit code: ', code);
+                });
+
             });
 
-            child.on('exit', function(code){
-                console.log('spawned process ended on exit code: ', code);
+            job.on('scheduled', function(date){
+                console.log('job schedule success', date);
+
             });
 
-        });
+            job.on('run', function(){
+                console.log('job ran');
 
-        job.on('scheduled', function(date){
-            console.log('job schedule success', date);
-        });
+                pg.connect(connectionString, function(err, client, done){
 
-        job.on('run', function(){
-            console.log('job ran');
-        });
+                    var query = client.query("UPDATE devices SET device_on='"+ req.body.device_on +"' where mac='" + req.body.mac + "'", function(error, result){
+                        if(error){console.log('there was an error ', error.detail);}
+                    })
 
-        //res.sendStatus(200);
+                    query.on('end',function(result){
+                        client.end();
+                        res.send(result);
+                    })
+
+                });
+
+            });
+
+            res.sendStatus(200);
+
+        }
+
 
     }
 
-
+    // NON-RECURRING SCHEDULE - SUNSET/SUNRICE CONTROL
     else if(req.body.offAtSunrise || req.body.onAtSunset) {
 
-
-        if(req.body.offAtSunrise){
-            setpoint = new Date(req.body.sunrise);
-        }
-        else {
-            setpoint = new Date(req.body.sunset);
-        }
+        req.body.onAtSunset ? (setpoint = new Date(req.body.sunset)) : (setpoint = new Date (req.body.sunrise));
+        req.body.onAtSunset ? req.body.device_on = true : req.body.device_on = false;
 
         console.log('schedulling non-recurring sunrise/sunset control', setpoint);
 
@@ -129,25 +148,39 @@ router.post('/schedule', function(req, res, error){
 
         job.on('run', function(){
             console.log('my job ran');
+
+            pg.connect(connectionString, function(err, client, done){
+
+                var query = client.query("UPDATE devices SET device_on='"+ req.body.device_on +"' where mac='" + req.body.mac + "'", function(error, result){
+                    if(error){console.log('there was an error ', error.detail);}
+                })
+
+                query.on('end',function(result){
+                    client.end();
+                    res.send(result);
+                })
+
+            });
         });
+
+        res.sendStatus(200);
 
 
     }
 
+    //NON-RECURRING SCHEDULE - REGULAR CONTROL
     else {
 
+        req.body.turnOn ? req.body.device_on = true : req.body.device_on = false;
 
         setpoint = new Date(req.body.dateBegin);
         setpoint.setHours(parseInt(req.body.hour));
         setpoint.setMinutes(parseInt(req.body.minute));
         setpoint.setSeconds(0);
-        //var date = new Date(setpoint);
 
         console.log('scheduling regular non-recurring control', setpoint);
 
         var job = schedule.scheduleJob(setpoint, function(){
-
-            console.log('write this to console');
 
             var child = spawn('gatttool', flipSwitch.gattArgs);
 
@@ -170,11 +203,25 @@ router.post('/schedule', function(req, res, error){
 
         job.on('run', function(){
             console.log('my job ran');
+
+            pg.connect(connectionString, function(err, client, done){
+
+                var query = client.query("UPDATE devices SET device_on='"+ req.body.device_on +"' where mac='" + req.body.mac + "'", function(error, result){
+                    if(error){console.log('there was an error ', error.detail);}
+                })
+
+                query.on('end',function(result){
+                    client.end();
+                    res.send(result);
+                })
+
+            });
+
         });
 
-    }
+        res.sendStatus(200);
 
-    res.sendStatus(200);
+    }
 
 });
 
