@@ -282,12 +282,10 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
     $rootScope.scheduleDevice.dateBegin = new Date();
 
     $scope.apply = function(option){
-        //console.log('in options ctrl - function apply',option, $rootScope);
 
         $rootScope.scheduleDevice.colour = $scope.color;
         $rootScope.scheduleDevice.hour = $scope.selectedHours.value;
         $rootScope.scheduleDevice.minute = $scope.selectedMinutes.value;
-        //$rootScope.scheduleDevice.dateBegin = new Date();
 
         if(option === 'colour'){
 
@@ -310,7 +308,7 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
             });
 
         }
-
+        $http.get('/panel');
         $rootScope.template.url = "/views/panel.html";
     };
 
