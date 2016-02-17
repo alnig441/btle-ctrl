@@ -103,7 +103,7 @@ router.post('/schedule', function(req, res, error){
 
                     query.on('end',function(result){
                         client.end();
-                        res.send(result);
+                        //res.send(result);
                     })
 
                 });
@@ -157,7 +157,7 @@ router.post('/schedule', function(req, res, error){
 
                 query.on('end',function(result){
                     client.end();
-                    res.send(result);
+                    //res.send(result);
                 })
 
             });
@@ -212,7 +212,7 @@ router.post('/schedule', function(req, res, error){
 
                 query.on('end',function(result){
                     client.end();
-                    res.send(result);
+                    //res.send(result);
                 })
 
             });
