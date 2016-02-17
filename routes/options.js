@@ -53,67 +53,52 @@ router.post('/schedule', function(req, res, error){
             recur.dayOfWeek = new schedule.Range(begin.getDay(), end.getDay());
         }
 
-        //RECURRING - SUNSET/SUNRISE CONTROL
-        if(req.body.onAtSunset || req.body.offAtSunrise){
-
-            console.log('setting up recurring schedule - sunset/sunrise control', recur);
-
-            req.body.onAtSunset ? req.body.device_on = true : req.body.device_on = false;
-
-            res.send('write code to schedule recurring sunset/sunrise control');
-
-        }
-
         //RECURRING - REGULAR CONTROL
-        else {
-            console.log('setting up recurring schedule - regular control', recur);
+        console.log('setting up recurring schedule - regular control', recur);
 
-            req.body.turnOn ? req.body.device_on = true : req.body.device_on = false;
+        req.body.turnOn ? req.body.device_on = true : req.body.device_on = false;
 
-            var job = schedule.scheduleJob(recur, function(){
+        var job = schedule.scheduleJob(recur, function(){
 
-                var child = spawn('gatttool', flipSwitch.gattArgs);
+            var child = spawn('gatttool', flipSwitch.gattArgs);
 
-                child.stdout.on('data', function(data){
+            child.stdout.on('data', function(data){
 
-                    res.send(data);
+                res.send(data);
 
-                    child.kill();
-                });
+                child.kill();
+            });
 
-                child.on('exit', function(code){
-                    console.log('spawned process ended on exit code: ', code);
-                });
+            child.on('exit', function(code){
+                console.log('spawned process ended on exit code: ', code);
+            });
+
+        });
+
+        job.on('scheduled', function(date){
+            console.log('job schedule success', date);
+
+        });
+
+        job.on('run', function(){
+            console.log('job ran');
+
+            pg.connect(connectionString, function(err, client, done){
+
+                var query = client.query("UPDATE devices SET device_on='"+ req.body.device_on +"' where mac='" + req.body.mac + "'", function(error, result){
+                    if(error){console.log('there was an error ', error.detail);}
+                })
+
+                query.on('end',function(result){
+                    client.end();
+                    //res.send(result);
+                })
 
             });
 
-            job.on('scheduled', function(date){
-                console.log('job schedule success', date);
+        });
 
-            });
-
-            job.on('run', function(){
-                console.log('job ran');
-
-                pg.connect(connectionString, function(err, client, done){
-
-                    var query = client.query("UPDATE devices SET device_on='"+ req.body.device_on +"' where mac='" + req.body.mac + "'", function(error, result){
-                        if(error){console.log('there was an error ', error.detail);}
-                    })
-
-                    query.on('end',function(result){
-                        client.end();
-                        //res.send(result);
-                    })
-
-                });
-
-            });
-
-            res.sendStatus(200);
-
-        }
-
+        res.sendStatus(200);
 
     }
 
