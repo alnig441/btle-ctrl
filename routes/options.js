@@ -57,7 +57,7 @@ router.post('/schedule', function(req, res, error){
             recur.dayOfWeek = new schedule.Range(begin.getDay(), end.getDay());
         }
 
-        console.log('setting up recurring schedule ', req.body, flipSwitch.gattArgs, recur);
+        console.log('setting up recurring schedule');
 
         if(req.body.onAtSunset || req.body.offAtSunrise){
 
@@ -98,7 +98,7 @@ router.post('/schedule', function(req, res, error){
 
     else if(req.body.offAtSunrise || req.body.onAtSunset) {
 
-        console.log('schedulling non-recurring sunrise/sunset control', flipSwitch.gattArgs);
+        console.log('schedulling non-recurring sunrise/sunset control');
 
         if(req.body.offAtSunrise){
             //flipSwitch.gattArgs.push(off);
@@ -139,7 +139,7 @@ router.post('/schedule', function(req, res, error){
 
     else {
 
-        console.log('scheduling regular non-recurring control', flipSwitch.gattArgs);
+        console.log('scheduling regular non-recurring control');
 
         setpoint = new Date();
         setpoint.setHours(parseInt(req.body.hour));
@@ -213,7 +213,6 @@ router.post('/colour', function(req, res, error){
     }
 
     chgColour.gattArgs.push(hex);
-    console.log(chgColour.gattArgs);
 
     var child = spawn('gatttool', chgColour.gattArgs);
 
