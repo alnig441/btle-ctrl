@@ -314,7 +314,7 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
 
             if(($rootScope.scheduleDevice.onAtSunset || $rootScope.scheduleDevice.offAtSunrise) && $rootScope.scheduleDevice.recurDaily){
 
-                var x = setInterval(setOrRise, 5000);
+                var x = setInterval(setOrRise, 86400000);
 
                 console.log('BINGO DINGO');
 
