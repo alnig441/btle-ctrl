@@ -30,6 +30,23 @@ var call = {
         array = tmpArray;
 
         return array;
+    },
+
+    buildGattargs: function(mac, arg){
+        gattArgs = [
+            '-i',
+            'hci1',
+            '-b',
+            mac,
+            '--char-write',
+            '-a',
+            '0x0028',
+            '-n',
+            arg
+        ];
+
+        return gattArgs;
+
     }
 };
 

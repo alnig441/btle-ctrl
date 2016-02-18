@@ -17,6 +17,15 @@ app.controller('optionsCtrl',['$scope', '$rootScope', '$http', '$location', '$md
                 });
         }
 
+        function parseDate(date, hrs, mins, secs, ms){
+            date.setHours(hrs);
+            date.setMinutes(mins);
+            date.setSeconds(secs);
+            date.setMilliseconds(ms);
+
+            return date;
+        }
+
 
         if(option === 'colour'){
 
@@ -29,47 +38,68 @@ app.controller('optionsCtrl',['$scope', '$rootScope', '$http', '$location', '$md
 
         if(option === 'schedule') {
 
-            if(($rootScope.scheduleDevice.onAtSunset || $rootScope.scheduleDevice.offAtSunrise) && $rootScope.scheduleDevice.recurDaily){
+            if($rootScope.scheduleDevice.onAtSunset || $rootScope.scheduleDevice.offAtSunrise){
 
-                console.log('setting sunrise/sunset today');
+                //console.log('setting sunrise/sunset today');
 
-                $http.post('/options/sun', $rootScope.scheduleDevice).then(function(response){
-                    console.log('response from options/sun', response);
-                });
+                if($rootScope.scheduleDevice.dateEnd !== undefined) {
 
+                    var dateBegin = parseDate($rootScope.scheduleDevice.dateBegin, 0, 0, 0, 0);
+                    var dateEnd = parseDate($rootScope.scheduleDevice.dateEnd, 0, 0, 0, 0);
+                    var days = (dateEnd - dateBegin) / 86400000;
+                    console.log(days);
+                }
 
-                var date = new Date();
-                date.setDate(date.getDate()+1);
-                date.setHours(3);
-                date.setMinutes(0);
-                date.setSeconds(0);
+                else if($rootScope.scheduleDevice.recurDaily) {
 
-
-                var delay = date - new Date();
-
-                console.log('setting up recurring sunrise/sunset schedule - calling setInterval every 24hrs from ', date);
-
-                var timeout = setTimeout(function(){
-                    console.log('settting sunset/sunrise tomorrow');
                     $http.post('/options/sun', $rootScope.scheduleDevice).then(function(response){
                         console.log('response from options/sun', response);
                     });
-                    console.log('setting sunset/sunrise every 24hrs');
-                    var x = setInterval(setOrRise, 86400000);
-                    $rootScope.scheduleDevice.intervalID = x;
-                }, delay);
+
+
+                    var date = new Date();
+                    date.setDate(date.getDate()+1);
+                    date.setHours(3);
+                    date.setMinutes(0);
+                    date.setSeconds(0);
+
+
+                    var delay = date - new Date();
+
+                    console.log('setting up recurring sunrise/sunset schedule - calling setInterval every 24hrs from ', date);
+
+                    var timeout = setTimeout(function(){
+                        console.log('settting sunset/sunrise tomorrow');
+                        $http.post('/options/sun', $rootScope.scheduleDevice).then(function(response){
+                            console.log('response from options/sun', response);
+                        });
+                        console.log('setting sunset/sunrise every 24hrs');
+                        var x = setInterval(setOrRise, 86400000);
+                        $rootScope.scheduleDevice.intervalID = x;
+                    }, delay);
+
+                }
+
+                else {
+
+                    $http.post('/options/sun', $rootScope.scheduleDevice).then(function(response){
+                        console.log('response from options/sun', response);
+                    });
+
+                }
+
 
             }
 
             else {
-                $http.get('http://api.sunrise-sunset.org/json?lat=44.891123.7201600&lng=-93.359752&formatted=0').then(function(response){
-                    $rootScope.scheduleDevice.sunset = response.data.results.sunset;
-                    $rootScope.scheduleDevice.sunrise = response.data.results.sunrise;
-                }).then(function(response){
+                //$http.get('http://api.sunrise-sunset.org/json?lat=44.891123.7201600&lng=-93.359752&formatted=0').then(function(response){
+                //    $rootScope.scheduleDevice.sunset = response.data.results.sunset;
+                //    $rootScope.scheduleDevice.sunrise = response.data.results.sunrise;
+                //}).then(function(response){
                     $http.post('/options/schedule', $rootScope.scheduleDevice).then(function(response){
                         console.log('response from options/schedule', response);
                     });
-                });
+                //});
 
             }
 
