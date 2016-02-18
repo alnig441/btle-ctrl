@@ -36,6 +36,7 @@ app.config(function($routeProvider, $locationProvider, $mdThemingProvider, $mdIc
 
     console.log('in login Ctrl - rootScopes ', $rootScope);
 
+    $rootScope.scheduleDevice = {};
 
     $rootScope.template = {
         dim: '/views/dim.html',
@@ -100,7 +101,7 @@ function LoginDialogController($scope, $mdDialog, $http, $location, $rootScope) 
 
 ;app.controller('adminViewCtrl',['$scope', '$rootScope', '$http', '$mdMedia', '$mdDialog', function($scope, $rootScope, $http, $mdMedia, $mdDialog){
 
-    console.log('in adminViewCtrl - rootScope: ', $rootScope);
+    //console.log('in adminViewCtrl - rootScope: ', $rootScope);
 
 
     $scope.customFullscreen = $mdMedia('xs') || $mdMedia('sm');
@@ -182,12 +183,12 @@ function LoginDialogController($scope, $mdDialog, $http, $location, $rootScope) 
 
 function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, $mdMedia) {
 
-    console.log('in adminDialogCtrl - rootScope: ', $rootScope);
+    //console.log('in adminDialogCtrl - rootScope: ', $rootScope);
 
 
     $scope.submit = function(choice, ev){
 
-        console.log('in AdminDialogController ', choice, $scope);
+        //console.log('in AdminDialogController ', choice, $scope);
 
         if(choice === 'add_from_scan') {
 
@@ -279,6 +280,8 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
     };
 };app.controller('optionsCtrl',['$scope', '$rootScope', '$http', '$location', '$mdDialog', function($scope, $rootScope, $http, $location, $mdDialog){
 
+    console.log('in optionsCtrl ', $rootScope);
+
     $rootScope.scheduleDevice.dateBegin = new Date();
 
     $scope.apply = function(option){
@@ -288,19 +291,12 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
         $rootScope.scheduleDevice.minute = $scope.selectedMinutes.value;
 
         function setOrRise() {
-
-            console.log('function setOrRise');
-            $http.get('http://api.sunrise-sunset.org/json?lat=44.891123.7201600&lng=-93.359752&formatted=0')
-                .then(function (response) {
-                    $rootScope.scheduleDevice.sunset = response.data.results.sunset;
-                    $rootScope.scheduleDevice.sunrise = response.data.results.sunrise;
-                    $rootScope.scheduleDevice.recurDaily = false;
-                    $rootScope.scheduleDevice.recurWeekly = false;
-                    $http.post('/options/schedule', $rootScope.scheduleDevice).then(function(response){
-                        console.log('response from options/schedule', response);
-                    });
+            console.log('function setOrRise', $rootScope);
+                $http.post('/options/sun', $rootScope.scheduleDevice).then(function(response){
+                    console.log('response from options/sun', response);
                 });
         }
+
 
         if(option === 'colour'){
 
@@ -315,16 +311,32 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
 
             if(($rootScope.scheduleDevice.onAtSunset || $rootScope.scheduleDevice.offAtSunrise) && $rootScope.scheduleDevice.recurDaily){
 
+                console.log('setting sunrise/sunset today');
+
+                $http.post('/options/sun', $rootScope.scheduleDevice).then(function(response){
+                    console.log('response from options/sun', response);
+                });
+
+
                 var date = new Date();
                 date.setDate(date.getDate()+1);
-                date.setHours(0);
+                date.setHours(3);
                 date.setMinutes(0);
                 date.setSeconds(0);
 
+
                 var delay = date - new Date();
 
+                console.log('setting up recurring sunrise/sunset schedule - calling setInterval every 24hrs from ', date);
+
                 var timeout = setTimeout(function(){
+                    console.log('settting sunset/sunrise tomorrow');
+                    $http.post('/options/sun', $rootScope.scheduleDevice).then(function(response){
+                        console.log('response from options/sun', response);
+                    });
+                    console.log('setting sunset/sunrise every 24hrs');
                     var x = setInterval(setOrRise, 86400000);
+                    $rootScope.scheduleDevice.intervalID = x;
                 }, delay);
 
             }
@@ -406,13 +418,38 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
     };
 
 
-
-
 }]);
 
 ;app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$mdMedia', '$mdDialog', function($scope, $rootScope, $http, $location, $mdMedia, $mdDialog){
 
     console.log('in panelViewCtrl - rootScope: ', $rootScope);
+
+    $http.get('http://api.sunrise-sunset.org/json?lat=44.891123.7201600&lng=-93.359752&formatted=0').then(function(response){
+        $rootScope.scheduleDevice.sunset = response.data.results.sunset;
+        $rootScope.scheduleDevice.sunrise = response.data.results.sunrise;
+    });
+
+    function refreshSetOrRise() {
+        console.log('sunrise/sunset date updated');
+        $http.get('http://api.sunrise-sunset.org/json?lat=44.891123.7201600&lng=-93.359752&formatted=0')
+            .then(function (response) {
+                $rootScope.scheduleDevice.sunset = response.data.results.sunset;
+                $rootScope.scheduleDevice.sunrise = response.data.results.sunrise;
+            });
+    }
+
+    var date = new Date();
+    date.setDate(date.getDate()+1);
+    date.setHours(1);
+    date.setMinutes(0);
+    date.setSeconds(0);
+
+    var delay = date - new Date();
+
+    var timeOut = setTimeout(function(){
+        console.log('refreshing sunrise/sunset data');
+        var x = setInterval(refreshSetOrRise, 86400000);
+    }, delay);
 
     $http.get('/panel')
         .then(function(response){
@@ -423,7 +460,7 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
 
         $scope.device = this.panel.device;
 
-        console.log('newState ', this);
+        //console.log('newState ', this);
 
         $http.put('/panel', $scope.device)
             .then(function(response){
@@ -436,13 +473,13 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
     };
 
     $scope.showOptions = function(url){
-        console.log('..changing to options view..', this);
+        //console.log('..changing to options view..', this);
         $rootScope.scheduleDevice = this.panel.device;
         $rootScope.template.url = $rootScope.template[url];
     };
 
     $scope.switch = function(url){
-        console.log('..loading option '+ url +' ..');
+        //console.log('..loading option '+ url +' ..');
         $rootScope.template.url = $rootScope.template[url];
 
     };
@@ -450,7 +487,7 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
     $scope.showAdvOptions = function(ev, option) {
         var useFullScreen = ($mdMedia('sm') || $mdMedia('xs'))  && $scope.customFullscreen;
 
-        console.log('in showAdvOptions ', this);
+        //console.log('in showAdvOptions ', this);
 
         var configDialog = {
             scope: $scope,

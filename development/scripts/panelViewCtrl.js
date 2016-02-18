@@ -2,6 +2,33 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
 
     console.log('in panelViewCtrl - rootScope: ', $rootScope);
 
+    $http.get('http://api.sunrise-sunset.org/json?lat=44.891123.7201600&lng=-93.359752&formatted=0').then(function(response){
+        $rootScope.scheduleDevice.sunset = response.data.results.sunset;
+        $rootScope.scheduleDevice.sunrise = response.data.results.sunrise;
+    });
+
+    function refreshSetOrRise() {
+        console.log('sunrise/sunset date updated');
+        $http.get('http://api.sunrise-sunset.org/json?lat=44.891123.7201600&lng=-93.359752&formatted=0')
+            .then(function (response) {
+                $rootScope.scheduleDevice.sunset = response.data.results.sunset;
+                $rootScope.scheduleDevice.sunrise = response.data.results.sunrise;
+            });
+    }
+
+    var date = new Date();
+    date.setDate(date.getDate()+1);
+    date.setHours(1);
+    date.setMinutes(0);
+    date.setSeconds(0);
+
+    var delay = date - new Date();
+
+    var timeOut = setTimeout(function(){
+        console.log('refreshing sunrise/sunset data');
+        var x = setInterval(refreshSetOrRise, 86400000);
+    }, delay);
+
     $http.get('/panel')
         .then(function(response){
             $scope.panels = response.data;
@@ -11,7 +38,7 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
 
         $scope.device = this.panel.device;
 
-        console.log('newState ', this);
+        //console.log('newState ', this);
 
         $http.put('/panel', $scope.device)
             .then(function(response){
@@ -24,13 +51,13 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
     };
 
     $scope.showOptions = function(url){
-        console.log('..changing to options view..', this);
+        //console.log('..changing to options view..', this);
         $rootScope.scheduleDevice = this.panel.device;
         $rootScope.template.url = $rootScope.template[url];
     };
 
     $scope.switch = function(url){
-        console.log('..loading option '+ url +' ..');
+        //console.log('..loading option '+ url +' ..');
         $rootScope.template.url = $rootScope.template[url];
 
     };
@@ -38,7 +65,7 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
     $scope.showAdvOptions = function(ev, option) {
         var useFullScreen = ($mdMedia('sm') || $mdMedia('xs'))  && $scope.customFullscreen;
 
-        console.log('in showAdvOptions ', this);
+        //console.log('in showAdvOptions ', this);
 
         var configDialog = {
             scope: $scope,

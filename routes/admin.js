@@ -13,7 +13,7 @@ router.put('/', function(req, res, error){
 
 router.post('/test', function(req, res, error){
 
-    console.log('this is from test', req.body);
+    //console.log('this is from test', req.body);
 
     var flipSwitch = {
         on: '58010301ff00ffffff',
@@ -42,7 +42,7 @@ router.post('/test', function(req, res, error){
             break;
     };
 
-    console.log(flipSwitch.gattArgs[8], flipSwitch.state);
+    //console.log(flipSwitch.gattArgs[8], flipSwitch.state);
 
     var child = spawn('gatttool', flipSwitch.gattArgs);
 
@@ -116,7 +116,7 @@ router.get('/scan', function(req, res, error){
 
 router.post('/', function(req, res, error){
 
-    console.log('from admin post: ', req.body.location);
+    //console.log('from admin post: ', req.body.location);
 
     pg.connect(connectionString, function(err, client, done){
         if(err){console.log(err);}

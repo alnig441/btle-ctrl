@@ -2,6 +2,7 @@ app.controller('loginCtrl',['$scope', '$rootScope', '$http', '$location', '$mdDi
 
     console.log('in login Ctrl - rootScopes ', $rootScope);
 
+    $rootScope.scheduleDevice = {};
 
     $rootScope.template = {
         dim: '/views/dim.html',

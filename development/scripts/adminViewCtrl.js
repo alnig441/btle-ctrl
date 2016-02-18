@@ -1,6 +1,6 @@
 app.controller('adminViewCtrl',['$scope', '$rootScope', '$http', '$mdMedia', '$mdDialog', function($scope, $rootScope, $http, $mdMedia, $mdDialog){
 
-    console.log('in adminViewCtrl - rootScope: ', $rootScope);
+    //console.log('in adminViewCtrl - rootScope: ', $rootScope);
 
 
     $scope.customFullscreen = $mdMedia('xs') || $mdMedia('sm');
@@ -82,12 +82,12 @@ app.controller('adminViewCtrl',['$scope', '$rootScope', '$http', '$mdMedia', '$m
 
 function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, $mdMedia) {
 
-    console.log('in adminDialogCtrl - rootScope: ', $rootScope);
+    //console.log('in adminDialogCtrl - rootScope: ', $rootScope);
 
 
     $scope.submit = function(choice, ev){
 
-        console.log('in AdminDialogController ', choice, $scope);
+        //console.log('in AdminDialogController ', choice, $scope);
 
         if(choice === 'add_from_scan') {
 

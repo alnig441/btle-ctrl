@@ -54,7 +54,7 @@ router.post('/schedule', function(req, res, error){
         }
 
         //RECURRING - REGULAR CONTROL
-        console.log('setting up recurring schedule - regular control', recur);
+        console.log('setting up recurring schedule - regular control', recur, req.body);
 
         req.body.turnOn ? req.body.device_on = true : req.body.device_on = false;
 
@@ -108,7 +108,7 @@ router.post('/schedule', function(req, res, error){
         req.body.onAtSunset ? (setpoint = new Date(req.body.sunset)) : (setpoint = new Date (req.body.sunrise));
         req.body.onAtSunset ? req.body.device_on = true : req.body.device_on = false;
 
-        console.log('schedulling non-recurring sunrise/sunset control', setpoint);
+        console.log('schedulling non-recurring sunrise/sunset control in options/schedule', setpoint);
 
         var job = schedule.scheduleJob(setpoint, function(){
 
@@ -210,9 +210,60 @@ router.post('/schedule', function(req, res, error){
 
 });
 
+router.post('/sun', function(req, res, error){
+
+    var setpoint;
+
+    req.body.onAtSunset ? (setpoint = new Date(req.body.sunset)) : (setpoint = new Date (req.body.sunrise));
+    req.body.onAtSunset ? req.body.device_on = true : req.body.device_on = false;
+
+    console.log('schedulling non-recurring sunrise/sunset control in options/sun', setpoint);
+
+    var job = schedule.scheduleJob(setpoint, function(){
+
+        var child = spawn('gatttool', flipSwitch.gattArgs);
+
+        child.stdout.on('data', function(data){
+
+            res.send(data);
+
+            child.kill();
+        });
+
+        child.on('exit', function(code){
+            console.log('spawned process ended on exit code: ', code);
+        });
+
+    });
+
+    job.on('scheduled',function(date){
+        console.log('job scheduled', date);
+    });
+
+    job.on('run', function(){
+        console.log('my job ran');
+
+        pg.connect(connectionString, function(err, client, done){
+
+            var query = client.query("UPDATE devices SET device_on='"+ req.body.device_on +"' where mac='" + req.body.mac + "'", function(error, result){
+                if(error){console.log('there was an error ', error.detail);}
+            })
+
+            query.on('end',function(result){
+                client.end();
+                //res.send(result);
+            })
+
+        });
+    });
+
+    res.sendStatus(200);
+
+});
+
 router.post('/colour', function(req, res, error){
 
-    console.log('in optiona colour route ', req.body);
+    //console.log('in optiona colour route ', req.body);
 
     var chgColour = {
         gattArgs: [

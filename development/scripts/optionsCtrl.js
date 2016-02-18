@@ -1,5 +1,7 @@
 app.controller('optionsCtrl',['$scope', '$rootScope', '$http', '$location', '$mdDialog', function($scope, $rootScope, $http, $location, $mdDialog){
 
+    console.log('in optionsCtrl ', $rootScope);
+
     $rootScope.scheduleDevice.dateBegin = new Date();
 
     $scope.apply = function(option){
@@ -9,19 +11,12 @@ app.controller('optionsCtrl',['$scope', '$rootScope', '$http', '$location', '$md
         $rootScope.scheduleDevice.minute = $scope.selectedMinutes.value;
 
         function setOrRise() {
-
-            console.log('function setOrRise');
-            $http.get('http://api.sunrise-sunset.org/json?lat=44.891123.7201600&lng=-93.359752&formatted=0')
-                .then(function (response) {
-                    $rootScope.scheduleDevice.sunset = response.data.results.sunset;
-                    $rootScope.scheduleDevice.sunrise = response.data.results.sunrise;
-                    $rootScope.scheduleDevice.recurDaily = false;
-                    $rootScope.scheduleDevice.recurWeekly = false;
-                    $http.post('/options/schedule', $rootScope.scheduleDevice).then(function(response){
-                        console.log('response from options/schedule', response);
-                    });
+            console.log('function setOrRise', $rootScope);
+                $http.post('/options/sun', $rootScope.scheduleDevice).then(function(response){
+                    console.log('response from options/sun', response);
                 });
         }
+
 
         if(option === 'colour'){
 
@@ -36,16 +31,32 @@ app.controller('optionsCtrl',['$scope', '$rootScope', '$http', '$location', '$md
 
             if(($rootScope.scheduleDevice.onAtSunset || $rootScope.scheduleDevice.offAtSunrise) && $rootScope.scheduleDevice.recurDaily){
 
+                console.log('setting sunrise/sunset today');
+
+                $http.post('/options/sun', $rootScope.scheduleDevice).then(function(response){
+                    console.log('response from options/sun', response);
+                });
+
+
                 var date = new Date();
                 date.setDate(date.getDate()+1);
-                date.setHours(0);
+                date.setHours(3);
                 date.setMinutes(0);
                 date.setSeconds(0);
 
+
                 var delay = date - new Date();
 
+                console.log('setting up recurring sunrise/sunset schedule - calling setInterval every 24hrs from ', date);
+
                 var timeout = setTimeout(function(){
+                    console.log('settting sunset/sunrise tomorrow');
+                    $http.post('/options/sun', $rootScope.scheduleDevice).then(function(response){
+                        console.log('response from options/sun', response);
+                    });
+                    console.log('setting sunset/sunrise every 24hrs');
                     var x = setInterval(setOrRise, 86400000);
+                    $rootScope.scheduleDevice.intervalID = x;
                 }, delay);
 
             }
@@ -125,8 +136,6 @@ app.controller('optionsCtrl',['$scope', '$rootScope', '$http', '$location', '$md
     $scope.dismiss = function() {
         $mdDialog.cancel();
     };
-
-
 
 
 }]);
