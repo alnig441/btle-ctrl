@@ -1,6 +1,6 @@
 app.controller('optionsCtrl',['$scope', '$rootScope', '$http', '$location', '$mdDialog', function($scope, $rootScope, $http, $location, $mdDialog){
 
-    console.log('in optionsCtrl ', $rootScope);
+    console.log('in optionsCtrl ', $rootScope, this);
 
     $rootScope.scheduleDevice.dateBegin = new Date();
 
@@ -69,11 +69,11 @@ app.controller('optionsCtrl',['$scope', '$rootScope', '$http', '$location', '$md
                     console.log('setting up recurring sunrise/sunset schedule - calling setInterval every 24hrs from ', date);
 
                     var timeout = setTimeout(function(){
-                        console.log('settting sunset/sunrise tomorrow');
+                        console.log('settting upcoming sunset/sunrise control');
                         $http.post('/options/sun', $rootScope.scheduleDevice).then(function(response){
                             console.log('response from options/sun', response);
                         });
-                        console.log('setting sunset/sunrise every 24hrs');
+                        console.log('setting sunset/sunrise control every 24hrs');
                         var x = setInterval(setOrRise, 86400000);
                         $rootScope.scheduleDevice.intervalID = x;
                     }, delay);
@@ -102,6 +102,31 @@ app.controller('optionsCtrl',['$scope', '$rootScope', '$http', '$location', '$md
                 //});
 
             }
+
+        }
+
+        if(option === 'profiles'){
+
+            console.log('in optionCtrl - profiles ', this );
+
+            var devices;
+
+            if(this.profile.profile.devices === null) {
+                devices = [];
+            } else {
+                devices = this.profile.profile.devices;
+            }
+
+            devices.push(this.scheduleDevice.mac);
+
+            this.profile.profile.devices = devices;
+
+            console.log('devices', devices);
+
+            $http.post('/profiles', this.profile.profile)
+                .then(function(response){
+                    console.log(response);
+                });
 
         }
          $rootScope.template.url = "/views/panel.html";

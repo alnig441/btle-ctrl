@@ -1,11 +1,3 @@
-//table(id='viewPane', ng-controller='adminCtrl')
-//    tr
-//        td(id='loadPane')
-//            ul(ng-repeat='device in devices')
-//                button.myButton(ng-click='addDev()') Add Device
-//                button.myButton(ng-click='testDev()') Test Device
-//                li Device: {{ device.mac }}
-
 md-dialog(ng-controller='adminViewCtrl', aria-label="List dialog")
     md-toolbar
         div.md-toolbar-tools
@@ -15,10 +7,11 @@ md-dialog(ng-controller='adminViewCtrl', aria-label="List dialog")
             md-list-item(ng-repeat="device in devices")
                 p {{device.mac}}
                 md-button.md-primary(ng-click="submit('add_from_scan', $event)") add
-                    md-icon done
+                    md-icon add
                 md-button.md-primary(ng-click='testDev()') test
                     md-icon lightbulb_outline
 
     md-dialog-actions
         span(flex)
         md-button.md-primary(ng-click="dismiss()") Cancel
+            md-icon cancel

@@ -6,9 +6,10 @@ md-dialog(ng-controller='adminViewCtrl', aria-label="List dialog")
         md-list.md-dialog-content
             md-list-item(ng-repeat="installation in installations")
                 p {{installation.device.location}}
-                md-button.md-primary(ng-click="submit('delete')")
-                    md-icon done
+                md-button.md-primary(ng-click="submit('delete')") Delete
+                    md-icon delete
 
     md-dialog-actions
         span(flex)
         md-button.md-primary(ng-click="dismiss()") Cancel
+            md-icon cancel

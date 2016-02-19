@@ -8,17 +8,17 @@ div(class='md-inline-form', layout='column', ng-cloak, ng-controller='optionsCtr
         md-select(ng-model='selectedMinutes', placeholder='Min')
             md-option(ng-value='minute', ng-repeat='minute in minutes') {{minute.name}}
         div(layout)
-            md-input-container
-                md-checkbox(ng-model='scheduleDevice.turnOn', value=false) ON
-            md-input-container
-                md-checkbox(ng-model='scheduleDevice.turnOff', value=false) OFF
+            md-input-container ON
+                md-checkbox(ng-model='scheduleDevice.turnOn', value=false)
+            md-input-container OFF
+                md-checkbox(ng-model='scheduleDevice.turnOff', value=false)
 
     md-content(layout-gt-sm='row', layout-padding)
         div(layout)
-            md-input-container
-                md-checkbox(ng-model='scheduleDevice.offAtSunrise', value=false) Turn OFF @ Sunrise
-            md-input-container
-                md-checkbox(ng-model='scheduleDevice.onAtSunset', value=false) Turn ON @ Sunset
+            md-input-container Turn OFF @ Sunrise
+                md-checkbox(ng-model='scheduleDevice.offAtSunrise', value=false)
+            md-input-container Turn ON @ Sunset
+                md-checkbox(ng-model='scheduleDevice.onAtSunset', value=false)
 
     md-toolbar
         div.md-toolbar-tools
@@ -27,14 +27,11 @@ div(class='md-inline-form', layout='column', ng-cloak, ng-controller='optionsCtr
     md-datepicker(ng-model='scheduleDevice.dateEnd', md-placeholder='End')
     md-content(layout-gt-sm='row', layout-padding)
         div(layout)
-            md-input-container
-                md-checkbox(ng-model='scheduleDevice.recurDaily', value='false') Repeat Daily
-            md-input-container
-                md-checkbox(ng-model='scheduleDevice.recurWeekly', value=false) Repeat Weekly
+            md-input-container Repeat Daily
+                md-checkbox(ng-model='scheduleDevice.recurDaily', value=false)
+            md-input-container Repeat Weekly
+                md-checkbox(ng-model='scheduleDevice.recurWeekly', value=false)
 
-    md-toolbar
-        div.md-toolbar-tools
-            h2 Create Profile/Add To Profile
     div(layout)
         md-button(ng-click='apply("schedule")') Apply
             md-icon done

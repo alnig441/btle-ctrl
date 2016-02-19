@@ -34,6 +34,12 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
             $scope.panels = response.data;
         });
 
+    $http.get('/profiles')
+        .then(function(response){
+            console.log('from profiles ', response.data);
+            $rootScope.profiles = response.data;
+        });
+
     $scope.newState = function(){
 
         $scope.device = this.panel.device;

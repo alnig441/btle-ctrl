@@ -15,25 +15,10 @@ router.post('/schedule', function(req, res, error){
     var setpoint;
     var gattArgs;
 
-    //var flipSwitch = {
-    //    gattArgs: [
-    //        '-i',
-    //        'hci1',
-    //        '-b',
-    //        req.body.mac,
-    //        '--char-write',
-    //        '-a',
-    //        '0x0028',
-    //        '-n'
-    //    ]
-    //};
-
     if(req.body.turnOff || req.body.offAtSunrise) {
-        //flipSwitch.gattArgs.push(off);
         gattArgs = call.buildGattargs(req.body.mac, off);
     }
     if(req.body.turnOn || req.body.onAtSunset) {
-        //flipSwitch.gattArgs.push(on);
         gattArgs = call.buildGattargs(req.body.mac, on);
     }
 
@@ -41,6 +26,12 @@ router.post('/schedule', function(req, res, error){
     if(req.body.recurWeekly || req.body.recurDaily || req.body.dateEnd !== undefined){
 
         var begin = new Date(req.body.dateBegin);
+        begin.setHours(parseInt(req.body.hour));
+        begin.setMinutes(parseInt(req.body.minute));
+
+        //if(begin < new Date()){
+        //
+        //}
 
         var recur = new schedule.RecurrenceRule();
         recur.hour = parseInt(req.body.hour);

@@ -8,9 +8,10 @@ md-dialog(ng-controller='adminViewCtrl')
                 md-input-container.md-block(flex-gt-sm)
                     label(for='location') Location: {{installation.device.location}}
                     input(type='text',name='location', ng-model='installation.device.location')
-                md-button.md-primary(ng-click="submit('update')")
-                    md-icon done
+                md-button.md-primary(ng-click="submit('update')") Update
+                    md-icon update
 
         md-dialog-actions
             span(flex)
             md-button.md-primary(ng-click="dismiss()") Cancel
+                md-icon cancel

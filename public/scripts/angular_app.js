@@ -184,8 +184,6 @@ function LoginDialogController($scope, $mdDialog, $http, $location, $rootScope) 
 function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, $mdMedia) {
 
     //console.log('in adminDialogCtrl - rootScope: ', $rootScope);
-
-
     $scope.submit = function(choice, ev){
 
         //console.log('in AdminDialogController ', choice, $scope);
@@ -194,7 +192,7 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
 
             var useFullScreen = ($mdMedia('sm') || $mdMedia('xs'))  && $scope.customFullscreen;
 
-            console.log('adding this device from scan ', this.device);
+            console.log('adding this device from scan ', $rootScope);
             $rootScope.form = this;
 
             $mdDialog.show({
@@ -238,6 +236,8 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
 
         if(choice === 'add') {
 
+            console.log('in add device ', this.form);
+
             $http.post('/admin', this.form.device)
                 .then(function(response){
                     console.log(response);
@@ -280,7 +280,7 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
     };
 };app.controller('optionsCtrl',['$scope', '$rootScope', '$http', '$location', '$mdDialog', function($scope, $rootScope, $http, $location, $mdDialog){
 
-    console.log('in optionsCtrl ', $rootScope);
+    console.log('in optionsCtrl ', $rootScope, this);
 
     $rootScope.scheduleDevice.dateBegin = new Date();
 
@@ -349,11 +349,11 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
                     console.log('setting up recurring sunrise/sunset schedule - calling setInterval every 24hrs from ', date);
 
                     var timeout = setTimeout(function(){
-                        console.log('settting sunset/sunrise tomorrow');
+                        console.log('settting upcoming sunset/sunrise control');
                         $http.post('/options/sun', $rootScope.scheduleDevice).then(function(response){
                             console.log('response from options/sun', response);
                         });
-                        console.log('setting sunset/sunrise every 24hrs');
+                        console.log('setting sunset/sunrise control every 24hrs');
                         var x = setInterval(setOrRise, 86400000);
                         $rootScope.scheduleDevice.intervalID = x;
                     }, delay);
@@ -382,6 +382,31 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
                 //});
 
             }
+
+        }
+
+        if(option === 'profiles'){
+
+            console.log('in optionCtrl - profiles ', this );
+
+            var devices;
+
+            if(this.profile.profile.devices === null) {
+                devices = [];
+            } else {
+                devices = this.profile.profile.devices;
+            }
+
+            devices.push(this.scheduleDevice.mac);
+
+            this.profile.profile.devices = devices;
+
+            console.log('devices', devices);
+
+            $http.post('/profiles', this.profile.profile)
+                .then(function(response){
+                    console.log(response);
+                });
 
         }
          $rootScope.template.url = "/views/panel.html";
@@ -484,6 +509,12 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
     $http.get('/panel')
         .then(function(response){
             $scope.panels = response.data;
+        });
+
+    $http.get('/profiles')
+        .then(function(response){
+            console.log('from profiles ', response.data);
+            $rootScope.profiles = response.data;
         });
 
     $scope.newState = function(){

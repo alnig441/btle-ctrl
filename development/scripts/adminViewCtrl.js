@@ -83,8 +83,6 @@ app.controller('adminViewCtrl',['$scope', '$rootScope', '$http', '$mdMedia', '$m
 function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, $mdMedia) {
 
     //console.log('in adminDialogCtrl - rootScope: ', $rootScope);
-
-
     $scope.submit = function(choice, ev){
 
         //console.log('in AdminDialogController ', choice, $scope);
@@ -93,7 +91,7 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
 
             var useFullScreen = ($mdMedia('sm') || $mdMedia('xs'))  && $scope.customFullscreen;
 
-            console.log('adding this device from scan ', this.device);
+            console.log('adding this device from scan ', $rootScope);
             $rootScope.form = this;
 
             $mdDialog.show({
@@ -136,6 +134,8 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
         }
 
         if(choice === 'add') {
+
+            console.log('in add device ', this.form);
 
             $http.post('/admin', this.form.device)
                 .then(function(response){
