@@ -11,8 +11,6 @@ var connectionString = process.env.DATABASE_URL || 'postgres://localhost:5432/bt
 
 router.get('/', function(req, res, error){
 
-    //console.log('in panel get');
-
     pg.connect(connectionString, function(err, client, done){
 
         var device = [];
@@ -36,59 +34,21 @@ router.get('/', function(req, res, error){
 
 router.put('/', function(req, res, error){
 
-    console.log('ONE', req.body.device_on);
-
     var on = '58010301ff00ffffff';
     var off = '58010301ff00000000';
     var gattArgs;
 
-    //var flipSwitch = {
-    //    on: '58010301ff00ffffff',
-    //    off: '58010301ff00000000',
-    //    gattArgs: [
-    //        '-i',
-    //        'hci1',
-    //        '-b',
-    //        req.body.mac,
-    //        '--char-write',
-    //        '-a',
-    //        '0x0028',
-    //        '-n'
-    //    ],
-    //    state: req.body.device_on
-    //};
-
-
     switch (req.body.device_on) {
         case true:
-            //flipSwitch.gattArgs.push(flipSwitch.off);
-            //flipSwitch.state = false;
             req.body.device_on = false;
             gattArgs = call.buildGattargs(req.body.mac, off);
             break;
         case false:
-            //flipSwitch.gattArgs.push(flipSwitch.on);
-            //flipSwitch.state = true;
             req.body.device_on = true;
             gattArgs = call.buildGattargs(req.body.mac, on);
             break;
     };
 
-    console.log('TWO')
-
-
-    //pg.connect(connectionString, function(err, client, done){
-    //
-    //    var query = client.query("UPDATE devices SET device_on='" + flipSwitch.state + "' where mac='" + req.body.mac + "'", function(error, result){
-    //        if(error){console.log('there was an error ', error.detail);}
-    //    })
-    //
-    //    query.on('end',function(result){
-    //        client.end();
-    //        res.send(result);
-    //    })
-    //
-    //});
 
     var child = spawn('gatttool', gattArgs);
 
@@ -98,9 +58,6 @@ router.put('/', function(req, res, error){
 
         child.kill();
     });
-
-    console.log('THREE')
-
 
     child.on('exit', function(code){
         console.log('spawned process ended on exit code: ', code);

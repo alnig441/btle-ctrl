@@ -284,34 +284,35 @@ router.post('/sun', function(req, res, error){
 
 router.post('/colour', function(req, res, error){
 
-    //console.log('in optiona colour route ', req.body);
+    var colour = '58010301ff00';
 
-    var chgColour = {
-        gattArgs: [
-            '-i',
-            'hci1',
-            '-b',
-            req.body.mac,
-            '--char-write',
-            '-a',
-            '0x0028',
-            '-n'
-        ]
-    };
+    //var chgColour = {
+    //    gattArgs: [
+    //        '-i',
+    //        'hci1',
+    //        '-b',
+    //        req.body.mac,
+    //        '--char-write',
+    //        '-a',
+    //        '0x0028',
+    //        '-n'
+    //    ]
+    //};
 
 
-    var hex = '58010301ff00';
 
     for(var i in req.body.colour){
         if(req.body.colour[i] < 16){
-            hex += '0';
+            colour += '0';
         }
-        hex += ayb.decToHex(req.body.colour[i]);
+        colour += ayb.decToHex(req.body.colour[i]);
     }
 
-    chgColour.gattArgs.push(hex);
+    //chgColour.gattArgs.push(hex);
 
-    var child = spawn('gatttool', chgColour.gattArgs);
+    var gattArgs = call.buildGattargs(req.body.mac, colour);
+
+    var child = spawn('gatttool', gattArgs);
 
     child.stdout.on('data', function(data){
 
