@@ -220,6 +220,7 @@ router.post('/sun', function(req, res, error){
     }
 
     else {
+
         if(req.body.offAtSunrise) {
             //flipSwitch.gattArgs.push(off);
             gattArgs = call.buildGattargs(req.body.mac, off);
@@ -227,7 +228,6 @@ router.post('/sun', function(req, res, error){
         if(req.body.onAtSunset) {
             //flipSwitch.gattArgs.push(on);
             gattArgs = call.buildGattargs(req.body.mac, on);
-
         }
 
 
