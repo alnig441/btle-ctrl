@@ -3,6 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="95122da9-fbae-4397-9692-e2312a5cdde2" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/routes/options.js" afterPath="$PROJECT_DIR$/routes/options.js" />
     </list>
     <ignored path="btle-ctrl.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -26,8 +27,8 @@
       <file leaf-file-name="options.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/routes/options.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="1.2560387">
-              <caret line="233" column="0" selection-start-line="233" selection-start-column="0" selection-end-line="233" selection-end-column="0" />
+            <state vertical-scroll-proportion="-0.8357488">
+              <caret line="279" column="17" selection-start-line="279" selection-start-column="17" selection-end-line="279" selection-end-column="17" />
               <folding />
             </state>
           </provider>
@@ -38,6 +39,16 @@
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
               <caret line="84" column="66" selection-start-line="84" selection-start-column="66" selection-end-line="84" selection-end-column="66" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="panel.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/routes/panel.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="84" column="14" selection-start-line="84" selection-start-column="14" selection-end-line="84" selection-end-column="14" />
               <folding />
             </state>
           </provider>
@@ -157,7 +168,6 @@
         <option value="$PROJECT_DIR$/development/templates/default.jade" />
         <option value="$PROJECT_DIR$/development/scripts/2_loginCtrl.js" />
         <option value="$PROJECT_DIR$/development/modules/myFunctions.js" />
-        <option value="$PROJECT_DIR$/routes/panel.js" />
         <option value="$PROJECT_DIR$/app.js" />
         <option value="$PROJECT_DIR$/routes/admin.js" />
         <option value="$PROJECT_DIR$/models/btle_ctrl.js" />
@@ -172,6 +182,7 @@
         <option value="$PROJECT_DIR$/development/scripts/optionsCtrl.js" />
         <option value="$PROJECT_DIR$/development/templates/addDev.jade" />
         <option value="$PROJECT_DIR$/development/scripts/adminViewCtrl.js" />
+        <option value="$PROJECT_DIR$/routes/panel.js" />
         <option value="$PROJECT_DIR$/routes/options.js" />
       </list>
     </option>
@@ -815,14 +826,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/routes/panel.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="7" column="0" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/models/btle_ctrl.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -961,10 +964,18 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/routes/panel.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="84" column="14" selection-start-line="84" selection-start-column="14" selection-end-line="84" selection-end-column="14" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/routes/options.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="1.2560387">
-          <caret line="233" column="0" selection-start-line="233" selection-start-column="0" selection-end-line="233" selection-end-column="0" />
+        <state vertical-scroll-proportion="-0.8357488">
+          <caret line="279" column="17" selection-start-line="279" selection-start-column="17" selection-end-line="279" selection-end-column="17" />
           <folding />
         </state>
       </provider>
