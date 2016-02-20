@@ -1,30 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="95122da9-fbae-4397-9692-e2312a5cdde2" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/routes/profiles.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app.js" afterPath="$PROJECT_DIR$/app.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/development/scripts/adminViewCtrl.js" afterPath="$PROJECT_DIR$/development/scripts/adminViewCtrl.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/development/scripts/optionsCtrl.js" afterPath="$PROJECT_DIR$/development/scripts/optionsCtrl.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/development/scripts/panelViewCtrl.js" afterPath="$PROJECT_DIR$/development/scripts/panelViewCtrl.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/development/templates/addDev.jade" afterPath="$PROJECT_DIR$/development/templates/addDev.jade" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/development/templates/delDev.jade" afterPath="$PROJECT_DIR$/development/templates/delDev.jade" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/development/templates/profiles.jade" afterPath="$PROJECT_DIR$/development/templates/profiles.jade" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/development/templates/scanDev.jade" afterPath="$PROJECT_DIR$/development/templates/scanDev.jade" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/development/templates/schedule.jade" afterPath="$PROJECT_DIR$/development/templates/schedule.jade" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/development/templates/updDev.jade" afterPath="$PROJECT_DIR$/development/templates/updDev.jade" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/models/btle_ctrl.js" afterPath="$PROJECT_DIR$/models/btle_ctrl.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/scripts/angular_app.js" afterPath="$PROJECT_DIR$/public/scripts/angular_app.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/views/addDev.html" afterPath="$PROJECT_DIR$/public/views/addDev.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/views/delDev.html" afterPath="$PROJECT_DIR$/public/views/delDev.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/views/profiles.html" afterPath="$PROJECT_DIR$/public/views/profiles.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/views/scanDev.html" afterPath="$PROJECT_DIR$/public/views/scanDev.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/views/schedule.html" afterPath="$PROJECT_DIR$/public/views/schedule.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/views/updDev.html" afterPath="$PROJECT_DIR$/public/views/updDev.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/routes/admin.js" afterPath="$PROJECT_DIR$/routes/admin.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/routes/options.js" afterPath="$PROJECT_DIR$/routes/options.js" />
-    </list>
+    <list default="true" id="95122da9-fbae-4397-9692-e2312a5cdde2" name="Default" comment="" />
     <ignored path="btle-ctrl.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -109,7 +86,7 @@
       <file leaf-file-name="schedule.jade" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/development/templates/schedule.jade">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.33816424">
+            <state vertical-scroll-proportion="0.25120774">
               <caret line="14" column="0" selection-start-line="14" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
               <folding />
             </state>
@@ -974,7 +951,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/development/templates/schedule.jade">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.33816424">
+        <state vertical-scroll-proportion="0.25120774">
           <caret line="14" column="0" selection-start-line="14" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
           <folding />
         </state>

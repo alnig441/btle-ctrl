@@ -232,8 +232,6 @@ router.post('/schedule', function(req, res, error){
             console.log('my job ran');
         });
 
-        res.sendStatus(200);
-
     }
 
 });
