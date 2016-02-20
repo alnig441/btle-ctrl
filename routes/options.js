@@ -79,6 +79,8 @@ router.post('/schedule', function(req, res, error){
 
                     });
 
+                    res.status(200);
+
                 }
                 else {
                     res.status(200).send('check hciconfig');
@@ -97,8 +99,6 @@ router.post('/schedule', function(req, res, error){
             console.log('job ran');
 
         });
-
-        res.sendStatus(200);
 
     }
 
@@ -138,6 +138,8 @@ router.post('/schedule', function(req, res, error){
 
                     });
 
+                    res.status(200);
+
                 }
                 else {
                     res.status(200).send('check hciconfig');
@@ -154,21 +156,7 @@ router.post('/schedule', function(req, res, error){
         job.on('run', function(){
             console.log('my job ran');
 
-            pg.connect(connectionString, function(err, client, done){
-
-                var query = client.query("UPDATE devices SET device_on='"+ req.body.device_on +"' where mac='" + req.body.mac + "'", function(error, result){
-                    if(error){console.log('there was an error ', error.detail);}
-                })
-
-                query.on('end',function(result){
-                    client.end();
-                    //res.send(result);
-                })
-
-            });
         });
-
-        res.sendStatus(200);
 
 
     }
@@ -212,6 +200,7 @@ router.post('/schedule', function(req, res, error){
                             client.end();
                             //res.send(result);
                         })
+                        res.status(200);
 
                     });
 
@@ -296,6 +285,8 @@ router.post('/sun', function(req, res, error){
 
                     });
 
+                    res.status(200);
+
                 }
                 else {
                     res.status(200).send('check hciconfig');
@@ -312,8 +303,6 @@ router.post('/sun', function(req, res, error){
         job.on('run', function(){
             console.log('my job ran');
         });
-
-        res.sendStatus(200);
 
     }
 

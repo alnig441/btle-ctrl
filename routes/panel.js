@@ -78,6 +78,8 @@ router.put('/', function(req, res, error){
 
             })
 
+            res.status(200);
+
         }
 
         else {
