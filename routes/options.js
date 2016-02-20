@@ -88,7 +88,7 @@ router.post('/schedule', function(req, res, error){
 
                 var query = client.query("UPDATE devices SET device_on='" + req.body.device_on + "' where mac='" + req.body.mac + "'", function (error, result) {
                     if (error) {
-                        console.log('there was an error ', error.detail);
+                        console.log('there was an error ', error);
                     }
                 })
 
@@ -148,7 +148,7 @@ router.post('/schedule', function(req, res, error){
 
                 var query = client.query("UPDATE devices SET device_on='" + req.body.device_on + "' where mac='" + req.body.mac + "'", function (error, result) {
                     if (error) {
-                        console.log('there was an error ', error.detail);
+                        console.log('there was an error ', error);
                     }
                 })
 
@@ -215,7 +215,7 @@ router.post('/schedule', function(req, res, error){
 
                 var query = client.query("UPDATE devices SET device_on='" + req.body.device_on + "' where mac='" + req.body.mac + "'", function (error, result) {
                     if (error) {
-                        console.log('there was an error ', error.detail);
+                        console.log('there was an error ', error);
                     }
                 })
 
@@ -299,7 +299,7 @@ router.post('/sun', function(req, res, error){
 
                 var query = client.query("UPDATE devices SET device_on='" + req.body.device_on + "' where mac='" + req.body.mac + "'", function (error, result) {
                     if (error) {
-                        console.log('there was an error ', error.detail);
+                        console.log('there was an error ', error);
                     }
                 })
 
