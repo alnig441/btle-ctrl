@@ -15,7 +15,7 @@ router.get('/', function(req, res, error){
 
         var device = [];
         var query = client.query("SELECT * FROM devices ORDER BY location", function(error, result){
-            if(error){console.log('there was an error ', error.detail);}
+            if(error){console.log('there was an error ', error);}
         })
 
         query.on('row', function(row, result){
