@@ -141,7 +141,7 @@ router.delete('/:mac?', function(req, res, error){
         if(err){console.log(err);}
 
         var query = client.query("DELETE FROM devices WHERE mac='" + req.params.mac + "'", function(error, result){
-            if(error){console.log('there was an error ', error.detail);}
+            if(error){console.log('there was an error ', error);}
         })
 
         query.on('end', function(result){
@@ -159,7 +159,7 @@ router.post('/update', function(req, res, error){
     pg.connect(connectionString, function(err, client, done){
 
         var query = client.query("UPDATE devices SET location='" + req.body.location +  "' WHERE mac='" + req.body.mac + "'", function(error, result){
-            if(error){console.log('there was an error ', error.detail);}
+            if(error){console.log('there was an error ', error);}
         });
 
         query.on('end', function(result){

@@ -14,7 +14,7 @@ router.get('/', function(req, res, error){
 
         var profiles = [];
         var query = client.query("SELECT * FROM profiles", function(error, result){
-            if(error){console.log('there was an error ', error.detail);}
+            if(error){console.log('there was an error ', error);}
         })
 
         query.on('row', function(row, result){
@@ -41,7 +41,7 @@ router.post('/', function(req, res, error){
 
         var profiles = [];
         var query = client.query("UPDATE profiles SET devices='{" + req.body.devices + "}' WHERE profile_name='"+ req.body.profile_name +"'", function(error, result){
-            if(error){console.log('there was an error ', error.detail);}
+            if(error){console.log('there was an error ', error);}
         })
 
         query.on('row', function(row, result){
