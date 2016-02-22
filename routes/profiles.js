@@ -36,28 +36,29 @@ router.get('/', function(req, res, error){
 
 router.post('/', function(req, res, error){
 
-    console.log('adding macs to profile ', req.body);
+    var devices = [];
+    req.body.devices.push('zzzzzzzzzz');
+
+    req.body.devices.sort().reduce(function(prev, curr, index, arr){
+        prev = arr[index -1];
+
+        if(prev != curr){
+            devices.push(prev);
+        }
+    })
+
     pg.connect(connectionString, function(err, client, done){
 
-        var profiles = [];
-        var query = client.query("UPDATE profiles SET devices='{" + req.body.devices + "}' WHERE profile_name='"+ req.body.profile_name +"'", function(error, result){
+        var query = client.query("UPDATE profiles SET devices='{" + devices + "}' WHERE profile_name='"+ req.body.profile_name +"'", function(error, result){
             if(error){console.log('there was an error ', error);}
         })
-
-        query.on('row', function(row, result){
-            console.log('in profiles: ', row);
-            profiles.push({profile: row});
-
-        })
-
         query.on('end',function(result){
             client.end();
-            console.log(profiles);
-            res.send(profiles);
         })
 
     })
 
+    res.status(200);
 
 });
 

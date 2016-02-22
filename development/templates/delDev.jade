@@ -1,15 +1,19 @@
-md-dialog(ng-controller='adminViewCtrl', aria-label="List dialog")
-    md-toolbar
-        div.md-toolbar-tools
-            h2 Delete Device
-    md-dialog-content
-        md-list.md-dialog-content
-            md-list-item(ng-repeat="installation in installations")
-                p {{installation.device.location}}
-                md-button.md-primary(ng-click="submit('delete')") Delete
+md-dialog(ng-controller='adminViewCtrl')
+    form
+        md-toolbar
+            div.md-toolbar-tools
+                h2 Modify Profile
+        md-dialog-content(ng-repeat='profile in profiles')
+            div.md-dialog-content
+                md-input-container.md-block(flex-gt-sm)
+                    label(for='profile_name') Name: {{profile.profile.profile_name}}
+                    input(type='text',name='profile_name', ng-model='profile.profile.profile_name')
+                md-button.md-primary(ng-click="submit('update_profile')") Update
+                    md-icon update
+                md-button.md-primary(ng-click="submit('delete_profile')") Delete
                     md-icon delete
 
-    md-dialog-actions
-        span(flex)
-        md-button.md-primary(ng-click="dismiss()") Cancel
-            md-icon cancel
+        md-dialog-actions
+            span(flex)
+            md-button.md-primary(ng-click="dismiss()") Cancel
+                md-icon cancel

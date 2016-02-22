@@ -107,8 +107,6 @@ app.controller('optionsCtrl',['$scope', '$rootScope', '$http', '$location', '$md
 
         if(option === 'profiles'){
 
-            console.log('in optionCtrl - profiles ', this );
-
             var devices;
 
             if(this.profile.profile.devices === null) {
@@ -116,12 +114,10 @@ app.controller('optionsCtrl',['$scope', '$rootScope', '$http', '$location', '$md
             } else {
                 devices = this.profile.profile.devices;
             }
-
+            //
             devices.push(this.scheduleDevice.mac);
 
             this.profile.profile.devices = devices;
-
-            console.log('devices', devices);
 
             $http.post('/profiles', this.profile.profile)
                 .then(function(response){

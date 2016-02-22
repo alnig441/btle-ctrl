@@ -221,7 +221,6 @@ router.post('/schedule', function(req, res, error){
 
                 query.on('end', function (result) {
                     client.end();
-                    //res.send(result);
                 })
                 res.status(200);
 
@@ -247,16 +246,11 @@ router.post('/sun', function(req, res, error){
     else {
 
         if(req.body.offAtSunrise) {
-            //flipSwitch.gattArgs.push(off);
             gattArgs = call.buildGattargs(req.body.mac, off);
         }
         if(req.body.onAtSunset) {
-            //flipSwitch.gattArgs.push(on);
             gattArgs = call.buildGattargs(req.body.mac, on);
         }
-
-
-        //console.log('this is still testing: ', gattArgs);
 
         req.body.onAtSunset ? (setpoint = new Date(req.body.sunset)) : (setpoint = new Date (req.body.sunrise));
         req.body.onAtSunset ? req.body.device_on = true : req.body.device_on = false;
@@ -305,7 +299,6 @@ router.post('/sun', function(req, res, error){
 
                 query.on('end', function (result) {
                     client.end();
-                    //res.send(result);
                 })
                 res.status(200);
 

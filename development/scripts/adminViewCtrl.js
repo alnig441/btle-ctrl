@@ -19,7 +19,7 @@ app.controller('adminViewCtrl',['$scope', '$rootScope', '$http', '$mdMedia', '$m
             fullscreen: useFullScreen
         };
 
-        if(option === 'delete' || option === 'update'){
+        if(option === 'modify_device'){
 
             $http.get('/panel')
                 .then(function(response){
@@ -73,6 +73,22 @@ app.controller('adminViewCtrl',['$scope', '$rootScope', '$http', '$mdMedia', '$m
 
         }
 
+        if(option === 'modify_profile'){
+
+            $http.get('/profiles')
+                .then(function(response){
+                    $rootScope.profiles = response.data;
+
+                    $mdDialog.show(configDialog);
+                    $scope.$watch(function() {
+                        return $mdMedia('xs') || $mdMedia('sm');
+                    }, function(wantsFullScreen) {
+                        $scope.customFullscreen = (wantsFullScreen === true);
+                    });
+
+                });
+
+        }
 
 
     };
@@ -141,6 +157,18 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
                 .then(function(response){
                     console.log(response);
                 });
+
+        }
+
+        if(choice === 'update_profile'){
+
+            console.log('build code', this);
+
+        }
+
+        if(choice === 'delete_profile'){
+
+            console.log('build code', this);
 
         }
 

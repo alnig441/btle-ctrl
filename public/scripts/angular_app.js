@@ -48,8 +48,8 @@ app.config(function($routeProvider, $locationProvider, $mdThemingProvider, $mdIc
         default: '/views/panel.html',
         scan: '/views/scanDev.html',
         add: '/views/addDev.html',
-        update: '/views/updDev.html',
-        delete: '/views/delDev.html'
+        modify_device: '/views/updDev.html',
+        modify_profile: '/views/delDev.html'
     };
 
 
@@ -120,7 +120,7 @@ function LoginDialogController($scope, $mdDialog, $http, $location, $rootScope) 
             fullscreen: useFullScreen
         };
 
-        if(option === 'delete' || option === 'update'){
+        if(option === 'modify_device'){
 
             $http.get('/panel')
                 .then(function(response){
@@ -174,6 +174,22 @@ function LoginDialogController($scope, $mdDialog, $http, $location, $rootScope) 
 
         }
 
+        if(option === 'modify_profile'){
+
+            $http.get('/profiles')
+                .then(function(response){
+                    $rootScope.profiles = response.data;
+
+                    $mdDialog.show(configDialog);
+                    $scope.$watch(function() {
+                        return $mdMedia('xs') || $mdMedia('sm');
+                    }, function(wantsFullScreen) {
+                        $scope.customFullscreen = (wantsFullScreen === true);
+                    });
+
+                });
+
+        }
 
 
     };
@@ -242,6 +258,18 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
                 .then(function(response){
                     console.log(response);
                 });
+
+        }
+
+        if(choice === 'update_profile'){
+
+            console.log('build code', this);
+
+        }
+
+        if(choice === 'delete_profile'){
+
+            console.log('build code', this);
 
         }
 
@@ -387,8 +415,6 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
 
         if(option === 'profiles'){
 
-            console.log('in optionCtrl - profiles ', this );
-
             var devices;
 
             if(this.profile.profile.devices === null) {
@@ -396,12 +422,10 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
             } else {
                 devices = this.profile.profile.devices;
             }
-
+            //
             devices.push(this.scheduleDevice.mac);
 
             this.profile.profile.devices = devices;
-
-            console.log('devices', devices);
 
             $http.post('/profiles', this.profile.profile)
                 .then(function(response){

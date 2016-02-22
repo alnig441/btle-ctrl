@@ -14,8 +14,8 @@ app.controller('loginCtrl',['$scope', '$rootScope', '$http', '$location', '$mdDi
         default: '/views/panel.html',
         scan: '/views/scanDev.html',
         add: '/views/addDev.html',
-        update: '/views/updDev.html',
-        delete: '/views/delDev.html'
+        modify_device: '/views/updDev.html',
+        modify_profile: '/views/delDev.html'
     };
 
 

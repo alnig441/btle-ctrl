@@ -9,16 +9,16 @@ div(class='md-inline-form', layout='column', ng-cloak, ng-controller='optionsCtr
             md-option(ng-value='minute', ng-repeat='minute in minutes') {{minute.name}}
         div(layout)
             md-input-container ON
-                md-checkbox(ng-model='scheduleDevice.turnOn', value=false)
+                md-checkbox(ng-model='scheduleDevice.turnOn', value=false, aria-label='on')
             md-input-container OFF
-                md-checkbox(ng-model='scheduleDevice.turnOff', value=false)
+                md-checkbox(ng-model='scheduleDevice.turnOff', value=false, aria-label='off')
 
     md-content(layout-gt-sm='row', layout-padding)
         div(layout)
             md-input-container Turn OFF @ Sunrise
-                md-checkbox(ng-model='scheduleDevice.offAtSunrise', value=false)
+                md-checkbox(ng-model='scheduleDevice.offAtSunrise', value=false, aria-label='off at sunrise')
             md-input-container Turn ON @ Sunset
-                md-checkbox(ng-model='scheduleDevice.onAtSunset', value=false)
+                md-checkbox(ng-model='scheduleDevice.onAtSunset', value=false, aria-label='on at sunset')
 
     md-toolbar
         div.md-toolbar-tools
@@ -28,9 +28,9 @@ div(class='md-inline-form', layout='column', ng-cloak, ng-controller='optionsCtr
     md-content(layout-gt-sm='row', layout-padding)
         div(layout)
             md-input-container Repeat Daily
-                md-checkbox(ng-model='scheduleDevice.recurDaily', value=false)
+                md-checkbox(ng-model='scheduleDevice.recurDaily', value=false, aria-label='repeat daily')
             md-input-container Repeat Weekly
-                md-checkbox(ng-model='scheduleDevice.recurWeekly', value=false)
+                md-checkbox(ng-model='scheduleDevice.recurWeekly', value=false, aria-label='repeat weekly')
 
     div(layout)
         md-button(ng-click='apply("schedule")') Apply
