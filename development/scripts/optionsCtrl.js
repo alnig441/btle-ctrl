@@ -68,15 +68,23 @@ app.controller('optionsCtrl',['$scope', '$rootScope', '$http', '$location', '$md
 
                     console.log('setting up recurring sunrise/sunset schedule - calling setInterval every 24hrs from ', date);
 
-                    var timeout = setTimeout(function(){
-                        console.log('settting upcoming sunset/sunrise control');
-                        $http.post('/options/sun', $rootScope.scheduleDevice).then(function(response){
-                            console.log('response from options/sun', response);
-                        });
-                        console.log('setting sunset/sunrise control every 24hrs');
-                        var x = setInterval(setOrRise, 86400000);
-                        $rootScope.scheduleDevice.intervalID = x;
-                    }, delay);
+                    if($rootScope.recurTimeOutID === undefined){
+
+                        var recurTimeOut = setTimeout(function(){
+
+                            console.log('settting upcoming sunset/sunrise control');
+                            $rootScope.recurTimeOutID = recurTimeOut;
+                            $http.post('/options/sun', $rootScope.scheduleDevice).then(function(response){
+                                console.log('response from options/sun', response);
+                            });
+                            console.log('setting sunset/sunrise control every 24hrs');
+                            var x = setInterval(setOrRise, 86400000);
+                            $rootScope.scheduleDevice.intervalID = x;
+                            clearTimeout(recurTimeOut);
+                        }, delay);
+
+                    }
+
 
                 }
 

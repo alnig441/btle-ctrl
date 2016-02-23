@@ -24,7 +24,7 @@ router.get('/', function(req, res, error){
 
         query.on('end',function(result){
             client.end();
-            console.log(device);
+            //console.log(device);
             res.send(device);
         })
 

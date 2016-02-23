@@ -18,14 +18,14 @@ router.get('/', function(req, res, error){
         })
 
         query.on('row', function(row, result){
-            console.log('in profiles: ', row);
+            //console.log('in profiles: ', row);
             profiles.push({profile: row});
 
         })
 
         query.on('end',function(result){
             client.end();
-            console.log(profiles);
+            //console.log(profiles);
             res.send(profiles);
         })
 
