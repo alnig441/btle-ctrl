@@ -1,6 +1,6 @@
 app.controller('optionsCtrl',['$scope', '$rootScope', '$http', '$location', '$mdDialog', function($scope, $rootScope, $http, $location, $mdDialog){
 
-    console.log('in optionsCtrl ', $rootScope, this);
+    //console.log('in optionsCtrl ', $rootScope, this);
 
     $rootScope.scheduleDevice.dateBegin = new Date();
 
@@ -90,7 +90,12 @@ app.controller('optionsCtrl',['$scope', '$rootScope', '$http', '$location', '$md
 
                 else {
 
-                    $http.post('/options/sun', $rootScope.scheduleDevice).then(function(response){
+                    //    $http.post('/cronjobs', $rootScope.scheduleDevice).then(function(response){
+                    //    console.log('response from options/cronjobs', response);
+                    //});
+
+
+                        $http.post('/options/sun', $rootScope.scheduleDevice).then(function(response){
                         console.log('response from options/sun', response);
                     });
 

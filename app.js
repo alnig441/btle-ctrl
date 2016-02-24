@@ -16,6 +16,7 @@ var admin = require('./routes/admin');
 var panel = require('./routes/panel');
 var options = require('./routes/options');
 var profiles = require('./routes/profiles');
+var cronjobs  = require('./routes/cronjobs');
 
 var app = express();
 
@@ -38,6 +39,7 @@ app.use('/admin', admin);
 app.use('/panel', panel);
 app.use('/options', options);
 app.use('/profiles', profiles);
+app.use('/cronjobs', cronjobs);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

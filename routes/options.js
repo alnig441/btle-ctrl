@@ -96,7 +96,6 @@ router.post('/schedule', function(req, res, error){
                     client.end();
                     //res.send(result);
                 })
-                res.status(200);
 
             });
 
@@ -156,7 +155,6 @@ router.post('/schedule', function(req, res, error){
                     client.end();
                     //res.send(result);
                 })
-                res.status(200);
 
             });
 
@@ -222,12 +220,13 @@ router.post('/schedule', function(req, res, error){
                 query.on('end', function (result) {
                     client.end();
                 })
-                res.status(200);
 
             });
 
         });
 
+        var pending = job.pendingInvocations();
+        console.log('pending invocations: ', pending[0].job.name);
     }
 
 });
@@ -300,13 +299,15 @@ router.post('/sun', function(req, res, error){
                 query.on('end', function (result) {
                     client.end();
                 })
-                res.status(200);
+                //res.status(200);
 
             });
 
         });
 
     }
+
+    res.status(200);
 
 });
 
@@ -319,78 +320,95 @@ router.post('/profile_recur', function(req, res, error){
     var sunset = new Date(req.body.sunset);
     var sunrise = new Date(req.body.sunrise);
 
-    for(var i = 0; i < req.body.set.length; i ++ ) {
-
-        var setArgs = call.buildGattargs(req.body.set[i], on);
-        //console.log(setArgs, sunset);
-
-        var set = schedule.scheduleJob(sunset, function(){
-
-            var child = spawn('gatttool', setArgs);
-
-            child.stdout.on('data', function(data){
-
-                res.send(data);
-
-                child.kill();
-            });
-
-            child.on('exit', function (code) {
-                console.log('spawned process ended on exit code: ', code);
-                if (code === 0) {
-                    console.log('gatttool run success');
-
-                }
-                else {
-                    console.log('check hciconfig');
-                }
-
-            });
-
-
-        })
-
-        set.on('run', function(){
-            console.log('job run success');
-        })
-
+    if(new Date(req.body.sunset) > new Date() && req.body.sunset !== null){
+    //
+    //    for(var i = 0; i < req.body.set.length; i ++ ) {
+    //
+    //        var setArgs = call.buildGattargs(req.body.set[i], on);
+    //        //console.log(setArgs, sunset);
+    //
+    //        var set = schedule.scheduleJob(sunset, function(){
+    //
+    //            console.log("it's a hit . Sunset: ", sunset);
+    //
+    //            //var child = spawn('gatttool', setArgs);
+    //            //
+    //            //child.stdout.on('data', function(data){
+    //            //
+    //            //    res.send(data);
+    //            //
+    //            //    child.kill();
+    //            //});
+    //            //
+    //            //child.on('exit', function (code) {
+    //            //    console.log('spawned process ended on exit code: ', code);
+    //            //    if (code === 0) {
+    //            //        console.log('gatttool run success');
+    //            //
+    //            //    }
+    //            //    else {
+    //            //        console.log('check hciconfig');
+    //            //    }
+    //            //
+    //            //});
+    //
+    //
+    //        })
+    //
+    //        set.on('run', function(){
+    //            console.log('job run success');
+    //        })
+    //
+    //    }
+    //
+    //}
+    //
+    //if(new Date(req.body.sunrise) > new Date() && req.body.sunrise !== null) {
+    //
+    //
+    //    for (var z = 0; z < req.body.rise.length; z++) {
+    //
+    //        var riseArgs = call.buildGattargs(req.body.rise[z], off);
+    //        console.log(riseArgs);
+    //
+    //        var rise = schedule.scheduleJob(sunrise, function () {
+    //
+    //            console.log("it's a hit. Sunrise: ", sunrise);
+    //
+    //
+    //            //var child = spawn('gatttool', riseArgs);
+    //            //
+    //            //child.stdout.on('data', function(data){
+    //            //
+    //            //    res.send(data);
+    //            //
+    //            //    child.kill();
+    //            //});
+    //            //
+    //            //child.on('exit', function (code) {
+    //            //    console.log('spawned process ended on exit code: ', code);
+    //            //    if (code === 0) {
+    //            //        console.log('gatttool run success');
+    //            //
+    //            //    }
+    //            //    else {
+    //            //        console.log('check hciconfig');
+    //            //    }
+    //            //
+    //            //});
+    //
+    //
+    //        })
+    //
+    //        rise.on('run', function () {
+    //            console.log('job run success');
+    //        })
+    //
+    //    }
     }
 
-    for(var z = 0; z < req.body.rise.length; z ++ ) {
-
-        var riseArgs = call.buildGattargs(req.body.rise[z], off);
-        console.log(riseArgs);
-
-        var rise = schedule.scheduleJob(sunrise, function(){
-
-            var child = spawn('gatttool', riseArgs);
-
-            child.stdout.on('data', function(data){
-
-                res.send(data);
-
-                child.kill();
-            });
-
-            child.on('exit', function (code) {
-                console.log('spawned process ended on exit code: ', code);
-                if (code === 0) {
-                    console.log('gatttool run success');
-
-                }
-                else {
-                    console.log('check hciconfig');
-                }
-
-            });
-
-
-        })
-
-        rise.on('run', function(){
-            console.log('job run success');
-        })
-
+    else{
+        res.send('invalid request');
     }
 
 });

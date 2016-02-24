@@ -1,8 +1,11 @@
 app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$mdMedia', '$mdDialog', function($scope, $rootScope, $http, $location, $mdMedia, $mdDialog){
 
+    console.log('panetViewCtrl rootscope ', $rootScope);
+
     $http.get('http://api.sunrise-sunset.org/json?lat=44.891123.7201600&lng=-93.359752&formatted=0').then(function(response){
         $rootScope.scheduleDevice.sunset = response.data.results.sunset;
         $rootScope.scheduleDevice.sunrise = response.data.results.sunrise;
+        console.log('sunset/sunrise data refresh on load. SUNRISE: ' + $rootScope.scheduleDevice.sunrise + ' / SUNSET: ' + $rootScope.scheduleDevice.sunset);
     });
 
     $http.get('/panel')
@@ -15,6 +18,8 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
             $rootScope.profiles = response.data;
         });
 
+    //Setting timeout delay to 1hr past midnight
+
     var date = new Date();
     date.setDate(date.getDate()+1);
     date.setHours(1);
@@ -23,74 +28,83 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
 
     var delay = date - new Date();
 
+    //Sunset/sunrise refresh data function - pulling fresh data every 24hrs
+
     function refreshSetOrRise() {
         $http.get('http://api.sunrise-sunset.org/json?lat=44.891123.7201600&lng=-93.359752&formatted=0')
             .then(function (response) {
                 $rootScope.scheduleDevice.sunset = response.data.results.sunset;
                 $rootScope.scheduleDevice.sunrise = response.data.results.sunrise;
             });
-        console.log('sunrise/sunset date updated. Sun rising at ' + response.data.results.sunrise + ' and setting at ' + response.data.results.sunset);
+        console.log('Daily sunrise/sunset data update. SUNRISE: ' + response.data.results.sunrise + ' / SUNSET: ' + response.data.results.sunset);
 
     }
 
-    function riseSetDaily() {
+    //function riseSetDaily() {
+    //
+    //    console.log($rootScope.runProfileTimerID);
+    //
+    //    var set = $rootScope.profiles[0].profile;
+    //    var rise = $rootScope.profiles[1].profile;
+    //
+    //    for(var i = 0; i < set.devices.length; i++){
+    //        console.log('turning on');
+    //    }
+    //}
+    //
+    //if($rootScope.runProfileTimerID === undefined){
+    //
+    //    var runProfileTimer = setTimeout(function(){
+    //
+    //        $rootScope.runProfileTimerID = runProfileTimer;
+    //
+    //        var recur = {};
+    //        recur.set = $rootScope.profiles[0].profile.devices;
+    //        recur.rise = $rootScope.profiles[1].profile.devices;
+    //        recur.sunset = $rootScope.scheduleDevice.sunset;
+    //        recur.sunrise = $rootScope.scheduleDevice.sunrise;
+    //
+    //        date.setHours(3);
+    //
+    //        $http.post('/options/profile_recur', recur)
+    //            .then(function(response){
+    //                console.log(response);
+    //            });
+    //
+    //        var tmp = setTimeout(function(){
+    //            $http.post('/options/profile_recur', recur)
+    //                .then(function(response){
+    //                    console.log(response);
+    //                });
+    //
+    //        var x = setInterval(riseSetDaily, 86400000);
+    //
+    //            clearTimeout(tmp);
+    //        }, delay);
+    //
+    //        clearTimeout(runProfileTimer);
+    //
+    //    }, 1000);
+    //
+    //
+    //}
 
-        console.log($rootScope.runProfileTimerID);
-
-        var set = $rootScope.profiles[0].profile;
-        var rise = $rootScope.profiles[1].profile;
-
-        for(var i = 0; i < set.devices.length; i++){
-            console.log('turning on');
-        }
-    }
-
-    if($rootScope.runProfileTimerID === undefined){
-
-        var runProfileTimer = setTimeout(function(){
-
-            $rootScope.runProfileTimerID = runProfileTimer;
-
-            var recur = {};
-            recur.set = $rootScope.profiles[0].profile.devices;
-            recur.rise = $rootScope.profiles[1].profile.devices;
-            recur.sunset = $rootScope.scheduleDevice.sunset;
-            recur.sunrise = $rootScope.scheduleDevice.sunrise;
-
-            date.setHours(3);
-
-            $http.post('/options/profile_recur', recur)
-                .then(function(response){
-                    console.log(response);
-                });
-
-            var tmp = setTimeout(function(){
-                $http.post('/options/profile_recur', recur)
-                    .then(function(response){
-                        console.log(response);
-                    });
-
-            var x = setInterval(riseSetDaily, 86400000);
-
-                clearTimeout(tmp);
-            }, delay);
-
-            clearTimeout(runProfileTimer);
-
-        }, 1000);
-
-
-    }
-
+    //Running refreshTimeOut function when the associated ID is undefined, i.e. on first page load only.
 
     if($rootScope.refreshTimeOutID === undefined) {
 
-        console.log('setting sunset/sunrise refresh timer');
-
         var refreshTimeOut = setTimeout(function(){
+
+            $http.get('http://api.sunrise-sunset.org/json?lat=44.891123.7201600&lng=-93.359752&formatted=0').then(function(response){
+                $rootScope.scheduleDevice.sunset = response.data.results.sunset;
+                $rootScope.scheduleDevice.sunrise = response.data.results.sunrise;
+            });
+
+            console.log('sunset/sunrise data refresh after initial dealy. SUNRISE: ' + $rootScope.scheduleDevice.sunrise + ' / SUNSET: ' + $rootScope.scheduleDevice.sunset);
+
             $rootScope.refreshTimeOutID = refreshTimeOut;
             var x = setInterval(refreshSetOrRise, 86400000);
-            console.log('refreshing sunrise/sunset data', $rootScope);
+
             clearTimeout(refreshTimeOut);
         }, delay);
 
