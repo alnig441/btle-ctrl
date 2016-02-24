@@ -90,14 +90,14 @@ app.controller('optionsCtrl',['$scope', '$rootScope', '$http', '$location', '$md
 
                 else {
 
-                    //    $http.post('/cronjobs', $rootScope.scheduleDevice).then(function(response){
-                    //    console.log('response from options/cronjobs', response);
-                    //});
-
-
-                        $http.post('/options/sun', $rootScope.scheduleDevice).then(function(response){
-                        console.log('response from options/sun', response);
+                        $http.post('/cronjobs', $rootScope.scheduleDevice).then(function(response){
+                        console.log('response from options/cronjobs', response);
                     });
+
+
+                    //    $http.post('/options/sun', $rootScope.scheduleDevice).then(function(response){
+                    //    console.log('response from options/sun', response);
+                    //});
 
                 }
 

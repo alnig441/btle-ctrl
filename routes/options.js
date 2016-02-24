@@ -178,25 +178,27 @@ router.post('/schedule', function(req, res, error){
 
         var job = schedule.scheduleJob(setpoint, function () {
 
-            var child = spawn('gatttool', gattArgs);
+            console.log('testing');
 
-            child.stdout.on('data', function (data) {
-
-                res.send(data);
-
-                child.kill();
-            });
-
-            child.on('exit', function (code) {
-                console.log('spawned process ended on exit code: ', code);
-                if (code === 0) {
-                    console.log('gatttool run success');
-                }
-                else {
-                    console.log('check hciconfig');
-                }
-
-            });
+            //var child = spawn('gatttool', gattArgs);
+            //
+            //child.stdout.on('data', function (data) {
+            //
+            //    res.send(data);
+            //
+            //    child.kill();
+            //});
+            //
+            //child.on('exit', function (code) {
+            //    console.log('spawned process ended on exit code: ', code);
+            //    if (code === 0) {
+            //        console.log('gatttool run success');
+            //    }
+            //    else {
+            //        console.log('check hciconfig');
+            //    }
+            //
+            //});
 
         });
 

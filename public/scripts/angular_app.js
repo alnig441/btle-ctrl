@@ -398,14 +398,14 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
 
                 else {
 
-                    //    $http.post('/cronjobs', $rootScope.scheduleDevice).then(function(response){
-                    //    console.log('response from options/cronjobs', response);
-                    //});
-
-
-                        $http.post('/options/sun', $rootScope.scheduleDevice).then(function(response){
-                        console.log('response from options/sun', response);
+                        $http.post('/cronjobs', $rootScope.scheduleDevice).then(function(response){
+                        console.log('response from options/cronjobs', response);
                     });
+
+
+                    //    $http.post('/options/sun', $rootScope.scheduleDevice).then(function(response){
+                    //    console.log('response from options/sun', response);
+                    //});
 
                 }
 
@@ -516,12 +516,6 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
 
     console.log('panetViewCtrl rootscope ', $rootScope);
 
-    $http.get('http://api.sunrise-sunset.org/json?lat=44.891123.7201600&lng=-93.359752&formatted=0').then(function(response){
-        $rootScope.scheduleDevice.sunset = response.data.results.sunset;
-        $rootScope.scheduleDevice.sunrise = response.data.results.sunrise;
-        console.log('sunset/sunrise data refresh on load. SUNRISE: ' + $rootScope.scheduleDevice.sunrise + ' / SUNSET: ' + $rootScope.scheduleDevice.sunset);
-    });
-
     $http.get('/panel')
         .then(function(response){
             $scope.panels = response.data;
@@ -550,7 +544,7 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
                 $rootScope.scheduleDevice.sunset = response.data.results.sunset;
                 $rootScope.scheduleDevice.sunrise = response.data.results.sunrise;
             });
-        console.log('Daily sunrise/sunset data update. SUNRISE: ' + response.data.results.sunrise + ' / SUNSET: ' + response.data.results.sunset);
+        console.log('Daily sunrise/sunset data update. SUNRISE: ' + new Date(response.data.results.sunrise) + ' / SUNSET: ' + new Date(response.data.results.sunset));
 
     }
 
@@ -609,18 +603,32 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
 
         var refreshTimeOut = setTimeout(function(){
 
+            $rootScope.refreshTimeOutID = refreshTimeOut;
+
             $http.get('http://api.sunrise-sunset.org/json?lat=44.891123.7201600&lng=-93.359752&formatted=0').then(function(response){
                 $rootScope.scheduleDevice.sunset = response.data.results.sunset;
                 $rootScope.scheduleDevice.sunrise = response.data.results.sunrise;
+                console.log('sunset/sunrise data refresh on load. SUNRISE: ' + new Date($rootScope.scheduleDevice.sunrise) + ' / SUNSET: ' + new Date($rootScope.scheduleDevice.sunset));
             });
 
-            console.log('sunset/sunrise data refresh after initial dealy. SUNRISE: ' + $rootScope.scheduleDevice.sunrise + ' / SUNSET: ' + $rootScope.scheduleDevice.sunset);
+            var tmp = setTimeout(function(){
 
-            $rootScope.refreshTimeOutID = refreshTimeOut;
-            var x = setInterval(refreshSetOrRise, 86400000);
+                $http.get('http://api.sunrise-sunset.org/json?lat=44.891123.7201600&lng=-93.359752&formatted=0').then(function(response){
+                    $rootScope.scheduleDevice.sunset = response.data.results.sunset;
+                    $rootScope.scheduleDevice.sunrise = response.data.results.sunrise;
+                });
+
+                console.log('sunset/sunrise data refresh after initial dealy. SUNRISE: ' + new Date($rootScope.scheduleDevice.sunrise) + ' / SUNSET: ' + new Date($rootScope.scheduleDevice.sunset));
+
+                var x = setInterval(refreshSetOrRise, 86400000);
+
+                clearTimeout(tmp);
+
+            }, delay);
+
 
             clearTimeout(refreshTimeOut);
-        }, delay);
+        }, 2500);
 
     }
 
