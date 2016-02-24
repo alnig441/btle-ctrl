@@ -1,6 +1,6 @@
 app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$mdMedia', '$mdDialog', function($scope, $rootScope, $http, $location, $mdMedia, $mdDialog){
 
-    console.log('panetViewCtrl rootscope ', $rootScope);
+    console.log('panelViewCtrl rootscope ', $rootScope);
 
     $http.get('/panel')
         .then(function(response){
@@ -27,10 +27,10 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
     function refreshSetOrRise() {
         $http.get('http://api.sunrise-sunset.org/json?lat=44.891123.7201600&lng=-93.359752&formatted=0')
             .then(function (response) {
-                $rootScope.scheduleDevice.sunset = response.data.results.sunset;
-                $rootScope.scheduleDevice.sunrise = response.data.results.sunrise;
+                $rootScope.sunset = response.data.results.sunset;
+                $rootScope.sunrise = response.data.results.sunrise;
             });
-        console.log('Daily sunrise/sunset data update. SUNRISE: ' + new Date(response.data.results.sunrise) + ' / SUNSET: ' + new Date(response.data.results.sunset));
+        console.log('Daily sunrise/sunset data update. SUNRISE: ' + new Date($rootScope.sunrise) + ' / SUNSET: ' + new Date($rootScope.sunset));
 
     }
 
@@ -92,19 +92,21 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
             $rootScope.refreshTimeOutID = refreshTimeOut;
 
             $http.get('http://api.sunrise-sunset.org/json?lat=44.891123.7201600&lng=-93.359752&formatted=0').then(function(response){
-                $rootScope.scheduleDevice.sunset = response.data.results.sunset;
-                $rootScope.scheduleDevice.sunrise = response.data.results.sunrise;
-                console.log('sunset/sunrise data refresh on load. SUNRISE: ' + new Date($rootScope.scheduleDevice.sunrise) + ' / SUNSET: ' + new Date($rootScope.scheduleDevice.sunset));
+                $rootScope.sunset = response.data.results.sunset;
+                $rootScope.sunrise = response.data.results.sunrise;
+                console.log('sunset/sunrise data refresh on load. SUNRISE: ' + new Date($rootScope.sunrise) + ' / SUNSET: ' + new Date($rootScope.sunset));
             });
+
+            console.log('refreshTimeOut timer - rootscope ', $rootScope);
 
             var tmp = setTimeout(function(){
 
                 $http.get('http://api.sunrise-sunset.org/json?lat=44.891123.7201600&lng=-93.359752&formatted=0').then(function(response){
-                    $rootScope.scheduleDevice.sunset = response.data.results.sunset;
-                    $rootScope.scheduleDevice.sunrise = response.data.results.sunrise;
+                    $rootScope.sunset = response.data.results.sunset;
+                    $rootScope.sunrise = response.data.results.sunrise;
                 });
 
-                console.log('sunset/sunrise data refresh after initial dealy. SUNRISE: ' + new Date($rootScope.scheduleDevice.sunrise) + ' / SUNSET: ' + new Date($rootScope.scheduleDevice.sunset));
+                console.log('sunset/sunrise data refresh after initial dealy. SUNRISE: ' + new Date($rootScope.sunrise) + ' / SUNSET: ' + new Date($rootScope.sunset));
 
                 var x = setInterval(refreshSetOrRise, 86400000);
 

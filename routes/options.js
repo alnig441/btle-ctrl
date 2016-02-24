@@ -235,6 +235,8 @@ router.post('/schedule', function(req, res, error){
 
 router.post('/sun', function(req, res, error){
 
+    console.log('options/sun ', req.body);
+
     var on = '58010301ff00ffffff';
     var off = '58010301ff00000000';
     var setpoint;
