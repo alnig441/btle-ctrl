@@ -142,7 +142,7 @@ app.controller('optionsCtrl',['$scope', '$rootScope', '$http', '$location', '$md
                 });
 
         }
-         $rootScope.template.url = "/views/panel.html";
+         $rootScope.template.url = $rootScope.template.default;
     };
 
     $scope.hours = [

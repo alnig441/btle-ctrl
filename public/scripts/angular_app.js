@@ -450,7 +450,7 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
                 });
 
         }
-         $rootScope.template.url = "/views/panel.html";
+         $rootScope.template.url = $rootScope.template.default;
     };
 
     $scope.hours = [
