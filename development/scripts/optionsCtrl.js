@@ -45,8 +45,7 @@ app.controller('optionsCtrl',['$scope', '$rootScope', '$http', '$location', '$md
 
             if($rootScope.scheduleDevice.onAtSunset || $rootScope.scheduleDevice.offAtSunrise){
 
-                //console.log('setting sunrise/sunset today');
-
+                // Schedule sunset/sunrise range event
                 if($rootScope.scheduleDevice.dateEnd !== undefined) {
 
                     var dateBegin = parseDate($rootScope.scheduleDevice.dateBegin, 0, 0, 0, 0);
@@ -55,50 +54,9 @@ app.controller('optionsCtrl',['$scope', '$rootScope', '$http', '$location', '$md
                     console.log(days);
                 }
 
-                else if($rootScope.scheduleDevice.recurDaily) {
 
-                    $http.post('/options/sun', $rootScope.scheduleDevice).then(function(response){
-                        console.log('response from options/sun', response);
-                    });
-
-
-                    var date = new Date();
-                    date.setDate(date.getDate()+1);
-                    date.setHours(3);
-                    date.setMinutes(0);
-                    date.setSeconds(0);
-
-
-                    var delay = date - new Date();
-
-                    console.log('setting up recurring sunrise/sunset schedule - calling setInterval every 24hrs from ', date);
-
-                    if($rootScope.recurTimeOutID === undefined){
-
-                        var recurTimeOut = setTimeout(function(){
-
-                            console.log('settting upcoming sunset/sunrise control');
-                            $rootScope.recurTimeOutID = recurTimeOut;
-                            $http.post('/options/sun', $rootScope.scheduleDevice).then(function(response){
-                                console.log('response from options/sun', response);
-                            });
-                            console.log('setting sunset/sunrise control every 24hrs');
-                            var x = setInterval(setOrRise, 86400000);
-                            $rootScope.scheduleDevice.intervalID = x;
-                            clearTimeout(recurTimeOut);
-                        }, delay);
-
-                    }
-
-
-                }
-
+                // Schedule single sunset/sunrise event
                 else {
-
-                    //    $http.post('/cronjobs', $rootScope.scheduleDevice).then(function(response){
-                    //    console.log('response from options/cronjobs', response);
-                    //});
-                        console.log('optionsCtrl - TEST - rootscope: ', $rootScope);
                         $http.post('/options/sun', $rootScope.scheduleDevice).then(function(response){
                         console.log('response from options/sun', response);
                     });
@@ -108,37 +66,22 @@ app.controller('optionsCtrl',['$scope', '$rootScope', '$http', '$location', '$md
 
             }
 
+            // Schedule normal event
             else {
-                //$http.get('http://api.sunrise-sunset.org/json?lat=44.891123.7201600&lng=-93.359752&formatted=0').then(function(response){
-                //    $rootScope.scheduleDevice.sunset = response.data.results.sunset;
-                //    $rootScope.scheduleDevice.sunrise = response.data.results.sunrise;
-                //}).then(function(response){
                     $http.post('/options/schedule', $rootScope.scheduleDevice).then(function(response){
                         console.log('response from options/schedule', response);
                     });
-                //});
-
             }
 
         }
 
         if(option === 'profiles'){
 
-            var devices;
+            //console.log('in options profile ', this.scheduleDevice);
 
-            if(this.profile.profile.devices === null) {
-                devices = [];
-            } else {
-                devices = this.profile.profile.devices;
-            }
-            //
-            devices.push(this.scheduleDevice.mac);
-
-            this.profile.profile.devices = devices;
-
-            $http.post('/profiles', this.profile.profile)
+            $http.post('/profiles', this.scheduleDevice)
                 .then(function(response){
-                    console.log(response);
+                    console.log('from profiles route ', response);
                 });
 
         }

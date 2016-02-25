@@ -353,8 +353,7 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
 
             if($rootScope.scheduleDevice.onAtSunset || $rootScope.scheduleDevice.offAtSunrise){
 
-                //console.log('setting sunrise/sunset today');
-
+                // Schedule sunset/sunrise range event
                 if($rootScope.scheduleDevice.dateEnd !== undefined) {
 
                     var dateBegin = parseDate($rootScope.scheduleDevice.dateBegin, 0, 0, 0, 0);
@@ -363,50 +362,9 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
                     console.log(days);
                 }
 
-                else if($rootScope.scheduleDevice.recurDaily) {
 
-                    $http.post('/options/sun', $rootScope.scheduleDevice).then(function(response){
-                        console.log('response from options/sun', response);
-                    });
-
-
-                    var date = new Date();
-                    date.setDate(date.getDate()+1);
-                    date.setHours(3);
-                    date.setMinutes(0);
-                    date.setSeconds(0);
-
-
-                    var delay = date - new Date();
-
-                    console.log('setting up recurring sunrise/sunset schedule - calling setInterval every 24hrs from ', date);
-
-                    if($rootScope.recurTimeOutID === undefined){
-
-                        var recurTimeOut = setTimeout(function(){
-
-                            console.log('settting upcoming sunset/sunrise control');
-                            $rootScope.recurTimeOutID = recurTimeOut;
-                            $http.post('/options/sun', $rootScope.scheduleDevice).then(function(response){
-                                console.log('response from options/sun', response);
-                            });
-                            console.log('setting sunset/sunrise control every 24hrs');
-                            var x = setInterval(setOrRise, 86400000);
-                            $rootScope.scheduleDevice.intervalID = x;
-                            clearTimeout(recurTimeOut);
-                        }, delay);
-
-                    }
-
-
-                }
-
+                // Schedule single sunset/sunrise event
                 else {
-
-                    //    $http.post('/cronjobs', $rootScope.scheduleDevice).then(function(response){
-                    //    console.log('response from options/cronjobs', response);
-                    //});
-                        console.log('optionsCtrl - TEST - rootscope: ', $rootScope);
                         $http.post('/options/sun', $rootScope.scheduleDevice).then(function(response){
                         console.log('response from options/sun', response);
                     });
@@ -416,37 +374,22 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
 
             }
 
+            // Schedule normal event
             else {
-                //$http.get('http://api.sunrise-sunset.org/json?lat=44.891123.7201600&lng=-93.359752&formatted=0').then(function(response){
-                //    $rootScope.scheduleDevice.sunset = response.data.results.sunset;
-                //    $rootScope.scheduleDevice.sunrise = response.data.results.sunrise;
-                //}).then(function(response){
                     $http.post('/options/schedule', $rootScope.scheduleDevice).then(function(response){
                         console.log('response from options/schedule', response);
                     });
-                //});
-
             }
 
         }
 
         if(option === 'profiles'){
 
-            var devices;
+            //console.log('in options profile ', this.scheduleDevice);
 
-            if(this.profile.profile.devices === null) {
-                devices = [];
-            } else {
-                devices = this.profile.profile.devices;
-            }
-            //
-            devices.push(this.scheduleDevice.mac);
-
-            this.profile.profile.devices = devices;
-
-            $http.post('/profiles', this.profile.profile)
+            $http.post('/profiles', this.scheduleDevice)
                 .then(function(response){
-                    console.log(response);
+                    console.log('from profiles route ', response);
                 });
 
         }
@@ -520,14 +463,40 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
 
     console.log('panelViewCtrl rootscope ', $rootScope);
 
+    $http.get('http://api.sunrise-sunset.org/json?lat=44.891123.7201600&lng=-93.359752&formatted=0')
+        .then(function (response) {
+            $rootScope.sunset = response.data.results.sunset;
+            $rootScope.sunrise = response.data.results.sunrise;
+        });
+
     $http.get('/panel')
         .then(function(response){
             $scope.panels = response.data;
         });
 
-    $http.get('/profiles')
+    $http.get('/profiles/on_at_sunset')
         .then(function(response){
-            $rootScope.profiles = response.data;
+            $rootScope.on_at_sunset = response.data;
+        })
+        .then(function(){
+        for(var i = 0; i < $rootScope.on_at_sunset.length; i++){
+            $rootScope.on_at_sunset[i].sunset = $rootScope.sunset;
+        }
+        });
+
+    $http.get('/profiles/off_at_sunrise')
+        .then(function(response){
+            $rootScope.off_at_sunrise = response.data;
+        })
+        .then(function(){
+            for(var i = 0; i < $rootScope.off_at_sunrise.length; i++){
+                $rootScope.on_at_sunset[i].sunrise = $rootScope.sunrise;
+            }
+        });
+
+    $http.get('/profiles/master_off')
+        .then(function(response){
+            $rootScope.master_off = response.data;
         });
 
     //Setting timeout delay to 1hr past midnight
@@ -540,68 +509,38 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
 
     var delay = date - new Date();
 
-    //Sunset/sunrise refresh data function - pulling fresh data every 24hrs
+    //Sunset/sunrise refresh data function - pulling fresh data every 24hrs and scheduling recurring profiles
 
     function refreshSetOrRise() {
         $http.get('http://api.sunrise-sunset.org/json?lat=44.891123.7201600&lng=-93.359752&formatted=0')
             .then(function (response) {
                 $rootScope.sunset = response.data.results.sunset;
                 $rootScope.sunrise = response.data.results.sunrise;
-            });
+            }).then(function(response){
+            if(new Date() < new Date($rootScope.sunset)){
+                for(var i = 0 ; i < $rootScope.on_at_sunset.length ; i ++){
+                    $rootScope.on_at_sunset[i].sunset = $rootScope.sunset;
+                    $rootScope.on_at_sunset[i].off_at_sunrise = false;
+                    $rootScope.on_at_sunset[i].master_off = false;
+                    $http.post('/options/profile_recur', $rootScope.on_at_sunset[i]);
+                }
+            }
+        }).then(function(response){
+            if(new Date() < new Date($rootScope.sunrise)){
+                for(var j = 0 ; j < $rootScope.off_at_sunrise.length ; j ++) {
+                    $rootScope.off_at_sunrise[j].sunrise = $rootScope.sunrise;
+                    $rootScope.off_at_sunrise[j].on_at_sunset = false;
+                    $rootScope.off_at_sunrise[j].master_off = false;
+                    $http.post('/options/profile_recur', $rootScope.off_at_sunrise[j]);
+                }
+            }
+        });
         console.log('Daily sunrise/sunset data update. SUNRISE: ' + new Date($rootScope.sunrise) + ' / SUNSET: ' + new Date($rootScope.sunset));
 
     }
 
-    //function riseSetDaily() {
-    //
-    //    console.log($rootScope.runProfileTimerID);
-    //
-    //    var set = $rootScope.profiles[0].profile;
-    //    var rise = $rootScope.profiles[1].profile;
-    //
-    //    for(var i = 0; i < set.devices.length; i++){
-    //        console.log('turning on');
-    //    }
-    //}
-    //
-    //if($rootScope.runProfileTimerID === undefined){
-    //
-    //    var runProfileTimer = setTimeout(function(){
-    //
-    //        $rootScope.runProfileTimerID = runProfileTimer;
-    //
-    //        var recur = {};
-    //        recur.set = $rootScope.profiles[0].profile.devices;
-    //        recur.rise = $rootScope.profiles[1].profile.devices;
-    //        recur.sunset = $rootScope.scheduleDevice.sunset;
-    //        recur.sunrise = $rootScope.scheduleDevice.sunrise;
-    //
-    //        date.setHours(3);
-    //
-    //        $http.post('/options/profile_recur', recur)
-    //            .then(function(response){
-    //                console.log(response);
-    //            });
-    //
-    //        var tmp = setTimeout(function(){
-    //            $http.post('/options/profile_recur', recur)
-    //                .then(function(response){
-    //                    console.log(response);
-    //                });
-    //
-    //        var x = setInterval(riseSetDaily, 86400000);
-    //
-    //            clearTimeout(tmp);
-    //        }, delay);
-    //
-    //        clearTimeout(runProfileTimer);
-    //
-    //    }, 1000);
-    //
-    //
-    //}
 
-    //Running refreshTimeOut function when the associated ID is undefined, i.e. on first page load only.
+    //Running refreshTimeOut function when the associated ID on first page load, then scheduling recurring profiles
 
     if($rootScope.refreshTimeOutID === undefined) {
 
@@ -613,6 +552,24 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
                 $rootScope.sunset = response.data.results.sunset;
                 $rootScope.sunrise = response.data.results.sunrise;
                 console.log('sunset/sunrise data refresh on load. SUNRISE: ' + new Date($rootScope.sunrise) + ' / SUNSET: ' + new Date($rootScope.sunset));
+            }).then(function(response){
+                if(new Date() < new Date($rootScope.sunset)){
+                    for(var i = 0 ; i < $rootScope.on_at_sunset.length ; i ++){
+                        $rootScope.on_at_sunset[i].sunset = $rootScope.sunset;
+                        $rootScope.on_at_sunset[i].off_at_sunrise = false;
+                        $rootScope.on_at_sunset[i].master_off = false;
+                        $http.post('/options/profile_recur', $rootScope.on_at_sunset[i]);
+                    }
+                }
+            }).then(function(response){
+                if(new Date() < new Date($rootScope.sunrise)){
+                    for(var j = 0 ; j < $rootScope.off_at_sunrise.length ; j ++) {
+                        $rootScope.off_at_sunrise[j].sunrise = $rootScope.sunrise;
+                        $rootScope.off_at_sunrise[j].on_at_sunset = false;
+                        $rootScope.off_at_sunrise[j].master_off = false;
+                        $http.post('/options/profile_recur', $rootScope.off_at_sunrise[j]);
+                    }
+                }
             });
 
             console.log('refreshTimeOut timer - rootscope ', $rootScope);
@@ -622,9 +579,27 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
                 $http.get('http://api.sunrise-sunset.org/json?lat=44.891123.7201600&lng=-93.359752&formatted=0').then(function(response){
                     $rootScope.sunset = response.data.results.sunset;
                     $rootScope.sunrise = response.data.results.sunrise;
+                }).then(function(response){
+                    if(new Date() < new Date($rootScope.sunset)){
+                        for(var i = 0 ; i < $rootScope.on_at_sunset.length ; i ++){
+                            $rootScope.on_at_sunset[i].sunset = $rootScope.sunset;
+                            $rootScope.on_at_sunset[i].off_at_sunrise = false;
+                            $rootScope.on_at_sunset[i].master_off = false;
+                            $http.post('/options/profile_recur', $rootScope.on_at_sunset[i]);
+                        }
+                    }
+                }).then(function(response){
+                    if(new Date() < new Date($rootScope.sunrise)){
+                        for(var j = 0 ; j < $rootScope.off_at_sunrise.length ; j ++) {
+                            $rootScope.off_at_sunrise[j].sunrise = $rootScope.sunrise;
+                            $rootScope.off_at_sunrise[j].on_at_sunset = false;
+                            $rootScope.off_at_sunrise[j].master_off = false;
+                            $http.post('/options/profile_recur', $rootScope.off_at_sunrise[j]);
+                        }
+                    }
                 });
 
-                console.log('sunset/sunrise data refresh after initial dealy. SUNRISE: ' + new Date($rootScope.sunrise) + ' / SUNSET: ' + new Date($rootScope.sunset));
+                console.log('sunset/sunrise data refresh after initial delay. SUNRISE: ' + new Date($rootScope.sunrise) + ' / SUNSET: ' + new Date($rootScope.sunset));
 
                 var x = setInterval(refreshSetOrRise, 86400000);
 

@@ -3,7 +3,7 @@ var connectionString = process.env.DATABASE_URL || 'postgres://localhost:5432/bt
 
 var client = new pg.Client(connectionString);
 client.connect();
-var query = client.query('CREATE TABLE devices(id SERIAL PRIMARY KEY, mac TEXT UNIQUE NOT NULL, location VARCHAR(20), device_On BOOLEAN)');
+var query = client.query('CREATE TABLE devices(id SERIAL PRIMARY KEY, mac TEXT UNIQUE NOT NULL, location VARCHAR(20), device_On BOOLEAN, on_At_Sunset BOOLEAN, off_At_Sunrise BOOLEAN, master_Off BOOLEAN)');
 var query = client.query('CREATE TABLE users(id SERIAL PRIMARY KEY, username VARCHAR(10) UNIQUE NOT NULL, password VARCHAR(100) NOT NULL)');
 var query = client.query('CREATE TABLE profiles(id SERIAL PRIMARY KEY, profile_name VARCHAR(25) UNIQUE NOT NULL, devices TEXT[], device_On BOOLEAN)');
 

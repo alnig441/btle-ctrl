@@ -1,13 +1,25 @@
 md-dialog(ng-controller='optionsCtrl')
     md-toolbar
         div.md-toolbar-tools
-            h2 Create Profile/Add To Profile
+            h2 Add To Profile
     md-content
-        div.md-dialog-content
-            md-input-container(ng-repeat='profile in profiles')
-                    md-button(ng-model='form.profile', ng-click='apply("profiles")') {{profile.profile.profile_name}}
-        div.md-dialog-content
-            md-button(ng-click='dismiss()') Cancel
-                    md-icon cancel
+        div(layout)
+            md-input-container Turn OFF @ Sunrise
+                md-checkbox(ng-model='scheduleDevice.off_at_sunrise', value=false, aria-label='off at sunrise')
+        div(layout)
+            md-input-container Turn ON @ Sunset
+                md-checkbox(ng-model='scheduleDevice.on_at_sunset', value=false, aria-label='on at sunset')
+        div(layout)
+            md-input-container Master Off
+                md-checkbox(ng-model='scheduleDevice.master_off', value=false, aria-label='master off')
+
+        //div.md-dialog-content
+        //    md-input-container(ng-repeat='profile in profiles')
+        //            md-button(ng-model='form.profile', ng-click='apply("profiles")') {{profile.profile.profile_name}}
+    div(layout)
+        md-button(ng-click='apply("profiles")')
+            md-icon done
+        md-button(ng-click='dismiss()') Cancel
+            md-icon cancel
 
 

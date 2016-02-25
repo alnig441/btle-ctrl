@@ -316,103 +316,68 @@ router.post('/sun', function(req, res, error){
 
 router.post('/profile_recur', function(req, res, error){
 
-    console.log('in profile_recur ', req.body.set.length, req.body);
+    console.log('in profile_recur ', req.body);
 
     var on = '58010301ff00ffffff';
     var off = '58010301ff00000000';
-    var sunset = new Date(req.body.sunset);
-    var sunrise = new Date(req.body.sunrise);
+    var arg;
+    var setpoint;
+    var gattArgs;
 
-    if(new Date(req.body.sunset) > new Date() && req.body.sunset !== null){
-    //
-    //    for(var i = 0; i < req.body.set.length; i ++ ) {
-    //
-    //        var setArgs = call.buildGattargs(req.body.set[i], on);
-    //        //console.log(setArgs, sunset);
-    //
-    //        var set = schedule.scheduleJob(sunset, function(){
-    //
-    //            console.log("it's a hit . Sunset: ", sunset);
-    //
-    //            //var child = spawn('gatttool', setArgs);
-    //            //
-    //            //child.stdout.on('data', function(data){
-    //            //
-    //            //    res.send(data);
-    //            //
-    //            //    child.kill();
-    //            //});
-    //            //
-    //            //child.on('exit', function (code) {
-    //            //    console.log('spawned process ended on exit code: ', code);
-    //            //    if (code === 0) {
-    //            //        console.log('gatttool run success');
-    //            //
-    //            //    }
-    //            //    else {
-    //            //        console.log('check hciconfig');
-    //            //    }
-    //            //
-    //            //});
-    //
-    //
-    //        })
-    //
-    //        set.on('run', function(){
-    //            console.log('job run success');
-    //        })
-    //
-    //    }
-    //
-    //}
-    //
-    //if(new Date(req.body.sunrise) > new Date() && req.body.sunrise !== null) {
-    //
-    //
-    //    for (var z = 0; z < req.body.rise.length; z++) {
-    //
-    //        var riseArgs = call.buildGattargs(req.body.rise[z], off);
-    //        console.log(riseArgs);
-    //
-    //        var rise = schedule.scheduleJob(sunrise, function () {
-    //
-    //            console.log("it's a hit. Sunrise: ", sunrise);
-    //
-    //
-    //            //var child = spawn('gatttool', riseArgs);
-    //            //
-    //            //child.stdout.on('data', function(data){
-    //            //
-    //            //    res.send(data);
-    //            //
-    //            //    child.kill();
-    //            //});
-    //            //
-    //            //child.on('exit', function (code) {
-    //            //    console.log('spawned process ended on exit code: ', code);
-    //            //    if (code === 0) {
-    //            //        console.log('gatttool run success');
-    //            //
-    //            //    }
-    //            //    else {
-    //            //        console.log('check hciconfig');
-    //            //    }
-    //            //
-    //            //});
-    //
-    //
-    //        })
-    //
-    //        rise.on('run', function () {
-    //            console.log('job run success');
-    //        })
-    //
-    //    }
-    }
 
-    else{
+    if(new Date() > req.body.sunrise || new Date() > req.body.sunset){
         res.send('invalid request');
     }
+
+    else {
+
+        if(req.body.on_at_sunset){
+            arg = on;
+            setpoint = new Date(req.body.sunset);
+        }
+
+        if(req.body.off_at_sunrise){
+            arg = off;
+            setpoint = new Date(req.body.sunrise);
+        }
+
+        gattArgs = call.buildGattargs(req.body.mac, arg);
+
+        var job = schedule.scheduleJob(setpoint, function(){
+
+            var child = spawn('gatttool', gattArgs);
+
+            child.stdout.on('data', function(data){
+
+                res.send(data);
+
+                child.kill();
+            });
+
+            child.on('exit', function (code) {
+                console.log('spawned process ended on exit code: ', code);
+                if (code === 0) {
+                    console.log('gatttool run success');
+
+                }
+                else {
+                    console.log('check hciconfig');
+                }
+
+            });
+
+        });
+
+        job.on('run', function(){
+            console.log('my job ran');
+
+        });
+
+        var pending = job.pendingInvocations();
+        console.log('pending invocations: ', pending[0].job.name);
+
+    }
+
 
 });
 

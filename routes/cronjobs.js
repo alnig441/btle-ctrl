@@ -10,30 +10,31 @@ var connectionString = process.env.DATABASE_URL || 'postgres://localhost:5432/bt
 
 router.post('/', function(req, res, error) {
 
-    console.log('in cronjobs router', req.body);
+    console.log('in cronjobs router', req.body.devices);
 
     var on = '58010301ff00ffffff',
         off = '58010301ff00000000';
     var setpoint;
-    var gattArgs;
+    //var gattArgs;
 
-    req.body.sunset ? setpoint = req.body.sunset : req.body.sunrise;
-    req.body.sunset ? gattArgs = call.buildGattargs(req.body.mac, on) : gattArgs = call.buildGattargs(req.body.mac, off);
+    var test = new Date();
+    //test.setMinutes(test.getMinutes()+5);
 
-    var job = CronJob(new Date(), function(){
+    //req.body.sunset ? setpoint = req.body.sunset : req.body.sunrise;
+    //req.body.sunset ? gattArgs = call.buildGattargs(req.body.mac, on) : gattArgs = call.buildGattargs(req.body.mac, off);
 
-        //var child = spawn('gatttool', gattArgs);
-        //
-        //child.stdout.on('data', function(data){
-        //
-        //    res.send(data);
-        //
-        //    child.kill();
-        //});
-
+    var job = CronJob({
+        cronTime : new Date(),
+        onTick: function(){
+            for(var i = 0 ; i < req.body.devices.length ; i ++){
+                console.log(req.body.devices[i]);
+            }
+        },
 
     })
-    job.start();
+
+    console.log(job);
+
 
 });
 
