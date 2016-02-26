@@ -22,7 +22,7 @@ router.post('/schedule', function(req, res, error){
         gattArgs = call.buildGattargs(req.body.mac, on);
     }
 
-    //RECURRING SCHEDULE
+    //RECURRING SCHEDULE - REGULAR CONTROL
     if(req.body.recurWeekly || req.body.recurDaily || req.body.dateEnd !== undefined){
 
         var begin = new Date(req.body.dateBegin);
@@ -45,12 +45,12 @@ router.post('/schedule', function(req, res, error){
             recur.dayOfWeek = new schedule.Range(begin.getDay(), end.getDay());
         }
 
-        //RECURRING - REGULAR CONTROL
+        //RECURRING SCHEDULE - REGULAR CONTROL
         console.log('setting up recurring schedule - regular control', recur, req.body);
 
         req.body.turnOn ? req.body.device_on = true : req.body.device_on = false;
 
-        var job = schedule.scheduleJob(recur, function(){
+        var job = schedule.scheduleJob('Recur/regular '+ req.body.location, recur, function(){
 
             var child = spawn('gatttool', gattArgs);
 
@@ -102,65 +102,9 @@ router.post('/schedule', function(req, res, error){
 
         });
 
-    }
-
-    // NON-RECURRING SCHEDULE - SUNSET/SUNRICE CONTROL
-    else if(req.body.offAtSunrise || req.body.onAtSunset) {
-
-        req.body.onAtSunset ? (setpoint = new Date(req.body.sunset)) : (setpoint = new Date (req.body.sunrise));
-        req.body.onAtSunset ? req.body.device_on = true : req.body.device_on = false;
-
-        console.log('schedulling non-recurring sunrise/sunset control in options/schedule', setpoint);
-
-        var job = schedule.scheduleJob(setpoint, function(){
-
-            var child = spawn('gatttool', gattArgs);
-
-            child.stdout.on('data', function(data){
-
-                res.send(data);
-
-                child.kill();
-            });
-
-            child.on('exit', function(code){
-                console.log('spawned process ended on exit code: ', code);
-                if(code === 0){
-                    console.log('gatttool run success');
-                }
-                else {
-                    console.log('check hciconfig');
-                }
-
-            });
-
-        });
-
-        job.on('scheduled',function(date){
-            console.log('job scheduled', date);
-        });
-
-        job.on('run', function(){
-            console.log('my job ran');
-
-            pg.connect(connectionString, function (err, client, done) {
-
-                var query = client.query("UPDATE devices SET device_on='" + req.body.device_on + "' where mac='" + req.body.mac + "'", function (error, result) {
-                    if (error) {
-                        console.log('there was an error ', error);
-                    }
-                })
-
-                query.on('end', function (result) {
-                    client.end();
-                    //res.send(result);
-                })
-
-            });
-
-
-        });
-
+        var items = schedule.scheduledJobs;
+        console.log('scheduled jobs: ', Object.keys(items));
+        res.send(items);
 
     }
 
@@ -176,7 +120,7 @@ router.post('/schedule', function(req, res, error){
 
         console.log('scheduling regular non-recurring control', setpoint);
 
-        var job = schedule.scheduleJob(setpoint, function () {
+        var job = schedule.scheduleJob('regular non-recur ' + req.body.location + ' ' + setpoint, setpoint, function () {
 
             var child = spawn('gatttool', gattArgs);
 
@@ -225,10 +169,12 @@ router.post('/schedule', function(req, res, error){
 
         });
 
-        var pending = job.pendingInvocations();
-        console.log('pending invocations: ', pending[0].job.name);
-        res.status(200);
     }
+
+    var items = schedule.scheduledJobs;
+    console.log('scheduled jobs: ', Object.keys(items));
+    res.send(items);
+
 
 });
 
@@ -259,7 +205,7 @@ router.post('/sun', function(req, res, error){
 
         console.log('schedulling non-recurring sunrise/sunset control in options/sun', setpoint);
 
-        var job = schedule.scheduleJob(setpoint, function(){
+        var job = schedule.scheduleJob('sunrise/sunset non-recur '+ req.body.location + ' ' + setpoint, setpoint, function(){
 
             var child = spawn('gatttool', gattArgs);
 
@@ -307,14 +253,20 @@ router.post('/sun', function(req, res, error){
             });
 
         });
-
+        ////var x = schedeule.scheduledJobs;
+        //console.log('scheduled jobs: ');
     }
 
-    res.status(200);
+    var items = schedule.scheduledJobs;
+    console.log('scheduled jobs: ', Object.keys(items));
+    res.send(items);
+
 
 });
 
 router.post('/profile_recur', function(req, res, error){
+
+    //PROFILE DRIVEN RECURRING SCHEDULE
 
     console.log('in profile_recur ', req.body);
 
@@ -343,7 +295,7 @@ router.post('/profile_recur', function(req, res, error){
 
         gattArgs = call.buildGattargs(req.body.mac, arg);
 
-        var job = schedule.scheduleJob(setpoint, function(){
+        var job = schedule.scheduleJob('sunrise/sunset recur ' + req.body.location + ' ' + setpoint, setpoint, function(){
 
             var child = spawn('gatttool', gattArgs);
 
@@ -373,10 +325,11 @@ router.post('/profile_recur', function(req, res, error){
 
         });
 
-        var pending = job.pendingInvocations();
-        console.log('pending invocations: ', pending[0].job.name);
-
     }
+
+    var items = schedule.scheduledJobs;
+    console.log('scheduled jobs: ', Object.keys(items));
+    res.send(items);
 
 
 });

@@ -1,6 +1,6 @@
 app.controller('loginCtrl',['$scope', '$rootScope', '$http', '$location', '$mdDialog', '$mdMedia', function ($scope, $rootScope, $http, $location, $mdDialog, $mdMedia){
 
-    console.log('in login Ctrl - rootScopes ', $rootScope);
+    //console.log('in login Ctrl - rootScopes ', $rootScope);
 
     $rootScope.scheduleDevice = {};
 

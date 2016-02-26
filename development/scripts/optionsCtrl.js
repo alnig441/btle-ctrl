@@ -1,6 +1,6 @@
 app.controller('optionsCtrl',['$scope', '$rootScope', '$http', '$location', '$mdDialog', function($scope, $rootScope, $http, $location, $mdDialog){
 
-    console.log('in optionsCtrl ', $rootScope, this);
+    //console.log('in optionsCtrl ', $rootScope, this);
 
 
     //Building scheduleDevice object with the required properties
@@ -14,13 +14,6 @@ app.controller('optionsCtrl',['$scope', '$rootScope', '$http', '$location', '$md
         $rootScope.scheduleDevice.colour = $scope.color;
         $rootScope.scheduleDevice.hour = $scope.selectedHours.value;
         $rootScope.scheduleDevice.minute = $scope.selectedMinutes.value;
-
-        function setOrRise() {
-            console.log('function setOrRise', $rootScope);
-                $http.post('/options/sun', $rootScope.scheduleDevice).then(function(response){
-                    console.log('response from options/sun', response);
-                });
-        }
 
         function parseDate(date, hrs, mins, secs, ms){
             date.setHours(hrs);
@@ -48,10 +41,7 @@ app.controller('optionsCtrl',['$scope', '$rootScope', '$http', '$location', '$md
                 // Schedule sunset/sunrise range event
                 if($rootScope.scheduleDevice.dateEnd !== undefined) {
 
-                    var dateBegin = parseDate($rootScope.scheduleDevice.dateBegin, 0, 0, 0, 0);
-                    var dateEnd = parseDate($rootScope.scheduleDevice.dateEnd, 0, 0, 0, 0);
-                    var days = (dateEnd - dateBegin) / 86400000;
-                    console.log(days);
+                    console.log('TODO - write code');
                 }
 
 
@@ -59,6 +49,7 @@ app.controller('optionsCtrl',['$scope', '$rootScope', '$http', '$location', '$md
                 else {
                         $http.post('/options/sun', $rootScope.scheduleDevice).then(function(response){
                         console.log('response from options/sun', response);
+
                     });
 
                 }

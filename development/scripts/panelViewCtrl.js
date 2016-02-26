@@ -1,6 +1,6 @@
-app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$mdMedia', '$mdDialog', function($scope, $rootScope, $http, $location, $mdMedia, $mdDialog){
+app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$mdMedia', '$mdDialog', '$timeout', '$interval', function($scope, $rootScope, $http, $location, $mdMedia, $mdDialog, $timeout, $interval){
 
-    console.log('panelViewCtrl rootscope ', $rootScope);
+    //console.log('panelViewCtrl rootscope ', $rootScope);
 
     $http.get('http://api.sunrise-sunset.org/json?lat=44.891123.7201600&lng=-93.359752&formatted=0')
         .then(function (response) {
@@ -111,7 +111,7 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
                 }
             });
 
-            console.log('refreshTimeOut timer - rootscope ', $rootScope);
+            //console.log('refreshTimeOut timer - rootscope ', $rootScope);
 
             var tmp = setTimeout(function(){
 
@@ -156,7 +156,7 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
 
         $scope.device = this.panel.device;
 
-        //console.log('newState ', this);
+        console.log('newState ', this);
 
         $http.put('/panel', $scope.device)
             .then(function(response){

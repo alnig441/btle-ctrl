@@ -34,7 +34,7 @@ app.config(function($routeProvider, $locationProvider, $mdThemingProvider, $mdIc
 
 ;app.controller('loginCtrl',['$scope', '$rootScope', '$http', '$location', '$mdDialog', '$mdMedia', function ($scope, $rootScope, $http, $location, $mdDialog, $mdMedia){
 
-    console.log('in login Ctrl - rootScopes ', $rootScope);
+    //console.log('in login Ctrl - rootScopes ', $rootScope);
 
     $rootScope.scheduleDevice = {};
 
@@ -308,7 +308,7 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
     };
 };app.controller('optionsCtrl',['$scope', '$rootScope', '$http', '$location', '$mdDialog', function($scope, $rootScope, $http, $location, $mdDialog){
 
-    console.log('in optionsCtrl ', $rootScope, this);
+    //console.log('in optionsCtrl ', $rootScope, this);
 
 
     //Building scheduleDevice object with the required properties
@@ -322,13 +322,6 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
         $rootScope.scheduleDevice.colour = $scope.color;
         $rootScope.scheduleDevice.hour = $scope.selectedHours.value;
         $rootScope.scheduleDevice.minute = $scope.selectedMinutes.value;
-
-        function setOrRise() {
-            console.log('function setOrRise', $rootScope);
-                $http.post('/options/sun', $rootScope.scheduleDevice).then(function(response){
-                    console.log('response from options/sun', response);
-                });
-        }
 
         function parseDate(date, hrs, mins, secs, ms){
             date.setHours(hrs);
@@ -356,10 +349,7 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
                 // Schedule sunset/sunrise range event
                 if($rootScope.scheduleDevice.dateEnd !== undefined) {
 
-                    var dateBegin = parseDate($rootScope.scheduleDevice.dateBegin, 0, 0, 0, 0);
-                    var dateEnd = parseDate($rootScope.scheduleDevice.dateEnd, 0, 0, 0, 0);
-                    var days = (dateEnd - dateBegin) / 86400000;
-                    console.log(days);
+                    console.log('TODO - write code');
                 }
 
 
@@ -367,6 +357,7 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
                 else {
                         $http.post('/options/sun', $rootScope.scheduleDevice).then(function(response){
                         console.log('response from options/sun', response);
+
                     });
 
                 }
@@ -459,9 +450,9 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
 
 }]);
 
-;app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$mdMedia', '$mdDialog', function($scope, $rootScope, $http, $location, $mdMedia, $mdDialog){
+;app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$mdMedia', '$mdDialog', '$timeout', '$interval', function($scope, $rootScope, $http, $location, $mdMedia, $mdDialog, $timeout, $interval){
 
-    console.log('panelViewCtrl rootscope ', $rootScope);
+    //console.log('panelViewCtrl rootscope ', $rootScope);
 
     $http.get('http://api.sunrise-sunset.org/json?lat=44.891123.7201600&lng=-93.359752&formatted=0')
         .then(function (response) {
@@ -572,7 +563,7 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
                 }
             });
 
-            console.log('refreshTimeOut timer - rootscope ', $rootScope);
+            //console.log('refreshTimeOut timer - rootscope ', $rootScope);
 
             var tmp = setTimeout(function(){
 
@@ -617,7 +608,7 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
 
         $scope.device = this.panel.device;
 
-        //console.log('newState ', this);
+        console.log('newState ', this);
 
         $http.put('/panel', $scope.device)
             .then(function(response){
