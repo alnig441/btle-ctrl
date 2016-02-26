@@ -160,6 +160,7 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
 
         $http.put('/panel', $scope.device)
             .then(function(response){
+                console.log('response from /panel put: ', response);
                 $http.get('/panel')
                     .then(function(response){
                         $scope.panels = response.data;

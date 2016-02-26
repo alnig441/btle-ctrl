@@ -74,6 +74,7 @@ router.put('/', function(req, res, error){
                 })
 
                 query.on('row', function(row){
+                    console.log('ballademanden: ',row);
                     res.send(row);
                 })
 
