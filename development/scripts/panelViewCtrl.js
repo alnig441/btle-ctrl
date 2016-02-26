@@ -1,6 +1,6 @@
 app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$mdMedia', '$mdDialog', '$timeout', '$interval', function($scope, $rootScope, $http, $location, $mdMedia, $mdDialog, $timeout, $interval){
 
-    //console.log('panelViewCtrl rootscope ', $rootScope);
+    console.log('panelViewCtrl rootscope ', $rootScope);
 
     $http.get('http://api.sunrise-sunset.org/json?lat=44.891123.7201600&lng=-93.359752&formatted=0')
         .then(function (response) {
@@ -10,7 +10,7 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
 
     $http.get('/panel')
         .then(function(response){
-            $scope.panels = response.data;
+            $rootScope.panels = response.data;
         });
 
     $http.get('/profiles/on_at_sunset')
@@ -163,7 +163,7 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
                 console.log('response from /panel put: ', response);
                 $http.get('/panel')
                     .then(function(response){
-                        $scope.panels = response.data;
+                        $rootScope.panels = response.data;
                     });
             });
 
