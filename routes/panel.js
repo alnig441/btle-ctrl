@@ -73,6 +73,10 @@ router.put('/', function(req, res, error){
                     if(error){console.log('there was an error ', error);}
                 })
 
+                query.on('row', function(row){
+                    res.send(row);
+                })
+
                 query.on('end',function(result){
                     client.end();
                     res.send(result);
@@ -89,6 +93,8 @@ router.put('/', function(req, res, error){
         }
 
     });
+
+    res.status(200);
 
 });
 
