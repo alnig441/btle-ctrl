@@ -61,6 +61,10 @@ app.controller('optionsCtrl',['$scope', '$rootScope', '$http', '$location', '$md
             else {
                     $http.post('/options/schedule', $rootScope.scheduleDevice).then(function(response){
                         console.log('response from options/schedule', response);
+                        $http.get('/panel')
+                            .then(function(response){
+                                $rootScope.panels = response.data;
+                            });
                     });
             }
 

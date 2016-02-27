@@ -102,10 +102,6 @@ router.post('/schedule', function(req, res, error){
 
         });
 
-        var items = schedule.scheduledJobs;
-        console.log('scheduled jobs: ', Object.keys(items));
-        res.send(items);
-
     }
 
     //NON-RECURRING SCHEDULE - REGULAR CONTROL
@@ -186,6 +182,7 @@ router.post('/sun', function(req, res, error){
     var off = '58010301ff00000000';
     var setpoint;
     var gattArgs;
+    var c;
 
     if((new Date(req.body.sunset) < new Date() && req.body.onAtSunset ) || (new Date(req.body.sunrise) < new Date() && req.body.offAtSunrise)){
         res.send('invalid request');
@@ -207,26 +204,30 @@ router.post('/sun', function(req, res, error){
 
         var job = schedule.scheduleJob('sunrise/sunset non-recur '+ req.body.location + ' ' + setpoint, setpoint, function(){
 
-            var child = spawn('gatttool', gattArgs);
+            do {
+                var child = spawn('gatttool', gattArgs);
 
-            child.stdout.on('data', function(data){
+                child.stdout.on('data', function(data){
 
-                res.send(data);
+                    res.send(data);
 
-                child.kill();
-            });
+                    child.kill();
+                });
 
-            child.on('exit', function (code) {
-                console.log('spawned process ended on exit code: ', code);
-                if (code === 0) {
-                    console.log('gatttool run success');
+                child.on('exit', function (code) {
+                    console.log('spawned process ended on exit code: ', code);
+                    if (code === 0) {
+                        c = code;
+                        console.log('gatttool run success');
 
-                }
-                else {
-                    console.log('check hciconfig');
-                }
+                    }
+                    else {
+                        console.log('check hciconfig');
+                    }
 
-            });
+                });
+
+            } while (c !== 0);
 
         });
 
@@ -275,6 +276,8 @@ router.post('/profile_recur', function(req, res, error){
     var arg;
     var setpoint;
     var gattArgs;
+    var device_on;
+    var c;
 
 
     if(new Date() > req.body.sunrise || new Date() > req.body.sunset){
@@ -286,42 +289,65 @@ router.post('/profile_recur', function(req, res, error){
         if(req.body.on_at_sunset){
             arg = on;
             setpoint = new Date(req.body.sunset);
+            device_on = true;
         }
 
         if(req.body.off_at_sunrise){
             arg = off;
             setpoint = new Date(req.body.sunrise);
+            device_on = false;
         }
 
         gattArgs = call.buildGattargs(req.body.mac, arg);
 
         var job = schedule.scheduleJob('sunrise/sunset recur ' + req.body.location + ' ' + setpoint, setpoint, function(){
 
-            var child = spawn('gatttool', gattArgs);
+            do {
 
-            child.stdout.on('data', function(data){
+                var child = spawn('gatttool', gattArgs);
 
-                res.send(data);
+                child.stdout.on('data', function(data){
 
-                child.kill();
-            });
+                    res.send(data);
 
-            child.on('exit', function (code) {
-                console.log('spawned process ended on exit code: ', code);
-                if (code === 0) {
-                    console.log('gatttool run success');
+                    child.kill();
+                });
 
-                }
-                else {
-                    console.log('check hciconfig');
-                }
+                child.on('exit', function (code) {
+                    console.log('spawned process ended on exit code: ', code);
+                    if (code === 0) {
+                        c = code;
+                        console.log('gatttool run success');
 
-            });
+                    }
+                    else {
+                        console.log('check hciconfig');
+                    }
+
+                });
+
+            } while (c !== 0);
+
 
         });
 
         job.on('run', function(){
             console.log('my job ran');
+
+            pg.connect(connectionString, function (err, client, done) {
+
+                var query = client.query("UPDATE devices SET device_on='" + device_on + "' where mac='" + req.body.mac + "'", function (error, result) {
+                    if (error) {
+                        console.log('there was an error ', error);
+                    }
+                })
+
+                query.on('end', function (result) {
+                    client.end();
+                })
+
+            });
+
 
         });
 

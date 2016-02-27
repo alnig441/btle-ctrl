@@ -369,6 +369,10 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
             else {
                     $http.post('/options/schedule', $rootScope.scheduleDevice).then(function(response){
                         console.log('response from options/schedule', response);
+                        $http.get('/panel')
+                            .then(function(response){
+                                $rootScope.panels = response.data;
+                            });
                     });
             }
 
@@ -610,12 +614,12 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
 
         console.log('newState ', this);
 
-        $http.put('/panel', $scope.device)
+        $http.get('/panel')
             .then(function(response){
-                console.log('response from /panel put: ', response);
-                $http.get('/panel')
+                $rootScope.panels = response.data;
+                $http.put('/panel', $scope.device)
                     .then(function(response){
-                        $rootScope.panels = response.data;
+                        console.log('response from /panel put: ', response);
                     });
             });
 
