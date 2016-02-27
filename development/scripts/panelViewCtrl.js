@@ -4,6 +4,7 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
 
     $http.get('http://api.sunrise-sunset.org/json?lat=44.891123.7201600&lng=-93.359752&formatted=0')
         .then(function (response) {
+            console.log(response);
             $rootScope.sunset = response.data.results.sunset;
             $rootScope.sunrise = response.data.results.sunrise;
         });
@@ -58,10 +59,10 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
             }).then(function(response){
             if(new Date() < new Date($rootScope.sunset)){
                 var setpoint = new Date($rootScope.sunset);
+                setpoint = Date.parse(setpoint);
                 for(var i = 0 ; i < $rootScope.on_at_sunset.length ; i ++){
-                    setpoint.setSeconds(setpoint.getSeconds()+1);
+                    setpoint = +1000;
                     $rootScope.on_at_sunset[i].sunset = setpoint;
-                    //$rootScope.on_at_sunset[i].sunset = $rootScope.sunset;
                     $rootScope.on_at_sunset[i].off_at_sunrise = false;
                     $rootScope.on_at_sunset[i].master_off = false;
                     $http.post('/options/profile_recur', $rootScope.on_at_sunset[i]);
@@ -70,9 +71,9 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
         }).then(function(response){
             if(new Date() < new Date($rootScope.sunrise)){
                 var setpoint = new Date($rootScope.sunrise);
+                setpoint = Date.parse(setpoint);
                 for(var j = 0 ; j < $rootScope.off_at_sunrise.length ; j ++) {
-                    setpoint.setSeconds(setpoint.getSeconds()+1);
-                    //$rootScope.off_at_sunrise[j].sunrise = $rootScope.sunrise;
+                    setpoint = 1000;
                     $rootScope.off_at_sunrise[j].sunrise = setpoint;
                     $rootScope.off_at_sunrise[j].on_at_sunset = false;
                     $rootScope.off_at_sunrise[j].master_off = false;
@@ -100,9 +101,9 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
             }).then(function(response){
                 if(new Date() < new Date($rootScope.sunset)){
                     var setpoint = new Date($rootScope.sunset);
+                    setpoint = Date.parse(setpoint);
                     for(var i = 0 ; i < $rootScope.on_at_sunset.length ; i ++){
-                        setpoint.setSeconds(setpoint.getSeconds()+1);
-                        //$rootScope.on_at_sunset[i].sunset = $rootScope.sunset;
+                        setpoint += 1000;
                         $rootScope.on_at_sunset[i].sunset = setpoint;
                         $rootScope.on_at_sunset[i].off_at_sunrise = false;
                         $rootScope.on_at_sunset[i].master_off = false;
@@ -112,9 +113,9 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
             }).then(function(response){
                 if(new Date() < new Date($rootScope.sunrise)){
                     var setpoint = new Date($rootScope.sunrise);
+                    setpoint = Date.parse(setpoint);
                     for(var j = 0 ; j < $rootScope.off_at_sunrise.length ; j ++) {
-                        setpoint.setSeconds(setpoint.getSeconds()+1);
-                        //$rootScope.off_at_sunrise[j].sunrise = $rootScope.sunrise;
+                        setpoint += 1000;
                         $rootScope.off_at_sunrise[j].sunrise = setpoint;
                         $rootScope.off_at_sunrise[j].on_at_sunset = false;
                         $rootScope.off_at_sunrise[j].master_off = false;
@@ -133,10 +134,10 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
                 }).then(function(response){
                     if(new Date() < new Date($rootScope.sunset)){
                         var setpoint = new Date($rootScope.sunset);
+                        setpoint = Date.parse(setpoint);
                         for(var i = 0 ; i < $rootScope.on_at_sunset.length ; i ++){
-                            setpoint.setMinutes(setpoint.getSeconds()+1);
+                            setpoint += 1000;
                             $rootScope.on_at_sunset[i].sunset = setpoint;
-                            //$rootScope.on_at_sunset[i].sunset = $rootScope.sunset;
                             $rootScope.on_at_sunset[i].off_at_sunrise = false;
                             $rootScope.on_at_sunset[i].master_off = false;
                             $http.post('/options/profile_recur', $rootScope.on_at_sunset[i]);
@@ -145,10 +146,10 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
                 }).then(function(response){
                     if(new Date() < new Date($rootScope.sunrise)){
                         var setpoint = new Date($rootScope.sunrise);
+                        setpoint = Date.parse(setpoint);
                         for(var j = 0 ; j < $rootScope.off_at_sunrise.length ; j ++) {
-                            setpoint.setSeconds(setpoint.getSeconds()+1);
+                            setpoint += 1000;
                             $rootScope.off_at_sunrise[j].sunrise = setpoint;
-                            //$rootScope.off_at_sunrise[j].sunrise = $rootScope.sunrise;
                             $rootScope.off_at_sunrise[j].on_at_sunset = false;
                             $rootScope.off_at_sunrise[j].master_off = false;
                             $http.post('/options/profile_recur', $rootScope.off_at_sunrise[j]);

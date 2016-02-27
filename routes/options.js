@@ -269,7 +269,7 @@ router.post('/profile_recur', function(req, res, error){
 
     //PROFILE DRIVEN RECURRING SCHEDULE
 
-    console.log('in profile_recur ', req.body);
+    console.log('in profile_recur ', new Date(req.body.sunset));
 
     var on = '58010301ff00ffffff';
     var off = '58010301ff00000000';
