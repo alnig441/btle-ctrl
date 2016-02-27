@@ -123,7 +123,6 @@ router.post('/schedule', function(req, res, error){
             child.stdout.on('data', function (data) {
 
                 res.send(data);
-
                 child.kill();
             });
 
@@ -149,7 +148,7 @@ router.post('/schedule', function(req, res, error){
 
             pg.connect(connectionString, function (err, client, done) {
 
-                console.log('regular - non recurring ', req.body);
+                //console.log('regular - non recurring ', req.body);
 
                 var query = client.query("UPDATE devices SET device_on='" + req.body.device_on + "' where mac='" + req.body.mac + "'", function (error, result) {
                     if (error) {
@@ -159,6 +158,7 @@ router.post('/schedule', function(req, res, error){
 
                 query.on('end', function (result) {
                     client.end();
+                    res.send(result);
                 })
 
             });
@@ -204,7 +204,7 @@ router.post('/sun', function(req, res, error){
 
         var job = schedule.scheduleJob('sunrise/sunset non-recur '+ req.body.location + ' ' + setpoint, setpoint, function(){
 
-            do {
+            //do {
                 var child = spawn('gatttool', gattArgs);
 
                 child.stdout.on('data', function(data){
@@ -227,7 +227,7 @@ router.post('/sun', function(req, res, error){
 
                 });
 
-            } while (c !== 0);
+            //} while (c !== 0);
 
         });
 
@@ -302,7 +302,7 @@ router.post('/profile_recur', function(req, res, error){
 
         var job = schedule.scheduleJob('sunrise/sunset recur ' + req.body.location + ' ' + setpoint, setpoint, function(){
 
-            do {
+            //do {
 
                 var child = spawn('gatttool', gattArgs);
 
@@ -326,7 +326,7 @@ router.post('/profile_recur', function(req, res, error){
 
                 });
 
-            } while (c !== 0);
+            //} while (c !== 0);
 
 
         });

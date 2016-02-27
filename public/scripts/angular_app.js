@@ -513,8 +513,11 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
                 $rootScope.sunrise = response.data.results.sunrise;
             }).then(function(response){
             if(new Date() < new Date($rootScope.sunset)){
+                var setpoint = new Date($rootScope.sunset);
                 for(var i = 0 ; i < $rootScope.on_at_sunset.length ; i ++){
-                    $rootScope.on_at_sunset[i].sunset = $rootScope.sunset;
+                    setpoint.setSeconds(setpoint.getSeconds()+1);
+                    $rootScope.on_at_sunset[i].sunset = setpoint;
+                    //$rootScope.on_at_sunset[i].sunset = $rootScope.sunset;
                     $rootScope.on_at_sunset[i].off_at_sunrise = false;
                     $rootScope.on_at_sunset[i].master_off = false;
                     $http.post('/options/profile_recur', $rootScope.on_at_sunset[i]);
@@ -522,8 +525,11 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
             }
         }).then(function(response){
             if(new Date() < new Date($rootScope.sunrise)){
+                var setpoint = new Date($rootScope.sunrise);
                 for(var j = 0 ; j < $rootScope.off_at_sunrise.length ; j ++) {
-                    $rootScope.off_at_sunrise[j].sunrise = $rootScope.sunrise;
+                    setpoint.setSeconds(setpoint.getSeconds()+1);
+                    //$rootScope.off_at_sunrise[j].sunrise = $rootScope.sunrise;
+                    $rootScope.off_at_sunrise[j].sunrise = setpoint;
                     $rootScope.off_at_sunrise[j].on_at_sunset = false;
                     $rootScope.off_at_sunrise[j].master_off = false;
                     $http.post('/options/profile_recur', $rootScope.off_at_sunrise[j]);
@@ -549,8 +555,11 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
                 console.log('sunset/sunrise data refresh on load. SUNRISE: ' + new Date($rootScope.sunrise) + ' / SUNSET: ' + new Date($rootScope.sunset));
             }).then(function(response){
                 if(new Date() < new Date($rootScope.sunset)){
+                    var setpoint = new Date($rootScope.sunset);
                     for(var i = 0 ; i < $rootScope.on_at_sunset.length ; i ++){
-                        $rootScope.on_at_sunset[i].sunset = $rootScope.sunset;
+                        setpoint.setSeconds(setpoint.getSeconds()+1);
+                        //$rootScope.on_at_sunset[i].sunset = $rootScope.sunset;
+                        $rootScope.on_at_sunset[i].sunset = setpoint;
                         $rootScope.on_at_sunset[i].off_at_sunrise = false;
                         $rootScope.on_at_sunset[i].master_off = false;
                         $http.post('/options/profile_recur', $rootScope.on_at_sunset[i]);
@@ -558,8 +567,11 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
                 }
             }).then(function(response){
                 if(new Date() < new Date($rootScope.sunrise)){
+                    var setpoint = new Date($rootScope.sunrise);
                     for(var j = 0 ; j < $rootScope.off_at_sunrise.length ; j ++) {
-                        $rootScope.off_at_sunrise[j].sunrise = $rootScope.sunrise;
+                        setpoint.setSeconds(setpoint.getSeconds()+1);
+                        //$rootScope.off_at_sunrise[j].sunrise = $rootScope.sunrise;
+                        $rootScope.off_at_sunrise[j].sunrise = setpoint;
                         $rootScope.off_at_sunrise[j].on_at_sunset = false;
                         $rootScope.off_at_sunrise[j].master_off = false;
                         $http.post('/options/profile_recur', $rootScope.off_at_sunrise[j]);
@@ -576,8 +588,11 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
                     $rootScope.sunrise = response.data.results.sunrise;
                 }).then(function(response){
                     if(new Date() < new Date($rootScope.sunset)){
+                        var setpoint = new Date($rootScope.sunset);
                         for(var i = 0 ; i < $rootScope.on_at_sunset.length ; i ++){
-                            $rootScope.on_at_sunset[i].sunset = $rootScope.sunset;
+                            setpoint.setMinutes(setpoint.getSeconds()+1);
+                            $rootScope.on_at_sunset[i].sunset = setpoint;
+                            //$rootScope.on_at_sunset[i].sunset = $rootScope.sunset;
                             $rootScope.on_at_sunset[i].off_at_sunrise = false;
                             $rootScope.on_at_sunset[i].master_off = false;
                             $http.post('/options/profile_recur', $rootScope.on_at_sunset[i]);
@@ -585,8 +600,11 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
                     }
                 }).then(function(response){
                     if(new Date() < new Date($rootScope.sunrise)){
+                        var setpoint = new Date($rootScope.sunrise);
                         for(var j = 0 ; j < $rootScope.off_at_sunrise.length ; j ++) {
-                            $rootScope.off_at_sunrise[j].sunrise = $rootScope.sunrise;
+                            setpoint.setSeconds(setpoint.getSeconds()+1);
+                            $rootScope.off_at_sunrise[j].sunrise = setpoint;
+                            //$rootScope.off_at_sunrise[j].sunrise = $rootScope.sunrise;
                             $rootScope.off_at_sunrise[j].on_at_sunset = false;
                             $rootScope.off_at_sunrise[j].master_off = false;
                             $http.post('/options/profile_recur', $rootScope.off_at_sunrise[j]);
