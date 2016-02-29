@@ -191,7 +191,13 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
                         console.log('refreshing panels data: ', response.data);
                         $rootScope.panels = response.data;
                     });
-            });
+            })
+            .then(function(response){
+                $http.get('/panel')
+                    .then(function(response){
+                        $rootScope.panels = response.date;
+                    })
+            })
 
     };
 
