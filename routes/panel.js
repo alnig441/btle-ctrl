@@ -40,12 +40,14 @@ router.put('/', function(req, res, error){
     var off = '58010301ff00000000';
     var gattArgs;
 
-    switch (req.body.device_on) {
+    switch(req.body.device_on) {
         case true:
+            console.log('case true');
             req.body.device_on = false;
             gattArgs = call.buildGattargs(req.body.mac, off);
             break;
         case false:
+            console.log('case false');
             req.body.device_on = true;
             gattArgs = call.buildGattargs(req.body.mac, on);
             break;
@@ -75,12 +77,12 @@ router.put('/', function(req, res, error){
 
                 query.on('end',function(result){
                     client.end();
-                    res.send(result);
+                    //res.send(result);
                 })
 
             })
 
-            res.status(200);
+            res.status(200).send('DONE');
 
         }
 
@@ -90,7 +92,7 @@ router.put('/', function(req, res, error){
 
     });
 
-    res.status(200);
+    res.status(200).send('DONE');
 
 });
 

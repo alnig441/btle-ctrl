@@ -4,7 +4,7 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
 
     $http.get('http://api.sunrise-sunset.org/json?lat=44.891123.7201600&lng=-93.359752&formatted=0')
         .then(function (response) {
-            console.log(response);
+            //console.log(response);
             $rootScope.sunset = response.data.results.sunset;
             $rootScope.sunrise = response.data.results.sunrise;
         });
@@ -173,16 +173,26 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
 
     $scope.newState = function(){
 
-        $scope.device = this.panel.device;
+        //$scope.device = this.panel.device;
 
-        console.log('newState ', this);
+        console.log('newState ', this.panel);
 
-        $http.get('/panel')
+        //$http.get('/panel')
+        //    .then(function(response){
+        //        $rootScope.panels = response.data;
+        //        $http.put('/panel', $scope.device)
+        //            .then(function(response){
+        //                console.log('response from /panel put: ', response);
+        //            });
+        //    });
+
+        $http.put('/panel', this.panel.device)
             .then(function(response){
-                $rootScope.panels = response.data;
-                $http.put('/panel', $scope.device)
+                console.log('response from /panel put: ', response);
+                $http.get('/panel')
                     .then(function(response){
-                        console.log('response from /panel put: ', response);
+                        console.log('refreshing panels data: ', response.data);
+                        $rootScope.panels = response.data;
                     });
             });
 
