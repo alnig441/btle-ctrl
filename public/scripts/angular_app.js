@@ -638,7 +638,7 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
         //            });
         //    });
 
-        $http.put('/panel', $scope.device)
+        $http.put('/panel', this.panel.device)
             .then(function(response){
                 console.log('response from /panel put: ', response);
                 $http.get('/panel')
