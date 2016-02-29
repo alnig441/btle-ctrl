@@ -170,7 +170,7 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
 
     $scope.newState = function(){
 
-        //$scope.device = this.panel.device;
+        $scope.device = this.panel.device;
 
         console.log('newState ', this.panel);
 
@@ -183,7 +183,7 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
         //            });
         //    });
 
-        $http.put('/panel', this.panel.device)
+        $http.put('/panel', $scope.device)
             .then(function(response){
                 console.log('response from /panel put: ', response);
                 $http.get('/panel')
