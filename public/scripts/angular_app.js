@@ -625,11 +625,6 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
 
     $scope.newState = function(){
 
-        $http.get('/panel')
-            .then(function(response){
-                $rootScope.panels = response.data;
-            });
-
         $scope.device = this.panel.device;
 
         console.log('newState ', this.panel.device, $rootScope.panels);
@@ -654,31 +649,31 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
 
     };
 
-    $scope.master = function(choice){
-
-        console.log('master switch: ', choice, $rootScope.panels);
-        var date = new Date();
-        date = Date.parse(date);
-
-        if(choice === 'on'){
-
-            for(var i = 0 ; i < $rootScope.panels.length ; i ++, date += 1000){
-                $rootScope.panels[i].device.date = date;
-                $rootScope.panels[i].device.device_on = false;
-                $http.put('/panel', $rootScope.panels[i]);
-            }
-        }
-
-        if(choice === 'off'){
-
-            for(var j = 0 ; j < $rootScope.panels.length ; j ++, date += 1000){
-                $rootScope.panels[j].device.date = date;
-                $rootScope.panels[j].device.device_on = true;
-                $http.put('/panel', $rootScope.panels[j]);
-            }
-
-        }
-    };
+    //$scope.master = function(choice){
+    //
+    //    console.log('master switch: ', choice, $rootScope.panels);
+    //    var date = new Date();
+    //    date = Date.parse(date);
+    //
+    //    if(choice === 'on'){
+    //
+    //        for(var i = 0 ; i < $rootScope.panels.length ; i ++, date += 1000){
+    //            $rootScope.panels[i].device.date = date;
+    //            $rootScope.panels[i].device.device_on = false;
+    //            $http.put('/panel', $rootScope.panels[i]);
+    //        }
+    //    }
+    //
+    //    if(choice === 'off'){
+    //
+    //        for(var j = 0 ; j < $rootScope.panels.length ; j ++, date += 1000){
+    //            $rootScope.panels[j].device.date = date;
+    //            $rootScope.panels[j].device.device_on = true;
+    //            $http.put('/panel', $rootScope.panels[j]);
+    //        }
+    //
+    //    }
+    //};
 
     $scope.showOptions = function(url){
         //console.log('..changing to options view..', this);
