@@ -33,59 +33,127 @@ router.get('/', function(req, res, error){
 
 });
 
+
 router.put('/', function(req, res, error){
 
     console.log('panel put: ', req.body);
 
-    var on = '58010301ff00ffffff',
-        off = '58010301ff00000000',
-        gattArgs;
+    var newRes;
 
-    switch(req.body.device_on){
-        case true:
-            console.log('case true');
-            req.body.device_on = false;
-            gattArgs = call.buildGattargs(req.body.mac, off);
-            break;
-        case false:
-            console.log('case false');
-            req.body.device_on = true;
-            gattArgs = call.buildGattargs(req.body.mac, on);
-            break;
-    };
 
-    var child = spawn('gatttool', gattArgs);
+    //TEST
 
-    child.stdout.on('data', function(data) {
-        res.send(data);
-        child.kill();
-    })
+    pg.connect(connectionString, function(err, client, done) {
+        var query = client.query("SELECT * FROM devices WHERE id='" + req.body.id + "'", function(error, result) {
+            if(error){console.log('there was an error: ', error)}
+        })
 
-    child.on('exit', function(code) {
-        console.log('spawned process ended on exit code: ', code);
-        if(code === 0){
-            console.log('gatttool run success');
+        query.on('row', function(row, result) {
+            client.end();
+            newRes = row;
 
-            pg.connect(connectionString, function(err, client, done) {
-                var query = client.query("UPDATE devices SET device_on='" + req.body.device_on + "' where mac='" + req.body.mac + "'", function(error, result) {
-                    if(error){console.log('there was an error: ', error)}
-                })
+            var on = '58010301ff00ffffff',
+                off = '58010301ff00000000',
+                gattArgs;
 
-                query.on('end', function(result) {
-                    client.end();
-                })
+            switch(newRes.device_on){
+                case true:
+                    console.log('case true');
+                    newRes.device_on = false;
+                    gattArgs = call.buildGattargs(newRes.mac, off);
+                    break;
+                case false:
+                    console.log('case false');
+                    newRes.device_on = true;
+                    gattArgs = call.buildGattargs(newRes.mac, on);
+                    break;
+            };
+
+            console.log('testing: ', newRes);
+
+            var child = spawn('gatttool', gattArgs);
+
+            child.stdout.on('data', function(data) {
+                res.send(data);
+                child.kill();
             })
 
-            res.status(200).send('DONE');
-        }
-        else {
-            res.status(200).send("CHECK HCICONFIG");
-        }
+            child.on('exit', function(code) {
+                console.log('spawned process ended on exit code: ', code);
+                if(code === 0){
+                    console.log('gatttool run success');
+
+                    pg.connect(connectionString, function(err, client, done) {
+                        var query = client.query("UPDATE devices SET device_on='" + newRes.device_on + "' where mac='" + newRes.mac + "'", function(error, result) {
+                            if(error){console.log('there was an error: ', error)}
+                        })
+
+                        query.on('end', function(result) {
+                            client.end();
+                        })
+                    })
+
+                    res.status(200).send('DONE');
+                }
+                else {
+                    res.status(200).send("CHECK HCICONFIG");
+                }
+            })
+
+        })
     })
 
-    //res.status(200).send('DONE');
+
+    //TEST END
 
 
-})
+    //var on = '58010301ff00ffffff',
+    //    off = '58010301ff00000000',
+    //    gattArgs;
+    //
+    //switch(req.body.device_on){
+    //    case true:
+    //        console.log('case true');
+    //        req.body.device_on = false;
+    //        gattArgs = call.buildGattargs(req.body.mac, off);
+    //        break;
+    //    case false:
+    //        console.log('case false');
+    //        req.body.device_on = true;
+    //        gattArgs = call.buildGattargs(req.body.mac, on);
+    //        break;
+    //};
+    //
+    //var child = spawn('gatttool', gattArgs);
+    //
+    //child.stdout.on('data', function(data) {
+    //    res.send(data);
+    //    child.kill();
+    //})
+    //
+    //child.on('exit', function(code) {
+    //    console.log('spawned process ended on exit code: ', code);
+    //    if(code === 0){
+    //        console.log('gatttool run success');
+    //
+    //        pg.connect(connectionString, function(err, client, done) {
+    //            var query = client.query("UPDATE devices SET device_on='" + req.body.device_on + "' where mac='" + req.body.mac + "'", function(error, result) {
+    //                if(error){console.log('there was an error: ', error)}
+    //            })
+    //
+    //            query.on('end', function(result) {
+    //                client.end();
+    //            })
+    //        })
+    //
+    //        res.status(200).send('DONE');
+    //    }
+    //    else {
+    //        res.status(200).send("CHECK HCICONFIG");
+    //    }
+    //})
+
+
+});
 
 module.exports = router;

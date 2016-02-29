@@ -174,25 +174,20 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
 
         console.log('newState ', this.panel.device, $rootScope);
 
-        $http.get('/panel')
-            .then(function(response){
-                $rootScope.panels = response.data;
-                $http.put('/panel', this.panel.device)
-                    .then(function(response){
-                        console.log('response from panel put: ', response);
-                    })
-            });
-
-
-        //$http.put('/panel', this.panel.device)
+        //$http.get('/panel')
         //    .then(function(response){
-        //        console.log('response from /panel put: ', response);
-        //        $http.get('/panel')
+        //        $rootScope.panels = response.data;
+        //        $http.put('/panel', this.panel.device)
         //            .then(function(response){
-        //                $rootScope.temp = response.data;
-        //                $rootScope.panels = $rootScope.temp;
+        //                console.log('response from panel put: ', response);
         //            });
         //    });
+
+
+        $http.put('/panel', this.panel.device)
+            .then(function(response){
+                console.log('response from /panel put: ', response);
+            });
 
     };
 
