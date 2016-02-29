@@ -42,80 +42,80 @@ router.put('/', function(req, res, error){
     var gattArgs;
     var setpoint;
 
-    if(req.body.device){
+    //if(req.body.device){
+    //
+    //    switch (req.body.device.device_on) {
+    //        case true:
+    //            req.body.device.device_on = false;
+    //            setpoint = new Date(req.body.device.date);
+    //            gattArgs = call.buildGattargs(req.body.device.mac, off);
+    //            break;
+    //        case false:
+    //            req.body.device.device_on = true;
+    //            setpoint = new Date(req.body.device.date);
+    //            gattArgs = call.buildGattargs(req.body.device.mac, on);
+    //            break;
+    //    }
+    //
+    //    console.log('swithing ', req.body.device.location);
+    //
+    //    var job = schedule.scheduleJob('Master ON/OFF '+ req.body.device.location, setpoint, function(){
+    //
+    //        var child = spawn('gatttool', gattArgs);
+    //
+    //        child.stdout.on('data', function(data){
+    //
+    //            res.send(data);
+    //
+    //            child.kill();
+    //        });
+    //
+    //        child.on('exit', function(code){
+    //            console.log('spawned process ended on exit code: ', code);
+    //
+    //            if(code === 0){
+    //                console.log('gatttool run success');
+    //
+    //            }
+    //            else {
+    //                console.log('check hciconfig');
+    //            }
+    //
+    //        });
+    //
+    //    });
+    //
+    //    job.on('scheduled', function(date){
+    //        console.log('job schedule success', date);
+    //
+    //    });
+    //
+    //    job.on('run', function(){
+    //        console.log('job ran');
+    //
+    //        pg.connect(connectionString, function (err, client, done) {
+    //
+    //            var query = client.query("UPDATE devices SET device_on='" + req.body.device.device_on + "' where mac='" + req.body.device.mac + "'", function (error, result) {
+    //                if (error) {
+    //                    console.log('there was an error ', error);
+    //                }
+    //            });
+    //
+    //            query.on('end', function (result) {
+    //                client.end();
+    //            })
+    //
+    //        });
+    //
+    //
+    //    });
+    //
+    //    var devices = schedule.scheduledJobs;
+    //    res.send(devices);
+    //
+    //}
 
-        switch (req.body.device.device_on) {
-            case true:
-                req.body.device.device_on = false;
-                setpoint = new Date(req.body.device.date);
-                gattArgs = call.buildGattargs(req.body.device.mac, off);
-                break;
-            case false:
-                req.body.device.device_on = true;
-                setpoint = new Date(req.body.device.date);
-                gattArgs = call.buildGattargs(req.body.device.mac, on);
-                break;
-        }
-
-        console.log('swithing ', req.body.device.location);
-
-        var job = schedule.scheduleJob('Master ON/OFF '+ req.body.device.location, setpoint, function(){
-
-            var child = spawn('gatttool', gattArgs);
-
-            child.stdout.on('data', function(data){
-
-                res.send(data);
-
-                child.kill();
-            });
-
-            child.on('exit', function(code){
-                console.log('spawned process ended on exit code: ', code);
-
-                if(code === 0){
-                    console.log('gatttool run success');
-
-                }
-                else {
-                    console.log('check hciconfig');
-                }
-
-            });
-
-        });
-
-        job.on('scheduled', function(date){
-            console.log('job schedule success', date);
-
-        });
-
-        job.on('run', function(){
-            console.log('job ran');
-
-            pg.connect(connectionString, function (err, client, done) {
-
-                var query = client.query("UPDATE devices SET device_on='" + req.body.device.device_on + "' where mac='" + req.body.device.mac + "'", function (error, result) {
-                    if (error) {
-                        console.log('there was an error ', error);
-                    }
-                });
-
-                query.on('end', function (result) {
-                    client.end();
-                })
-
-            });
-
-
-        });
-
-        var devices = schedule.scheduledJobs;
-        res.send(devices);
-
-    }
-
-    else if(!req.body.device){
+    //else if(!req.body.device){
 
         switch (req.body.device_on) {
             case true:
@@ -150,6 +150,7 @@ router.put('/', function(req, res, error){
                     });
 
                     query.on('row', function(row){
+
                         res.send(row);
 
                     })
@@ -173,7 +174,7 @@ router.put('/', function(req, res, error){
 
         res.status(200);
 
-    }
+    //}
 
 
 });
