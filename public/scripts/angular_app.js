@@ -639,8 +639,6 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
                     });
             });
 
-        $rootScope.template.url = $rootScope.template.default;
-
     };
 
     $scope.showOptions = function(url){
