@@ -642,7 +642,7 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
 
     $scope.master = function(choice){
 
-        console.log('master switch: ', $rootScope.panels);
+        console.log('master switch: ', choice, $rootScope.panels);
         var date = new Date();
         date = Date.parse(date);
 

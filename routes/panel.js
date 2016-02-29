@@ -57,6 +57,8 @@ router.put('/', function(req, res, error){
                 break;
         }
 
+        console.log('swithing ', req.body.device.location);
+
         var job = schedule.scheduleJob('Master ON/OFF '+ req.body.device.location, setpoint, function(){
 
             var child = spawn('gatttool', gattArgs);
