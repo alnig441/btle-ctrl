@@ -179,8 +179,8 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
                 console.log('response from /panel put: ', response);
                 $http.get('/panel')
                     .then(function(response){
-                        $rootScope.panels = response.data;
                         $rootScope.temp = response.data;
+                        $rootScope.panels = $rootScope.temp;
                     });
             });
 
