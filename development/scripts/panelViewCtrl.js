@@ -1,5 +1,7 @@
 app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$mdMedia', '$mdDialog', '$timeout', '$interval', function($scope, $rootScope, $http, $location, $mdMedia, $mdDialog, $timeout, $interval){
 
+    console.log('in panelViewCtrl - rootScope: ', $rootScope);
+
     $http.get('http://api.sunrise-sunset.org/json?lat=44.891123.7201600&lng=-93.359752&formatted=0')
         .then(function (response) {
             $rootScope.sunset = response.data.results.sunset;
@@ -170,18 +172,7 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
 
     $scope.newState = function(){
 
-        $scope.device = this.panel.device;
-
-        console.log('newState ', this.panel.device, $rootScope.panels);
-
-        //$http.get('/panel')
-        //    .then(function(response){
-        //        $rootScope.panels = response.data;
-        //        $http.put('/panel', $scope.device)
-        //            .then(function(response){
-        //                console.log('response from /panel put: ', response);
-        //            });
-        //    });
+        console.log('newState ', this.panel.device, $rootScope);
 
         $http.put('/panel', this.panel.device)
             .then(function(response){
@@ -189,36 +180,11 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
                 $http.get('/panel')
                     .then(function(response){
                         $rootScope.panels = response.data;
+                        $rootScope.temp = response.data;
                     });
             });
 
     };
-
-    //$scope.master = function(choice){
-    //
-    //    console.log('master switch: ', choice, $rootScope.panels);
-    //    var date = new Date();
-    //    date = Date.parse(date);
-    //
-    //    if(choice === 'on'){
-    //
-    //        for(var i = 0 ; i < $rootScope.panels.length ; i ++, date += 1000){
-    //            $rootScope.panels[i].device.date = date;
-    //            $rootScope.panels[i].device.device_on = false;
-    //            $http.put('/panel', $rootScope.panels[i]);
-    //        }
-    //    }
-    //
-    //    if(choice === 'off'){
-    //
-    //        for(var j = 0 ; j < $rootScope.panels.length ; j ++, date += 1000){
-    //            $rootScope.panels[j].device.date = date;
-    //            $rootScope.panels[j].device.device_on = true;
-    //            $http.put('/panel', $rootScope.panels[j]);
-    //        }
-    //
-    //    }
-    //};
 
     $scope.showOptions = function(url){
         //console.log('..changing to options view..', this);
