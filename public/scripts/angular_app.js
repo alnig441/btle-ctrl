@@ -625,6 +625,11 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
 
     $scope.newState = function(){
 
+        $http.get('/panel')
+            .then(function(response){
+                $rootScope.panels = response.data;
+            });
+
         $scope.device = this.panel.device;
 
         console.log('newState ', this.panel.device, $rootScope.panels);
