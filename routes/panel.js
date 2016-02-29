@@ -35,7 +35,7 @@ router.get('/', function(req, res, error){
 
 router.put('/', function(req, res, error){
 
-    //console.log('panel put ', req.body);
+    console.log('panel put ', req.body);
 
     var on = '58010301ff00ffffff';
     var off = '58010301ff00000000';
@@ -53,11 +53,23 @@ router.put('/', function(req, res, error){
             break;
     }
 
-    if(req.body.date){
+    switch (req.body.device.device_on) {
+        case true:
+            req.body.device.device_on = false;
+            setpoint = new Date(req.body.device.date);
+            gattArgs = call.buildGattargs(req.body.device.mac, off);
+            break;
+        case false:
+            req.body.device.device_on = true;
+            setpoint = new Date(req.body.device.date);
+            gattArgs = call.buildGattargs(req.body.device.mac, on);
+            break;
+    }
 
-        setpoint = new Date(req.body.date);
 
-        var job = schedule.scheduleJob('Master ON/OFF '+ req.body.location, setpoint, function(){
+    if(req.body.device.date){
+
+        var job = schedule.scheduleJob('Master ON/OFF '+ req.body.device.location, setpoint, function(){
 
             var child = spawn('gatttool', gattArgs);
 
