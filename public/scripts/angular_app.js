@@ -627,7 +627,7 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
 
         $scope.device = this.panel.device;
 
-        console.log('newState ', this.panel.device, $scope.device);
+        console.log('newState ', this.panel.device, $rootScope.panels);
 
         //$http.get('/panel')
         //    .then(function(response){
