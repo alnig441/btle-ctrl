@@ -195,6 +195,7 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
             .then(function(response){
                 $http.get('/panel')
                     .then(function(response){
+                        console.log('effing panels ', response.data);
                         $rootScope.panels = response.date;
                     })
             })
