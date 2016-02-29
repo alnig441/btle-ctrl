@@ -31,7 +31,6 @@ app.config(function($routeProvider, $locationProvider, $mdThemingProvider, $mdIc
 
 });
 
-
 ;app.controller('loginCtrl',['$scope', '$rootScope', '$http', '$location', '$mdDialog', '$mdMedia', function ($scope, $rootScope, $http, $location, $mdDialog, $mdMedia){
 
     //console.log('in login Ctrl - rootScopes ', $rootScope);
@@ -456,11 +455,8 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
 
 ;app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$mdMedia', '$mdDialog', '$timeout', '$interval', function($scope, $rootScope, $http, $location, $mdMedia, $mdDialog, $timeout, $interval){
 
-    console.log('panelViewCtrl rootscope ', $rootScope);
-
     $http.get('http://api.sunrise-sunset.org/json?lat=44.891123.7201600&lng=-93.359752&formatted=0')
         .then(function (response) {
-            //console.log(response);
             $rootScope.sunset = response.data.results.sunset;
             $rootScope.sunrise = response.data.results.sunrise;
         });
@@ -652,6 +648,32 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
                     });
             });
 
+    };
+
+    $scope.master = function(choice){
+
+        console.log('master switch: ', choice, $rootScope.panels);
+        var date = new Date();
+        date = Date.parse(date);
+
+        if(choice === 'on'){
+
+            for(var i = 0 ; i < $rootScope.panels.length ; i ++, date += 1000){
+                $rootScope.panels[i].device.date = date;
+                $rootScope.panels[i].device.device_on = false;
+                $http.put('/panel', $rootScope.panels[i]);
+            }
+        }
+
+        if(choice === 'off'){
+
+            for(var j = 0 ; j < $rootScope.panels.length ; j ++, date += 1000){
+                $rootScope.panels[j].device.date = date;
+                $rootScope.panels[j].device.device_on = true;
+                $http.put('/panel', $rootScope.panels[j]);
+            }
+
+        }
     };
 
     $scope.showOptions = function(url){
