@@ -66,7 +66,7 @@ router.put('/', function(req, res, error){
         if(code === 0){
             console.log('gatttool run success');
 
-            pq.connect(connectionString, function(err, client, done) {
+            pg.connect(connectionString, function(err, client, done) {
                 var query = client.query("UPDATE devices SET device_on='" + req.body.device_on + "' where mac='" + req.body.mac + "'", function(error, result) {
                     if(error){console.log('there was an error: ', error)}
                 })
