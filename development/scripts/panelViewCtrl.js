@@ -186,19 +186,7 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
         $http.put('/panel', this.panel.device)
             .then(function(response){
                 console.log('response from /panel put: ', response);
-                $http.get('/panel')
-                    .then(function(response){
-                        console.log('refreshing panels data: ', response.data);
-                        $rootScope.panels = response.data;
-                    });
-            })
-            .then(function(response){
-                $http.get('/panel')
-                    .then(function(response){
-                        console.log('effing panels ', response.data);
-                        $rootScope.panels = response.date;
-                    })
-            })
+            });
 
     };
 
