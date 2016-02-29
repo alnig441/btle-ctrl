@@ -189,7 +189,7 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
                 $http.get('/panel')
                     .then(function(response){
                         $rootScope.panels = response.data;
-                    })
+                    });
             });
 
     };

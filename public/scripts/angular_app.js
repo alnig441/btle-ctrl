@@ -625,27 +625,27 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
 
     $scope.newState = function(){
 
-        //$scope.device = this.panel.device;
+        $scope.device = this.panel.device;
 
-        console.log('newState ', this.panel);
+        console.log('newState ', this.panel.device, $scope.device);
 
-        $http.get('/panel')
+        //$http.get('/panel')
+        //    .then(function(response){
+        //        $rootScope.panels = response.data;
+        //        $http.put('/panel', $scope.device)
+        //            .then(function(response){
+        //                console.log('response from /panel put: ', response);
+        //            });
+        //    });
+
+        $http.put('/panel', $scope.device)
             .then(function(response){
-                $rootScope.panels = response.data;
-                $http.put('/panel', $scope.device)
+                console.log('response from /panel put: ', response);
+                $http.get('/panel')
                     .then(function(response){
-                        console.log('response from /panel put: ', response);
+                        $rootScope.panels = response.data;
                     });
             });
-
-        //$http.put('/panel', this.panel.device)
-        //    .then(function(response){
-        //        console.log('response from /panel put: ', response);
-        //        $http.get('/panel')
-        //            .then(function(response){
-        //                $rootScope.panels = response.data;
-        //            })
-        //    });
 
     };
 
