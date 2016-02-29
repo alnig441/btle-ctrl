@@ -172,7 +172,7 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
 
         $scope.device = this.panel.device;
 
-        console.log('newState ', this.panel);
+        console.log('newState ', this.panel.device, $scope.device);
 
         //$http.get('/panel')
         //    .then(function(response){
