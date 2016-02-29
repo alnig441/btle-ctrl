@@ -35,7 +35,7 @@ router.get('/', function(req, res, error){
 
 router.put('/', function(req, res, error){
 
-    //console.log('panel put ', req.body);
+    console.log('panel put ', req.body);
 
     var on = '58010301ff00ffffff';
     var off = '58010301ff00000000';
