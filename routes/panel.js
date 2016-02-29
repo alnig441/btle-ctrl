@@ -35,39 +35,27 @@ router.get('/', function(req, res, error){
 
 router.put('/', function(req, res, error){
 
-    console.log('panel put ', req.body);
+    //console.log('panel put ', req.body);
 
     var on = '58010301ff00ffffff';
     var off = '58010301ff00000000';
     var gattArgs;
     var setpoint;
 
-    switch (req.body.device_on) {
-        case true:
-            req.body.device_on = false;
-            gattArgs = call.buildGattargs(req.body.mac, off);
-            break;
-        case false:
-            req.body.device_on = true;
-            gattArgs = call.buildGattargs(req.body.mac, on);
-            break;
-    }
+    if(req.body.device){
 
-    switch (req.body.device.device_on) {
-        case true:
-            req.body.device.device_on = false;
-            setpoint = new Date(req.body.device.date);
-            gattArgs = call.buildGattargs(req.body.device.mac, off);
-            break;
-        case false:
-            req.body.device.device_on = true;
-            setpoint = new Date(req.body.device.date);
-            gattArgs = call.buildGattargs(req.body.device.mac, on);
-            break;
-    }
-
-
-    if(req.body.device.date){
+        switch (req.body.device.device_on) {
+            case true:
+                req.body.device.device_on = false;
+                setpoint = new Date(req.body.device.date);
+                gattArgs = call.buildGattargs(req.body.device.mac, off);
+                break;
+            case false:
+                req.body.device.device_on = true;
+                setpoint = new Date(req.body.device.date);
+                gattArgs = call.buildGattargs(req.body.device.mac, on);
+                break;
+        }
 
         var job = schedule.scheduleJob('Master ON/OFF '+ req.body.device.location, setpoint, function(){
 
@@ -105,7 +93,7 @@ router.put('/', function(req, res, error){
 
             pg.connect(connectionString, function (err, client, done) {
 
-                var query = client.query("UPDATE devices SET device_on='" + req.body.device_on + "' where mac='" + req.body.mac + "'", function (error, result) {
+                var query = client.query("UPDATE devices SET device_on='" + req.body.device.device_on + "' where mac='" + req.body.device.mac + "'", function (error, result) {
                     if (error) {
                         console.log('there was an error ', error);
                     }
@@ -125,7 +113,18 @@ router.put('/', function(req, res, error){
 
     }
 
-    else{
+    else if(!req.body.device){
+
+        switch (req.body.device_on) {
+            case true:
+                req.body.device_on = false;
+                gattArgs = call.buildGattargs(req.body.mac, off);
+                break;
+            case false:
+                req.body.device_on = true;
+                gattArgs = call.buildGattargs(req.body.mac, on);
+                break;
+        }
 
         var child = spawn('gatttool', gattArgs);
 
