@@ -181,9 +181,10 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
                     .then(function(response){
                         $rootScope.panels = response.data;
                         $rootScope.temp = response.data;
-                        this.panel.device = {};
                     });
             });
+
+        $rootScope.template.url = $rootScope.template.default;
 
     };
 

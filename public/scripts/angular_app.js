@@ -636,9 +636,10 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
                     .then(function(response){
                         $rootScope.panels = response.data;
                         $rootScope.temp = response.data;
-                        this.panel.device = {};
                     });
             });
+
+        $rootScope.template.url = $rootScope.template.default;
 
     };
 
