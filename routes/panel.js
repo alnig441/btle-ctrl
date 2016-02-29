@@ -156,4 +156,70 @@ router.put('/', function(req, res, error){
 
 });
 
+router.post('/master', function(req, res, error) {
+
+    console.log('in panel/master: ', req.body);
+
+    var on = '58010301ff00ffffff';
+    var off = '58010301ff00000000';
+    var setpoint = new Date(req.body.date);
+    var gattArgs;
+
+    req.body.device_on ? gattArgs = call.buildGattargs(req.body.mac, off) : gattArgs = call.buildGattargs(req.body.mac, on);
+
+    var job = schedule.scheduleJob('master ON/OFF ' + req.body.location + ' ' + setpoint, setpoint, function(){
+
+        var child = spawn('gatttool', gattArgs);
+
+        child.stdout.on('data', function(data){
+
+            res.send(data);
+
+            child.kill();
+        });
+
+        child.on('exit', function (code) {
+            console.log('spawned process ended on exit code: ', code);
+            if (code === 0) {
+                c = code;
+                console.log('gatttool run success');
+
+            }
+            else {
+                console.log('check hciconfig');
+            }
+
+        });
+
+
+    });
+
+    job.on('run', function(){
+        console.log('my job ran');
+
+        pg.connect(connectionString, function (err, client, done) {
+
+            var query = client.query("UPDATE devices SET device_on='" + req.body.device_on + "' where mac='" + req.body.mac + "'", function (error, result) {
+                if (error) {
+                    console.log('there was an error ', error);
+                }
+            })
+
+            query.on('end', function (result) {
+                client.end();
+            })
+
+        });
+
+
+    });
+
+
+    var items = schedule.scheduledJobs;
+    console.log('scheduled jobs: ', Object.keys(items));
+    res.send(items);
+
+
+});
+
 module.exports = router;

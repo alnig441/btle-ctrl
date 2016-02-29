@@ -172,22 +172,37 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
 
     $scope.newState = function(){
 
-        console.log('newState ', this.panel.device, $rootScope);
-
-        //$http.get('/panel')
-        //    .then(function(response){
-        //        $rootScope.panels = response.data;
-        //        $http.put('/panel', this.panel.device)
-        //            .then(function(response){
-        //                console.log('response from panel put: ', response);
-        //            });
-        //    });
-
-
         $http.put('/panel', this.panel.device)
             .then(function(response){
                 console.log('response from /panel put: ', response);
             });
+
+    };
+
+    $scope.master = function(option){
+
+        var now = new Date();
+        now = Date.parse(now);
+
+        if(option === 'on'){
+
+            for(var i = 0 ; i < $rootScope.panels.length ; i ++, now += 1000){
+                $rootScope.panels[i].device.date = now;
+                $rootScope.panels[i].device.device_on = false;
+                $http.post('/panel/master', $rootScope.panels[i].device);
+            }
+
+        }
+
+        if(option === 'off'){
+
+            for(var i = 0 ; i < $rootScope.panels.length ; i ++, now += 1000){
+                $rootScope.panels[i].device.date = now;
+                $rootScope.panels[i].device.device_on = true;
+                $http.post('/panel/master', $rootScope.panels[i].device);
+            }
+
+        }
 
     };
 
