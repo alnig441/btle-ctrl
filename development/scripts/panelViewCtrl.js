@@ -6,10 +6,10 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
             $rootScope.sunrise = response.data.results.sunrise;
         });
 
-    $http.get('/panel')
-        .then(function(response){
-            $rootScope.panels = response.data;
-        });
+    //$http.get('/panel')
+    //    .then(function(response){
+    //        $rootScope.panels = response.data;
+    //    });
 
     $http.get('/profiles/on_at_sunset')
         .then(function(response){
@@ -174,23 +174,23 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
 
         console.log('newState ', this.panel);
 
-        //$http.get('/panel')
-        //    .then(function(response){
-        //        $rootScope.panels = response.data;
-        //        $http.put('/panel', $scope.device)
-        //            .then(function(response){
-        //                console.log('response from /panel put: ', response);
-        //            });
-        //    });
-
-        $http.put('/panel', this.panel.device)
+        $http.get('/panel')
             .then(function(response){
-                console.log('response from /panel put: ', response);
-                $http.get('/panel')
+                $rootScope.panels = response.data;
+                $http.put('/panel', $scope.device)
                     .then(function(response){
-                        $rootScope.panels = response.data;
-                    })
+                        console.log('response from /panel put: ', response);
+                    });
             });
+
+        //$http.put('/panel', this.panel.device)
+        //    .then(function(response){
+        //        console.log('response from /panel put: ', response);
+        //        $http.get('/panel')
+        //            .then(function(response){
+        //                $rootScope.panels = response.data;
+        //            })
+        //    });
 
     };
 

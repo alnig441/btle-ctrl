@@ -76,7 +76,7 @@ router.put('/', function(req, res, error){
                 })
             })
 
-            res.status(200).send(result);
+            res.status(200).send('DONE');
         }
         else {
             res.status(200).send("CHECK HCICONFIG");
