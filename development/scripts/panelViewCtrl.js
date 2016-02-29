@@ -6,10 +6,10 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
             $rootScope.sunrise = response.data.results.sunrise;
         });
 
-    //$http.get('/panel')
-    //    .then(function(response){
-    //        $rootScope.panels = response.data;
-    //    });
+    $http.get('/panel')
+        .then(function(response){
+            $rootScope.panels = response.data;
+        });
 
     $http.get('/profiles/on_at_sunset')
         .then(function(response){
