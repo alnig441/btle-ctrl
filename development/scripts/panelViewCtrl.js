@@ -1,10 +1,7 @@
 app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$mdMedia', '$mdDialog', '$timeout', '$interval', function($scope, $rootScope, $http, $location, $mdMedia, $mdDialog, $timeout, $interval){
 
-    console.log('panelViewCtrl rootscope ', $rootScope);
-
     $http.get('http://api.sunrise-sunset.org/json?lat=44.891123.7201600&lng=-93.359752&formatted=0')
         .then(function (response) {
-            console.log(response);
             $rootScope.sunset = response.data.results.sunset;
             $rootScope.sunrise = response.data.results.sunrise;
         });
@@ -186,6 +183,32 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
                     });
             });
 
+    };
+
+    $scope.master = function(choice){
+
+        console.log('master switch: ', $rootScope.panels);
+        var date = new Date();
+        date = Date.parse(date);
+
+        if(choice === 'on'){
+
+            for(var i = 0 ; i < $rootScope.panels.length ; i ++, date += 1000){
+                $rootScope.panels[i].date = date;
+                $rootScope.panels[i].device_on = 'false';
+                $http.put('/panel', $rootScope.panels[i]);
+            }
+        }
+
+        if(choice === 'off'){
+
+            for(var j = 0 ; j < $rootScope.panels.length ; j ++, date += 1000){
+                $rootScope.panels[j].date = date;
+                $rootScope.panels[j].device_on = 'true';
+                $http.put('/panel', $rootScope.panels[j]);
+            }
+
+        }
     };
 
     $scope.showOptions = function(url){

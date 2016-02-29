@@ -4,6 +4,7 @@ var pg = require('pg');
 var spawn = require('child_process').spawn;
 var exec = require('child_process').exec;
 var call = require('../public/scripts/myFunctions.min.js');
+var schedule = require('node-schedule');
 
 
 var connectionString = process.env.DATABASE_URL || 'postgres://localhost:5432/btle-ctrl';
@@ -16,11 +17,11 @@ router.get('/', function(req, res, error){
         var device = [];
         var query = client.query("SELECT * FROM devices ORDER BY location", function(error, result){
             if(error){console.log('there was an error ', error);}
-        })
+        });
 
         query.on('row', function(row, result){
             device.push({device: row});
-        })
+        });
 
         query.on('end',function(result){
             client.end();
@@ -34,11 +35,12 @@ router.get('/', function(req, res, error){
 
 router.put('/', function(req, res, error){
 
-    console.log('panel put ', req.body);
+    //console.log('panel put ', req.body);
 
     var on = '58010301ff00ffffff';
     var off = '58010301ff00000000';
     var gattArgs;
+    var setpoint;
 
     switch (req.body.device_on) {
         case true:
@@ -49,48 +51,112 @@ router.put('/', function(req, res, error){
             req.body.device_on = true;
             gattArgs = call.buildGattargs(req.body.mac, on);
             break;
-    };
+    }
 
+    if(req.body.date){
 
-    var child = spawn('gatttool', gattArgs);
+        setpoint = new Date(req.body.date);
 
-    child.stdout.on('data', function(data){
+        var job = schedule.scheduleJob('Master ON/OFF '+ req.body.location, setpoint, function(){
 
-        res.send(data);
+            var child = spawn('gatttool', gattArgs);
 
-        child.kill();
-    });
+            child.stdout.on('data', function(data){
 
-    child.on('exit', function(code){
-        console.log('spawned process ended on exit code: ', code);
-        if(code === 0){
+                res.send(data);
 
-            console.log('gatttool run success');
+                child.kill();
+            });
 
-            pg.connect(connectionString, function(err, client, done){
+            child.on('exit', function(code){
+                console.log('spawned process ended on exit code: ', code);
 
-                var query = client.query("UPDATE devices SET device_on='" + req.body.device_on + "' where mac='" + req.body.mac + "'", function(error, result){
-                    if(error){console.log('there was an error ', error);}
-                })
+                if(code === 0){
+                    console.log('gatttool run success');
 
-                query.on('end',function(result){
+                }
+                else {
+                    console.log('check hciconfig');
+                }
+
+            });
+
+        });
+
+        job.on('scheduled', function(date){
+            console.log('job schedule success', date);
+
+        });
+
+        job.on('run', function(){
+            console.log('job ran');
+
+            pg.connect(connectionString, function (err, client, done) {
+
+                var query = client.query("UPDATE devices SET device_on='" + req.body.device_on + "' where mac='" + req.body.mac + "'", function (error, result) {
+                    if (error) {
+                        console.log('there was an error ', error);
+                    }
+                });
+
+                query.on('end', function (result) {
                     client.end();
-                    res.send(result);
                 })
 
-            })
+            });
 
-            res.status(200);
 
-        }
+        });
 
-        else {
-            res.status(200).send('check hciconfig');
-        }
+        var devices = schedule.scheduledJobs;
+        res.send(devices);
 
-    });
+    }
 
-    res.status(200);
+    else{
+
+        var child = spawn('gatttool', gattArgs);
+
+        child.stdout.on('data', function(data){
+
+            res.send(data);
+
+            child.kill();
+        });
+
+        child.on('exit', function(code){
+            console.log('spawned process ended on exit code: ', code);
+            if(code === 0){
+
+                console.log('gatttool run success');
+
+                pg.connect(connectionString, function(err, client, done){
+
+                    var query = client.query("UPDATE devices SET device_on='" + req.body.device_on + "' where mac='" + req.body.mac + "'", function(error, result){
+                        if(error){console.log('there was an error ', error);}
+                    });
+
+                    query.on('end',function(result){
+                        client.end();
+                        res.send(result);
+                    })
+
+                });
+
+                res.status(200);
+
+            }
+
+            else {
+                res.status(200).send('check hciconfig');
+            }
+
+        });
+
+        res.status(200);
+
+    }
+
 
 });
 

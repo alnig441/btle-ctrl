@@ -94,7 +94,6 @@ router.post('/schedule', function(req, res, error){
 
                 query.on('end', function (result) {
                     client.end();
-                    //res.send(result);
                 })
 
             });
@@ -158,7 +157,6 @@ router.post('/schedule', function(req, res, error){
 
                 query.on('end', function (result) {
                     client.end();
-                    res.send(result);
                 })
 
             });
@@ -249,13 +247,10 @@ router.post('/sun', function(req, res, error){
                 query.on('end', function (result) {
                     client.end();
                 })
-                //res.status(200);
 
             });
 
         });
-        ////var x = schedeule.scheduledJobs;
-        //console.log('scheduled jobs: ');
     }
 
     var items = schedule.scheduledJobs;

@@ -31,4 +31,3 @@ app.config(function($routeProvider, $locationProvider, $mdThemingProvider, $mdIc
 
 });
 
-
