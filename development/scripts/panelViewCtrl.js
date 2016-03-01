@@ -181,6 +181,8 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
 
     $scope.master = function(option){
 
+        console.log('in scope.master: ', option, $rootScope.panels);
+
         var now = new Date();
         now = Date.parse(now);
 
@@ -196,10 +198,10 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
 
         if(option === 'off'){
 
-            for(var i = 0 ; i < $rootScope.panels.length ; i ++, now += 1000){
-                $rootScope.panels[i].device.date = now;
-                $rootScope.panels[i].device.device_on = true;
-                $http.post('/panel/master', $rootScope.panels[i].device);
+            for(var j = 0 ; j < $rootScope.panels.length ; j ++, now += 1000){
+                $rootScope.panels[j].device.date = now;
+                $rootScope.panels[j].device.device_on = true;
+                $http.post('/panel/master', $rootScope.panels[j].device);
             }
 
         }

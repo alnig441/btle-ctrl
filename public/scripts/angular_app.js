@@ -636,6 +636,8 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
 
     $scope.master = function(option){
 
+        console.log('in scope.master: ', option, $rootScope.panels);
+
         var now = new Date();
         now = Date.parse(now);
 
@@ -650,6 +652,12 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
         }
 
         if(option === 'off'){
+
+            for(var j = 0 ; j < $rootScope.panels.length ; j ++, now += 1000){
+                $rootScope.panels[j].device.date = now;
+                $rootScope.panels[j].device.device_on = true;
+                $http.post('/panel/master', $rootScope.panels[j].device);
+            }
 
         }
 
