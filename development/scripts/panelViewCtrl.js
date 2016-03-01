@@ -184,6 +184,7 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
         console.log('in scope.master: ', option, $rootScope.panels);
 
         var now = new Date();
+        now.setMinutes(now.getMinutes()+1);
         now = Date.parse(now);
 
         if(option === 'on'){
