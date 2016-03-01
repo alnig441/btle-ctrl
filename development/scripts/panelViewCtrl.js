@@ -6,6 +6,30 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
         .then(function (response) {
             $rootScope.sunset = response.data.results.sunset;
             $rootScope.sunrise = response.data.results.sunrise;
+        })
+        .then(function(response){
+            $http.get('/profiles/on_at_sunset')
+                .then(function(response){
+                    $rootScope.on_at_sunset = response.data;
+                })
+                .then(function(){
+                    for(var i = 0; i < $rootScope.on_at_sunset.length; i++){
+                        $rootScope.on_at_sunset[i].sunset = $rootScope.sunset;
+                    }
+                });
+
+        })
+        .then(function(response){
+            $http.get('/profiles/off_at_sunrise')
+                .then(function(response){
+                    $rootScope.off_at_sunrise = response.data;
+                })
+                .then(function(){
+                    for(var i = 0; i < $rootScope.off_at_sunrise.length; i++){
+                        $rootScope.on_at_sunset[i].sunrise = $rootScope.sunrise;
+                    }
+                });
+
         });
 
     $http.get('/panel')
@@ -13,25 +37,7 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
             $rootScope.panels = response.data;
         });
 
-    $http.get('/profiles/on_at_sunset')
-        .then(function(response){
-            $rootScope.on_at_sunset = response.data;
-        })
-        .then(function(){
-        for(var i = 0; i < $rootScope.on_at_sunset.length; i++){
-            $rootScope.on_at_sunset[i].sunset = $rootScope.sunset;
-        }
-        });
 
-    $http.get('/profiles/off_at_sunrise')
-        .then(function(response){
-            $rootScope.off_at_sunrise = response.data;
-        })
-        .then(function(){
-            for(var i = 0; i < $rootScope.off_at_sunrise.length; i++){
-                $rootScope.on_at_sunset[i].sunrise = $rootScope.sunrise;
-            }
-        });
 
     $http.get('/profiles/master_off')
         .then(function(response){
