@@ -158,14 +158,22 @@ router.put('/', function(req, res, error){
 
 router.post('/master', function(req, res, error) {
 
-    console.log('in panel/master: ', req.body);
+    console.log('in panel/master: ', req.body, !req.body.device_on);
 
     var on = '58010301ff00ffffff';
     var off = '58010301ff00000000';
     var setpoint = new Date(req.body.date);
     var gattArgs;
 
-    req.body.device_on ? gattArgs = call.buildGattargs(req.body.mac, off) : gattArgs = call.buildGattargs(req.body.mac, on);
+    if(req.body.device_on){
+        setpoint = new Date(req.body.date);
+        gattArgs = call.buildGattargs(req.body.mac, on);
+    }
+
+    if(!req.body.device_on){
+        setpoint = new Date(req.body.date);
+        gattArgs = call.buildGattargs(req.body.mac, off);
+    }
 
     var job = schedule.scheduleJob('master ON/OFF ' + req.body.location + ' ' + setpoint, setpoint, function(){
 
