@@ -643,7 +643,7 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
 
         if(option === 'on'){
 
-            for(var i = 0 ; i < $rootScope.panels.length ; i ++, now += 1000){
+            for(var i = 0 ; i < $rootScope.panels.length ; i ++, now += 2000){
                 $rootScope.panels[i].device.date = now;
                 $rootScope.panels[i].device.device_on = false;
                 $http.post('/panel/master', $rootScope.panels[i].device);
@@ -653,7 +653,7 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
 
         if(option === 'off'){
 
-            for(var j = 0 ; j < $rootScope.panels.length ; j ++, now += 1000){
+            for(var j = 0 ; j < $rootScope.panels.length ; j ++, now += 2000){
                 $rootScope.panels[j].device.date = now;
                 $rootScope.panels[j].device.device_on = true;
                 $http.post('/panel/master', $rootScope.panels[j].device);
