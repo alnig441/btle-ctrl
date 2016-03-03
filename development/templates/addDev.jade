@@ -12,6 +12,19 @@ md-dialog(ng-controller='adminViewCtrl')
                     label Location:
                     input(type='text',ng-model='form.device.location')
 
+        md-toolbar
+            div.md-toolbar-tools
+                h2 Add Profile
+        md-content
+            div.md-dialog-content
+                md-input-container.md-block(flex-gt-sm)
+                    label Name:
+                    input(type='text', ng-model='form.profile.name')
+                md-input-container.md-block(flex-gt-sm)
+                    label Device State:
+                    input(type='text',ng-model='form.profile.state')
+
+
         md-dialog-actions
             span(flex)
             md-button.md-primary(ng-click="submit('add')") Add

@@ -110,4 +110,21 @@ router.post('/', function(req, res, error){
 
 });
 
+router.post('/add', function(req, res, error){
+
+    console.log('profiles add: ', req.body);
+
+    pg.connect(connectionString, function(err, client, done){
+
+        var query = client.query("INSERT INTO profiles (profile_name, turn_on) values($1, $2)", [req.body.name, req.body.state], function(error, result){
+            if(error){res.send(error);}
+        })
+        query.on('end',function(result){
+            client.end();
+            res.send(result);
+        })
+    })
+
+});
+
 module.exports = router;

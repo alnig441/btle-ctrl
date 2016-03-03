@@ -151,12 +151,27 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
 
         if(choice === 'add') {
 
-            console.log('in add device ', this.form);
+            console.log('in add device ');
 
-            $http.post('/admin', this.form.device)
-                .then(function(response){
-                    console.log(response);
-                });
+            if(this.form.profile){
+                console.log('we have profile');
+
+                $http.post('/profiles/add', this.form.profile)
+                    .then(function(response){
+                        console.log(response);
+                    });
+            }
+
+            if(this.form.device){
+                console.log('we have a device');
+
+                $http.post('/admin', this.form.device)
+                    .then(function(response){
+                        console.log(response);
+                    });
+
+            }
+
 
         }
 
