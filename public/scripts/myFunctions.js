@@ -47,6 +47,21 @@ var call = {
 
         return gattArgs;
 
+    },
+
+    addProfiles: function(array1, array2){
+        var temp = {};
+
+        for(var prop in array1){
+            if(prop !== 'id'){
+                temp[prop] = array1[prop];
+            }
+
+        }
+
+        console.log(temp);
+        return temp;
+
     }
 };
 

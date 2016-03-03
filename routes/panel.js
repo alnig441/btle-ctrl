@@ -21,13 +21,32 @@ router.get('/', function(req, res, error){
 
         query.on('row', function(row, result){
             device.push({device: row});
-        });
 
-        query.on('end',function(result){
-            client.end();
-            //console.log(device);
-            res.send(device);
-        })
+            pg.connect(connectionString, function(err, client, done){
+
+                var query = client.query("SELECT * FROM memberships WHERE id='" + row.mac + "'", function(error, result){
+                    if(error){
+                        res.send(error);
+                    }
+                });
+                query.on('row', function(row){
+
+                    device.forEach(function(elem, index, array){
+
+                        if(elem.device.mac === row.id){
+                            device[index].device.profiles = call.addProfiles(row);
+                        }
+
+                    });
+                    res.send(device);
+                });
+
+                query.on('end', function(result){
+                    client.end();
+                })
+            })
+
+        });
 
     })
 

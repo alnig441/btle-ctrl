@@ -129,6 +129,21 @@ router.post('/', function(req, res, error){
 
         query.on('end', function(result){
             client.end();
+
+            pg.connect(connectionString, function(err, client, done){
+
+                var query = client.query("INSERT INTO memberships (id) values ($1)", [req.body.mac], function(error, result){
+                    if(error){
+                        res.send(error);
+                    }
+                })
+
+                query.on('end', function(result){
+                    client.end();
+                })
+
+            })
+
             res.send('device ' + req.body.mac + ' created');
 
         });
