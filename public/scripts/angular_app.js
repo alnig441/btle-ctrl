@@ -396,12 +396,19 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
 
         if(option === 'profiles'){
 
-            //console.log('in options profile ', this.scheduleDevice);
+            var x = this.scheduleDevice.profiles;
+            var mac = this.scheduleDevice.mac;
 
-            $http.post('/profiles', this.scheduleDevice)
-                .then(function(response){
-                    console.log('from profiles route ', response);
-                });
+            x.forEach(function(elem, ind, arr){
+                elem.mac = mac;
+
+                $http.post('/profiles', elem)
+                    .then(function(response){
+                        console.log('from profiles route ', response);
+                    });
+
+            });
+
 
         }
          $rootScope.template.url = $rootScope.template.default;
