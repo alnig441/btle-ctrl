@@ -51,7 +51,6 @@ var call = {
 
     addProfiles: function(array1, array2){
         var temp = [];
-        console.log('in addProfiles: ');
 
         array2.forEach(function(elem2, index2, arr2){
 

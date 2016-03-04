@@ -8,84 +8,84 @@ var call = require('../public/scripts/myFunctions.min.js');
 
 var connectionString = process.env.DATABASE_URL || 'postgres://localhost:5432/btle-ctrl';
 
-router.get('/on_at_sunset', function(req, res, error){
-
-    pg.connect(connectionString, function(err, client, done){
-
-        var on_at_sunset = [];
-        var query = client.query("SELECT * FROM devices WHERE on_at_sunset ='true'", function(error, result){
-            if(error){console.log('there was an error ', error);}
-        })
-
-        query.on('row', function(row, result){
-            //console.log('in profiles: ', row);
-            on_at_sunset.push(row);
-
-        })
-
-        query.on('end',function(result){
-            client.end();
-            //console.log(profiles);
-            res.send(on_at_sunset);
-        })
-
-    })
-
-
-});
-
-
-router.get('/off_at_sunrise', function(req, res, error){
-
-    pg.connect(connectionString, function(err, client, done){
-
-        var on_at_sunset = [];
-        var query = client.query("SELECT * FROM devices WHERE off_at_sunrise ='true'", function(error, result){
-            if(error){console.log('there was an error ', error);}
-        })
-
-        query.on('row', function(row, result){
-            //console.log('in profiles: ', row);
-            on_at_sunset.push(row);
-
-        })
-
-        query.on('end',function(result){
-            client.end();
-            //console.log(profiles);
-            res.send(on_at_sunset);
-        })
-
-    })
+//router.get('/on_at_sunset', function(req, res, error){
+//
+//    pg.connect(connectionString, function(err, client, done){
+//
+//        var on_at_sunset = [];
+//        var query = client.query("SELECT * FROM devices WHERE on_at_sunset ='true'", function(error, result){
+//            if(error){console.log('JESPER there was an error ', error);}
+//        })
+//
+//        query.on('row', function(row, result){
+//            //console.log('in profiles: ', row);
+//            on_at_sunset.push(row);
+//
+//        })
+//
+//        query.on('end',function(result){
+//            client.end();
+//            //console.log(profiles);
+//            res.send(on_at_sunset);
+//        })
+//
+//    })
+//
+//
+//});
 
 
-});
+//router.get('/off_at_sunrise', function(req, res, error){
+//
+//    pg.connect(connectionString, function(err, client, done){
+//
+//        var on_at_sunset = [];
+//        var query = client.query("SELECT * FROM devices WHERE off_at_sunrise ='true'", function(error, result){
+//            if(error){console.log('ANDERS there was an error ', error);}
+//        })
+//
+//        query.on('row', function(row, result){
+//            //console.log('in profiles: ', row);
+//            on_at_sunset.push(row);
+//
+//        })
+//
+//        query.on('end',function(result){
+//            client.end();
+//            //console.log(profiles);
+//            res.send(on_at_sunset);
+//        })
+//
+//    })
+//
+//
+//});
 
-router.get('/master_off', function(req, res, error){
-
-    pg.connect(connectionString, function(err, client, done){
-
-        var on_at_sunset = [];
-        var query = client.query("SELECT * FROM devices WHERE master_off ='true'", function(error, result){
-            if(error){console.log('there was an error ', error);}
-        })
-
-        query.on('row', function(row, result){
-            //console.log('in profiles: ', row);
-            on_at_sunset.push(row);
-
-        })
-
-        query.on('end',function(result){
-            client.end();
-            //console.log(profiles);
-            res.send(on_at_sunset);
-        })
-
-    })
-
-
-});
+//router.get('/master_off', function(req, res, error){
+//
+//    pg.connect(connectionString, function(err, client, done){
+//
+//        var on_at_sunset = [];
+//        var query = client.query("SELECT * FROM devices WHERE master_off ='true'", function(error, result){
+//            if(error){console.log('RASMUS there was an error ', error);}
+//        })
+//
+//        query.on('row', function(row, result){
+//            //console.log('in profiles: ', row);
+//            on_at_sunset.push(row);
+//
+//        })
+//
+//        query.on('end',function(result){
+//            client.end();
+//            //console.log(profiles);
+//            res.send(on_at_sunset);
+//        })
+//
+//    })
+//
+//
+//});
 
 
 router.post('/', function(req, res, error){
@@ -108,8 +108,6 @@ router.post('/', function(req, res, error){
             query.on('end', function(result){
                 client.end();
             })
-
-            res.send(200);
 
         })
 
@@ -160,11 +158,12 @@ router.get('/', function(req, res, error){
         var profiles = [];
 
         var query = client.query("SELECT * FROM profiles", function(error, result){
-            if(error){console.log('there was an error ', error);}
+            if(error){console.log('PETER there was an error ', error);}
         })
 
         query.on('row', function(row, result){
             profiles.push({profile: row});
+
 
         })
 
@@ -178,5 +177,29 @@ router.get('/', function(req, res, error){
 
 });
 
+router.get('/:profile?', function(req, res, error){
+
+    var profile = {};
+
+    pg.connect(connectionString, function(err, client, done){
+
+        var query = client.query("SELECT result.id FROM (profiles CROSS JOIN connectedprofiles)as result WHERE result.profile_name='" + req.params.profile + "' AND result." + req.params.profile + "='true'", function(error, result){
+            if(error){console.log('JOHN there was an error ', error);}
+        })
+
+        query.on('row', function(row, result){
+
+        })
+
+        query.on('end',function(result){
+            client.end();
+            profile = result.rows;
+            res.send(profile);
+        })
+
+    })
+
+
+});
 
 module.exports = router;

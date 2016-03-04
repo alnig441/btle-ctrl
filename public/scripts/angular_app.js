@@ -509,12 +509,18 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
             $rootScope.panels = response.data;
         });
 
-
-
-    //$http.get('/profiles/master_off')
-    //    .then(function(response){
-    //        $rootScope.master_off = response.data;
-    //    });
+    $http.get('/profiles')
+        .then(function(response){
+            $rootScope.profiles = response.data;
+            var x = response.data;
+            $rootScope.connectedProfiles = {};
+            x.forEach(function(elem, ind, arr){
+                $http.get('/profiles/' + elem.profile.profile_name)
+                    .then(function(response){
+                        $rootScope.connectedProfiles[elem.profile.profile_name] = response.data;
+                    });
+            });
+        });
 
     //Setting timeout delay to 1hr past midnight
 
