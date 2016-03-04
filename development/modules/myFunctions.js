@@ -56,15 +56,18 @@ var call = {
         array2.forEach(function(elem2, index2, arr2){
 
             array1.forEach(function(elem1, index1, arr1){
-                if(elem1.id === elem2.mac){
-                    var x = {};
-                    for(var prop in elem1){
-                        if(prop !== 'id'){
-                            x[prop] = elem1[prop];
+                var y = [];
 
+                if(elem1.id === elem2.mac){
+                    for(var prop in elem1){
+                        var x = {};
+                        if(prop !== 'id'){
+                            x.name = prop;
+                            x.value = elem1[prop];
+                            y.push(x);
                         }
                     }
-                    arr2[index2].profiles = x;
+                    arr2[index2].profiles = y;
                     temp.push({device: arr2[index2]});
                 }
             });

@@ -13,9 +13,10 @@ md-dialog(ng-controller='optionsCtrl')
             md-input-container Master Off
                 md-checkbox(ng-model='scheduleDevice.master_off', value=false, aria-label='master off')
 
-        //div.md-dialog-content
-        //    md-input-container(ng-repeat='profile in profiles')
-        //            md-button(ng-model='form.profile', ng-click='apply("profiles")') {{profile.profile.profile_name}}
+        div.md-dialog-content
+            md-input-container(ng-repeat='profile in scheduleDevice.profiles')
+                md-checkbox(ng-model='profile.value', value=false, ng-click='apply("profiles")') {{profile.name}}
+
     div(layout)
         md-button(ng-click='apply("profiles")')
             md-icon done
