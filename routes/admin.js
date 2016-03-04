@@ -92,7 +92,7 @@ router.get('/scan', function(req, res, error){
 
     console.log('..scanning..');
 
-    /*FOR TESTING ONLY*/
+    ///*FOR TESTING ONLY*/
     //arr = test.toString().split(/\n/);
     //res.send(call.cleanArray(arr));
 
@@ -132,7 +132,7 @@ router.post('/', function(req, res, error){
 
             pg.connect(connectionString, function(err, client, done){
 
-                var query = client.query("INSERT INTO memberships (id) values ($1)", [req.body.mac], function(error, result){
+                var query = client.query("INSERT INTO connectedprofiles (id) values ($1)", [req.body.mac], function(error, result){
                     if(error){
                         res.send(error);
                     }
@@ -163,6 +163,21 @@ router.delete('/:mac?', function(req, res, error){
 
         query.on('end', function(result){
             client.end();
+
+            pg.connect(connectionString, function(err, client, done){
+
+                var query = client.query("DELETE FROM connectedprofiles WHERE id='" + req.body.mac +"'", function(error, result){
+                    if(error){
+                        res.send(error);
+                    }
+                });
+
+                query.on('end', function(result){
+                    client.end();
+                })
+
+            });
+
             res.send('user '+ req.params.mac + ' deleted');
         })
     })

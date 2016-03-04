@@ -78,7 +78,7 @@ app.controller('adminViewCtrl',['$scope', '$rootScope', '$http', '$mdMedia', '$m
             $http.get('/profiles')
                 .then(function(response){
                     $rootScope.profiles = response.data;
-
+                    console.log($rootScope.profiles);
                     $mdDialog.show(configDialog);
                     $scope.$watch(function() {
                         return $mdMedia('xs') || $mdMedia('sm');

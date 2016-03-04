@@ -30,7 +30,7 @@ router.get('/', function(req, res, error){
 
             pg.connect(connectionString, function(err, client, done){
 
-                var query = client.query("select * from memberships", function(error, result){
+                var query = client.query("select * from connectedprofiles", function(error, result){
                     if(err){
                         res.send(err);
                     }

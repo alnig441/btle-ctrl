@@ -90,6 +90,32 @@ router.get('/master_off', function(req, res, error){
 
 router.post('/', function(req, res, error){
 
+    console.log('profiles post: ');
+
+    var profiles = req.body.profiles;
+
+    profiles.forEach(function(elem, index, array){
+
+        console.log(elem.name);
+
+        pg.connect(connectionString, function(err, client, done){
+
+            var query = client.query("UPDATE connectedprofiles SET ("+ elem.name +") = ('" + elem.value + "') WHERE id='" + req.body.mac + "'", function(error, result){
+                if(err){
+                    res.send(err);
+                }
+            })
+            query.on('end', function(result){
+                client.end();
+            })
+
+            res.send(200);
+
+        })
+
+    });
+
+
     req.body.on_at_sunset ? req.body.on_at_sunset = true : req.body.on_at_sunset = false;
     req.body.off_at_sunrise ? req.body.off_at_sunrise = true : req.body.off_at_sunrise = false;
     req.body.master_off ? req.body.master_off = true : req.body.master_off = false;
@@ -129,7 +155,7 @@ router.post('/add', function(req, res, error){
 
             pg.connect(connectionString, function(err, client, done){
 
-                var query = client.query("ALTER TABLE memberships ADD COLUMN "+ req.body.name +" BOOLEAN", function(error, result){
+                var query = client.query("ALTER TABLE connectedprofiles ADD COLUMN "+ req.body.name +" BOOLEAN", function(error, result){
                     if(error){
                         res.send(error);
                     }
@@ -146,5 +172,31 @@ router.post('/add', function(req, res, error){
 
 
 });
+
+router.get('/', function(req, res, error){
+
+    pg.connect(connectionString, function(err, client, done){
+        var profiles = [];
+
+        var query = client.query("SELECT * FROM profiles", function(error, result){
+            if(error){console.log('there was an error ', error);}
+        })
+
+        query.on('row', function(row, result){
+            profiles.push({profile: row});
+
+        })
+
+        query.on('end',function(result){
+            client.end();
+            //console.log(profiles);
+            res.send(profiles);
+        })
+
+    })
+
+
+});
+
 
 module.exports = router;

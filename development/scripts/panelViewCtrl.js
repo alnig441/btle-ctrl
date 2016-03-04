@@ -2,35 +2,35 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
 
     console.log('in panelViewCtrl - rootScope: ', $rootScope);
 
-    $http.get('http://api.sunrise-sunset.org/json?lat=44.891123.7201600&lng=-93.359752&formatted=0')
-        .then(function (response) {
-            $rootScope.sunset = response.data.results.sunset;
-            $rootScope.sunrise = response.data.results.sunrise;
-        })
-        .then(function(response){
-            $http.get('/profiles/on_at_sunset')
-                .then(function(response){
-                    $rootScope.on_at_sunset = response.data;
-                })
-                .then(function(){
-                    for(var i = 0; i < $rootScope.on_at_sunset.length; i++){
-                        $rootScope.on_at_sunset[i].sunset = $rootScope.sunset;
-                    }
-                });
-
-        })
-        .then(function(response){
-            $http.get('/profiles/off_at_sunrise')
-                .then(function(response){
-                    $rootScope.off_at_sunrise = response.data;
-                })
-                .then(function(){
-                    for(var i = 0; i < $rootScope.off_at_sunrise.length; i++){
-                        $rootScope.on_at_sunset[i].sunrise = $rootScope.sunrise;
-                    }
-                });
-
-        });
+    //$http.get('http://api.sunrise-sunset.org/json?lat=44.891123.7201600&lng=-93.359752&formatted=0')
+    //    .then(function (response) {
+    //        $rootScope.sunset = response.data.results.sunset;
+    //        $rootScope.sunrise = response.data.results.sunrise;
+    //    })
+    //    .then(function(response){
+    //        $http.get('/profiles/on_at_sunset')
+    //            .then(function(response){
+    //                $rootScope.on_at_sunset = response.data;
+    //            })
+    //            .then(function(){
+    //                for(var i = 0; i < $rootScope.on_at_sunset.length; i++){
+    //                    $rootScope.on_at_sunset[i].sunset = $rootScope.sunset;
+    //                }
+    //            });
+    //
+    //    })
+    //    .then(function(response){
+    //        $http.get('/profiles/off_at_sunrise')
+    //            .then(function(response){
+    //                $rootScope.off_at_sunrise = response.data;
+    //            })
+    //            .then(function(){
+    //                for(var i = 0; i < $rootScope.off_at_sunrise.length; i++){
+    //                    $rootScope.on_at_sunset[i].sunrise = $rootScope.sunrise;
+    //                }
+    //            });
+    //
+    //    });
 
     $http.get('/panel')
         .then(function(response){
@@ -39,10 +39,10 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
 
 
 
-    $http.get('/profiles/master_off')
-        .then(function(response){
-            $rootScope.master_off = response.data;
-        });
+    //$http.get('/profiles/master_off')
+    //    .then(function(response){
+    //        $rootScope.master_off = response.data;
+    //    });
 
     //Setting timeout delay to 1hr past midnight
 

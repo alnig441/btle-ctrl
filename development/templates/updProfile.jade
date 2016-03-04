@@ -6,11 +6,11 @@ md-dialog(ng-controller='adminViewCtrl')
         md-dialog-content(ng-repeat='profile in profiles')
             div.md-dialog-content
                 md-input-container.md-block(flex-gt-sm)
-                    label(for='profile_name') Name: {{profile.profile.profile_name}}
-                    input(type='text',name='profile_name', ng-model='profile.profile.profile_name')
-                md-button.md-primary(ng-click="submit('update_profile')") Update
+                    label(for='profile_name') Name: {{profile.profile_name}}
+                    input(type='text', name='profile_name', ng-model='profile.profile_name')
+                md-button.md-primary(ng-click="submit('update_profile')")
                     md-icon update
-                md-button.md-primary(ng-click="submit('delete_profile')") Delete
+                md-button.md-primary(ng-click="submit('delete_profile')")
                     md-icon delete
 
         md-dialog-actions
