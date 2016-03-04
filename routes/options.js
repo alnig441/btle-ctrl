@@ -264,7 +264,7 @@ router.post('/profile_recur', function(req, res, error){
 
     //PROFILE DRIVEN RECURRING SCHEDULE
 
-    console.log('in profile_recur ', new Date(req.body.sunset));
+    console.log('in profile_recur ',req.body);
 
     var on = '58010301ff00ffffff';
     var off = '58010301ff00000000';
@@ -281,47 +281,43 @@ router.post('/profile_recur', function(req, res, error){
 
     else {
 
-        if(req.body.on_at_sunset){
+        if(req.body.sunset){
             arg = on;
             setpoint = new Date(req.body.sunset);
             device_on = true;
         }
 
-        if(req.body.off_at_sunrise){
+        if(req.body.sunrise){
             arg = off;
             setpoint = new Date(req.body.sunrise);
             device_on = false;
         }
 
-        gattArgs = call.buildGattargs(req.body.mac, arg);
+        gattArgs = call.buildGattargs(req.body.id, arg);
 
-        var job = schedule.scheduleJob('sunrise/sunset recur ' + req.body.location + ' ' + setpoint, setpoint, function(){
+        var job = schedule.scheduleJob('sunrise/sunset recur ' + req.body.id + ' ' + setpoint, setpoint, function(){
 
-            //do {
-
-                var child = spawn('gatttool', gattArgs);
-
-                child.stdout.on('data', function(data){
-
-                    res.send(data);
-
-                    child.kill();
-                });
-
-                child.on('exit', function (code) {
-                    console.log('spawned process ended on exit code: ', code);
-                    if (code === 0) {
-                        c = code;
-                        console.log('gatttool run success');
-
-                    }
-                    else {
-                        console.log('check hciconfig');
-                    }
-
-                });
-
-            //} while (c !== 0);
+                //var child = spawn('gatttool', gattArgs);
+                //
+                //child.stdout.on('data', function(data){
+                //
+                //    res.send(data);
+                //
+                //    child.kill();
+                //});
+                //
+                //child.on('exit', function (code) {
+                //    console.log('spawned process ended on exit code: ', code);
+                //    if (code === 0) {
+                //        c = code;
+                //        console.log('gatttool run success');
+                //
+                //    }
+                //    else {
+                //        console.log('check hciconfig');
+                //    }
+                //
+                //});
 
 
         });
@@ -331,7 +327,7 @@ router.post('/profile_recur', function(req, res, error){
 
             pg.connect(connectionString, function (err, client, done) {
 
-                var query = client.query("UPDATE devices SET device_on='" + device_on + "' where mac='" + req.body.mac + "'", function (error, result) {
+                var query = client.query("UPDATE devices SET device_on='" + device_on + "' where mac='" + req.body.id + "'", function (error, result) {
                     if (error) {
                         console.log('there was an error ', error);
                     }

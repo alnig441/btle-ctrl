@@ -2,35 +2,11 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
 
     console.log('in panelViewCtrl - rootScope: ', $rootScope);
 
-    //$http.get('http://api.sunrise-sunset.org/json?lat=44.891123.7201600&lng=-93.359752&formatted=0')
-    //    .then(function (response) {
-    //        $rootScope.sunset = response.data.results.sunset;
-    //        $rootScope.sunrise = response.data.results.sunrise;
-    //    })
-    //    .then(function(response){
-    //        $http.get('/profiles/on_at_sunset')
-    //            .then(function(response){
-    //                $rootScope.on_at_sunset = response.data;
-    //            })
-    //            .then(function(){
-    //                for(var i = 0; i < $rootScope.on_at_sunset.length; i++){
-    //                    $rootScope.on_at_sunset[i].sunset = $rootScope.sunset;
-    //                }
-    //            });
-    //
-    //    })
-    //    .then(function(response){
-    //        $http.get('/profiles/off_at_sunrise')
-    //            .then(function(response){
-    //                $rootScope.off_at_sunrise = response.data;
-    //            })
-    //            .then(function(){
-    //                for(var i = 0; i < $rootScope.off_at_sunrise.length; i++){
-    //                    $rootScope.on_at_sunset[i].sunrise = $rootScope.sunrise;
-    //                }
-    //            });
-    //
-    //    });
+    $http.get('http://api.sunrise-sunset.org/json?lat=44.891123.7201600&lng=-93.359752&formatted=0')
+        .then(function (response) {
+            $rootScope.sunset = response.data.results.sunset;
+            $rootScope.sunrise = response.data.results.sunrise;
+        });
 
     $http.get('/panel')
         .then(function(response){
@@ -71,24 +47,20 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
             if(new Date() < new Date($rootScope.sunset)){
                 var setpoint = new Date($rootScope.sunset);
                 setpoint = Date.parse(setpoint);
-                for(var i = 0 ; i < $rootScope.on_at_sunset.length ; i ++){
+                for(var i = 0 ; i < $rootScope.connectedProfiles.on_at_sunset.length ; i ++){
                     setpoint = +1000;
-                    $rootScope.on_at_sunset[i].sunset = setpoint;
-                    $rootScope.on_at_sunset[i].off_at_sunrise = false;
-                    $rootScope.on_at_sunset[i].master_off = false;
-                    $http.post('/options/profile_recur', $rootScope.on_at_sunset[i]);
+                    $rootScope.connectedProfiles.on_at_sunset[i].sunset = setpoint;
+                    $http.post('/options/profile_recur', $rootScope.connectedProfiles.on_at_sunset[i]);
                 }
             }
         }).then(function(response){
             if(new Date() < new Date($rootScope.sunrise)){
                 var setpoint = new Date($rootScope.sunrise);
                 setpoint = Date.parse(setpoint);
-                for(var j = 0 ; j < $rootScope.off_at_sunrise.length ; j ++) {
+                for(var j = 0 ; j < $rootScope.connectedProfiles.off_at_sunrise.length ; j ++) {
                     setpoint = 1000;
-                    $rootScope.off_at_sunrise[j].sunrise = setpoint;
-                    $rootScope.off_at_sunrise[j].on_at_sunset = false;
-                    $rootScope.off_at_sunrise[j].master_off = false;
-                    $http.post('/options/profile_recur', $rootScope.off_at_sunrise[j]);
+                    $rootScope.connectedProfiles.off_at_sunrise[j].sunrise = setpoint;
+                    $http.post('/options/profile_recur', $rootScope.connectedProfiles.off_at_sunrise[j]);
                 }
             }
         });
@@ -113,24 +85,20 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
                 if(new Date() < new Date($rootScope.sunset)){
                     var setpoint = new Date($rootScope.sunset);
                     setpoint = Date.parse(setpoint);
-                    for(var i = 0 ; i < $rootScope.on_at_sunset.length ; i ++){
+                    for(var i = 0 ; i < $rootScope.connectedProfiles.on_at_sunset.length ; i ++){
                         setpoint += 1000;
-                        $rootScope.on_at_sunset[i].sunset = setpoint;
-                        $rootScope.on_at_sunset[i].off_at_sunrise = false;
-                        $rootScope.on_at_sunset[i].master_off = false;
-                        $http.post('/options/profile_recur', $rootScope.on_at_sunset[i]);
+                        $rootScope.connectedProfiles.on_at_sunset[i].sunset = setpoint;
+                        $http.post('/options/profile_recur', $rootScope.connectedProfiles.on_at_sunset[i]);
                     }
                 }
             }).then(function(response){
                 if(new Date() < new Date($rootScope.sunrise)){
                     var setpoint = new Date($rootScope.sunrise);
                     setpoint = Date.parse(setpoint);
-                    for(var j = 0 ; j < $rootScope.off_at_sunrise.length ; j ++) {
+                    for(var j = 0 ; j < $rootScope.connectedProfiles.off_at_sunrise.length ; j ++) {
                         setpoint += 1000;
-                        $rootScope.off_at_sunrise[j].sunrise = setpoint;
-                        $rootScope.off_at_sunrise[j].on_at_sunset = false;
-                        $rootScope.off_at_sunrise[j].master_off = false;
-                        $http.post('/options/profile_recur', $rootScope.off_at_sunrise[j]);
+                        $rootScope.connectedProfiles.off_at_sunrise[j].sunrise = setpoint;
+                        $http.post('/options/profile_recur', $rootScope.connectedProfiles.off_at_sunrise[j]);
                     }
                 }
             });
@@ -146,24 +114,20 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
                     if(new Date() < new Date($rootScope.sunset)){
                         var setpoint = new Date($rootScope.sunset);
                         setpoint = Date.parse(setpoint);
-                        for(var i = 0 ; i < $rootScope.on_at_sunset.length ; i ++){
+                        for(var i = 0 ; i < $rootScope.connectedProfiles.on_at_sunset.length ; i ++){
                             setpoint += 1000;
-                            $rootScope.on_at_sunset[i].sunset = setpoint;
-                            $rootScope.on_at_sunset[i].off_at_sunrise = false;
-                            $rootScope.on_at_sunset[i].master_off = false;
-                            $http.post('/options/profile_recur', $rootScope.on_at_sunset[i]);
+                            $rootScope.connectedProfiles.on_at_sunset[i].sunset = setpoint;
+                            $http.post('/options/profile_recur', $rootScope.connectedProfiles.on_at_sunset[i]);
                         }
                     }
                 }).then(function(response){
                     if(new Date() < new Date($rootScope.sunrise)){
                         var setpoint = new Date($rootScope.sunrise);
                         setpoint = Date.parse(setpoint);
-                        for(var j = 0 ; j < $rootScope.off_at_sunrise.length ; j ++) {
+                        for(var j = 0 ; j < $rootScope.connectedProfiles.off_at_sunrise.length ; j ++) {
                             setpoint += 1000;
-                            $rootScope.off_at_sunrise[j].sunrise = setpoint;
-                            $rootScope.off_at_sunrise[j].on_at_sunset = false;
-                            $rootScope.off_at_sunrise[j].master_off = false;
-                            $http.post('/options/profile_recur', $rootScope.off_at_sunrise[j]);
+                            $rootScope.connectedProfiles.off_at_sunrise[j].sunrise = setpoint;
+                            $http.post('/options/profile_recur', $rootScope.connectedProfiles.off_at_sunrise[j]);
                         }
                     }
                 });
