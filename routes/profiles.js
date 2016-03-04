@@ -154,6 +154,8 @@ router.post('/add', function(req, res, error){
 
 router.get('/', function(req, res, error){
 
+    console.log('.. GETTING PROFILES .. ');
+
     pg.connect(connectionString, function(err, client, done){
         var profiles = [];
 
@@ -178,6 +180,8 @@ router.get('/', function(req, res, error){
 });
 
 router.get('/:profile?', function(req, res, error){
+
+    console.log('.. GETTING CONNECTED PROFILES ... ', req.params);
 
     var profile = {};
 
