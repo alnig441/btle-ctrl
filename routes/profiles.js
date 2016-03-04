@@ -115,25 +115,6 @@ router.post('/', function(req, res, error){
 
     });
 
-
-    req.body.on_at_sunset ? req.body.on_at_sunset = true : req.body.on_at_sunset = false;
-    req.body.off_at_sunrise ? req.body.off_at_sunrise = true : req.body.off_at_sunrise = false;
-    req.body.master_off ? req.body.master_off = true : req.body.master_off = false;
-
-
-    pg.connect(connectionString, function(err, client, done){
-
-        var query = client.query("UPDATE devices SET (on_at_sunset, off_at_sunrise, master_off) = ('"+ req.body.on_at_sunset +"', '" + req.body.off_at_sunrise + "', '" + req.body.master_off + "') WHERE  mac='" + req.body.mac + "'", function(error, result){
-            if(error){console.log('there was an error ', error);}
-        })
-        query.on('end',function(result){
-            client.end();
-        })
-
-    })
-
-    //res.status(200);
-
 });
 
 router.post('/add', function(req, res, error){
@@ -189,7 +170,6 @@ router.get('/', function(req, res, error){
 
         query.on('end',function(result){
             client.end();
-            //console.log(profiles);
             res.send(profiles);
         })
 

@@ -178,7 +178,6 @@ function LoginDialogController($scope, $mdDialog, $http, $location, $rootScope) 
             $http.get('/profiles')
                 .then(function(response){
                     $rootScope.profiles = response.data;
-                    console.log($rootScope.profiles);
                     $mdDialog.show(configDialog);
                     $scope.$watch(function() {
                         return $mdMedia('xs') || $mdMedia('sm');
