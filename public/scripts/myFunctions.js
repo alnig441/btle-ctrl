@@ -50,16 +50,26 @@ var call = {
     },
 
     addProfiles: function(array1, array2){
-        var temp = {};
+        var temp = [];
+        console.log('in addProfiles: ');
 
-        for(var prop in array1){
-            if(prop !== 'id'){
-                temp[prop] = array1[prop];
-            }
+        array2.forEach(function(elem2, index2, arr2){
 
-        }
+            array1.forEach(function(elem1, index1, arr1){
+                if(elem1.id === elem2.mac){
+                    var x = {};
+                    for(var prop in elem1){
+                        if(prop !== 'id'){
+                            x[prop] = elem1[prop];
 
-        console.log(temp);
+                        }
+                    }
+                    arr2[index2].profiles = x;
+                    temp.push({device: arr2[index2]});
+                }
+            });
+
+        });
         return temp;
 
     }
