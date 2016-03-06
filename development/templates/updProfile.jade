@@ -6,11 +6,14 @@ md-dialog(ng-controller='adminViewCtrl')
         md-dialog-content(ng-repeat='profile in profiles')
             div.md-dialog-content
                 md-input-container.md-block(flex-gt-sm)
-                    label(for='profile_name') Name: {{profile.profile_name}}
+                    label(for='profile_name') Name: {{profile.profile.profile_name}}
                     input(type='text', name='profile_name', ng-model='profile.profile_name')
-                md-button.md-primary(ng-click="submit('update_profile')")
+                md-input-container.md-block(flex-gt-sm)
+                    md-checkbox(ng-model='profile.profile.active', name='profile active', value=false) Active
+
+                md-button.md-primary(ng-click="submit('update_profile')") Update
                     md-icon update
-                md-button.md-primary(ng-click="submit('delete_profile')")
+                md-button.md-primary(ng-click="submit('delete_profile')") Delete
                     md-icon delete
 
         md-dialog-actions

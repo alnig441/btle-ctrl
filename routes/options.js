@@ -271,9 +271,8 @@ router.post('/profile_recur', function(req, res, error){
     var arg;
     var setpoint;
     var gattArgs;
-    var device_on;
-    var c;
 
+    req.body.turn_on ? arg = on : arg = off;
 
     if(new Date() > req.body.sunrise || new Date() > req.body.sunset){
         res.send('invalid request');
@@ -282,15 +281,11 @@ router.post('/profile_recur', function(req, res, error){
     else {
 
         if(req.body.sunset){
-            arg = on;
             setpoint = new Date(req.body.sunset);
-            device_on = true;
         }
 
         if(req.body.sunrise){
-            arg = off;
             setpoint = new Date(req.body.sunrise);
-            device_on = false;
         }
 
         gattArgs = call.buildGattargs(req.body.id, arg);
@@ -327,7 +322,7 @@ router.post('/profile_recur', function(req, res, error){
 
             pg.connect(connectionString, function (err, client, done) {
 
-                var query = client.query("UPDATE devices SET device_on='" + device_on + "' where mac='" + req.body.id + "'", function (error, result) {
+                var query = client.query("UPDATE devices SET device_on='" + req.body.turn_on + "' where mac='" + req.body.id + "'", function (error, result) {
                     if (error) {
                         console.log('there was an error ', error);
                     }

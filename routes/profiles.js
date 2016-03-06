@@ -94,7 +94,7 @@ router.get('/:profile?', function(req, res, error){
 
     pg.connect(connectionString, function(err, client, done){
 
-        var query = client.query("SELECT result.id FROM (profiles CROSS JOIN connectedprofiles)as result WHERE result.profile_name='" + req.params.profile + "' AND result." + req.params.profile + "='true'", function(error, result){
+        var query = client.query("SELECT result.id, result.turn_on FROM (profiles CROSS JOIN connectedprofiles)as result WHERE result.profile_name='" + req.params.profile + "' AND result." + req.params.profile + "='true' AND result.active='true'", function(error, result){
             if(error){console.log('JOHN there was an error ', error);}
         })
 
@@ -114,3 +114,5 @@ router.get('/:profile?', function(req, res, error){
 });
 
 module.exports = router;
+
+
