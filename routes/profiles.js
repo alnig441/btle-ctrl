@@ -74,7 +74,6 @@ router.get('/', function(req, res, error){
         query.on('row', function(row, result){
             profiles.push({profile: row});
 
-
         })
 
         query.on('end',function(result){

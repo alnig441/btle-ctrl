@@ -501,6 +501,7 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
                 $http.get('/profiles/' + elem.profile.profile_name)
                     .then(function(response){
                         $rootScope.connectedProfiles[elem.profile.profile_name] = response.data;
+                        $rootScope.connectedProfiles[elem.profile.profile_name].turn_on = elem.profile.turn_on;
                     });
             });
         });
