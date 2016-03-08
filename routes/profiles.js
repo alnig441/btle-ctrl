@@ -113,6 +113,41 @@ router.get('/:profile?', function(req, res, error){
 
 });
 
+router.put('/', function(req, res, error){
+
+    console.log('update profile: ', req.body);
+
+    var tmp = req.body.profile;
+    var props = [];
+    var values = [];
+
+    for(var prop in tmp){
+        var x = "'";
+        if(tmp[prop] !== null){
+            props.push(prop);
+            x += tmp[prop];
+            x += "'";
+            values.push(x);
+        }
+    }
+
+    console.log(props.toString(), values.toString());
+
+    pg.connect(connectionString, function(err, client, done){
+
+        var query = client.query("UPDATE profiles set ("+props.toString()+") = ("+values.toString()+") WHERE profile_name='"+tmp.profile_name+"'", function(error, result){
+            if(error){
+                console.log(error);
+            }
+        });
+        query.on('end', function(result){
+            client.end();
+            res.send(result);
+        })
+    })
+
+});
+
 module.exports = router;
 
 

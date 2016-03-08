@@ -278,6 +278,11 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
 
             console.log('build code', this);
 
+            $http.put('/profiles', this.profile)
+                .then(function(response){
+                    console.log(response);
+                });
+
         }
 
         if(choice === 'delete_profile'){

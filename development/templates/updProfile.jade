@@ -11,9 +11,9 @@ md-dialog(ng-controller='adminViewCtrl')
                 md-input-container.md-block(flex-gt-sm)
                     md-checkbox(ng-model='profile.profile.active', name='profile active', value=false) Active
                 md-input-container.md-block(flex-gt-sm)
-                    md-checkbox(ng-model='profile.profile.daily', name='profile recur daily', value=false, ng-disabled='profile.profile.weekly') Recur Daily
+                    md-checkbox(ng-model='profile.profile.recur_daily', name='profile recur daily', value=false, ng-disabled='profile.profile.recur_weekly || !profile.profile.active') Recur Daily
                 md-input-container.md-block(flex-gt-sm)
-                    md-checkbox(ng-model='profile.profile.weekly', name='profile recur weekly', value=false, ng-disabled='profile.profile.daily') Recur Weekly
+                    md-checkbox(ng-model='profile.profile.recur_weekly', name='profile recur weekly', value=false, ng-disabled='profile.profile.recur_daily || !profile.profile.active') Recur Weekly
 
                 md-button.md-primary(ng-click="submit('update_profile')") Update
                     md-icon update
