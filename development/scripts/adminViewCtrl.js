@@ -1,7 +1,7 @@
 app.controller('adminViewCtrl',['$scope', '$rootScope', '$http', '$mdMedia', '$mdDialog', function($scope, $rootScope, $http, $mdMedia, $mdDialog){
 
     //console.log('in adminViewCtrl - rootScope: ', $rootScope);
-
+    $rootScope.setpoint = {};
 
     $scope.customFullscreen = $mdMedia('xs') || $mdMedia('sm');
 
@@ -176,7 +176,11 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
 
         if(choice === 'update_profile'){
 
-            console.log('build code', this);
+            var hour = this.profile.profile.setpoint.getHours();
+            var minute = this.profile.profile.setpoint.getMinutes();
+            this.profile.profile.hour = hour;
+            this.profile.profile.minute = minute;
+            this.profile.profile.setpoint = null;
 
             $http.put('/profiles', this.profile)
                 .then(function(response){
