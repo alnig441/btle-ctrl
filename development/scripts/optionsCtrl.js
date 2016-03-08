@@ -4,16 +4,19 @@ app.controller('optionsCtrl',['$scope', '$rootScope', '$http', '$location', '$md
 
 
     //Building scheduleDevice object with the required properties
-
-    $rootScope.scheduleDevice.dateBegin = new Date();
+    $rootScope.scheduleDevice.today = new Date();
     $rootScope.scheduleDevice.sunset = $rootScope.sunset;
     $rootScope.scheduleDevice.sunrise = $rootScope.sunrise;
 
     $scope.apply = function(option){
 
+        console.log('allo allo: ', $scope.form);
+
+        for(var prop in $scope.form){
+            $rootScope.scheduleDevice[prop] = $scope.form[prop];
+        }
+
         $rootScope.scheduleDevice.colour = $scope.color;
-        $rootScope.scheduleDevice.hour = $scope.selectedHours.value;
-        $rootScope.scheduleDevice.minute = $scope.selectedMinutes.value;
 
         function parseDate(date, hrs, mins, secs, ms){
             date.setHours(hrs);
@@ -90,55 +93,10 @@ app.controller('optionsCtrl',['$scope', '$rootScope', '$http', '$location', '$md
          $rootScope.template.url = $rootScope.template.default;
     };
 
-    $scope.hours = [
-
-        {name: 'Hr', value: 'null'},
-        {name: 0, value: '0'},
-        {name: 1, value: '1'},
-        {name: 2, value: '2'},
-        {name: 3, value: '3'},
-        {name: 4, value: '4'},
-        {name: 5, value: '5'},
-        {name: 6, value: '6'},
-        {name: 7, value: '7'},
-        {name: 8, value: '8'},
-        {name: 9, value: '9'},
-        {name: 10, value: '10'},
-        {name: 11, value: '11'},
-        {name: 12, value: '12'},
-        {name: 13, value: '13'},
-        {name: 14, value: '14'},
-        {name: 15, value: '15'},
-        {name: 16, value: '16'},
-        {name: 17, value: '17'},
-        {name: 18, value: '18'},
-        {name: 19, value: '19'},
-        {name: 20, value: '20'},
-        {name: 21, value: '21'},
-        {name: 22, value: '22'},
-        {name: 23, value: '23'}
-
+    $scope.turnDevOn = [
+        {name: 'ON', value:  true},
+        {name: 'OFF', value: false}
     ];
-
-    $scope.selectedHours = {name: 'Hr', value: 'null'};
-
-    $scope.minutes = [
-        {name: 'Min', value: 'null'},
-        {name: 0, value: '0'},
-        {name: 5, value: '5'},
-        {name: 10, value: '10'},
-        {name: 15, value: '15'},
-        {name: 20, value: '20'},
-        {name: 25, value: '25'},
-        {name: 30, value: '30'},
-        {name: 35, value: '35'},
-        {name: 40, value: '40'},
-        {name: 45, value: '45'},
-        {name: 50, value: '50'},
-        {name: 55, value: '55'}
-    ];
-
-    $scope.selectedMinutes = {name: 'Min', value: 'null'};
 
     $scope.color = {
         red: Math.floor(Math.random() * 255),

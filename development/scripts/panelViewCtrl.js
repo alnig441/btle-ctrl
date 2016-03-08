@@ -4,6 +4,7 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
 
     $http.get('http://api.sunrise-sunset.org/json?lat=44.891123.7201600&lng=-93.359752&formatted=0')
         .then(function (response) {
+            $rootScope.sun_data = response.data.results;
             $rootScope.sunset = response.data.results.sunset;
             $rootScope.sunrise = response.data.results.sunrise;
         });
@@ -13,12 +14,12 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
             $rootScope.panels = response.data;
         });
 
+
+
     $http.get('/profiles')
         .then(function(response){
-            $rootScope.profiles = response.data;
-            var x = response.data;
             $rootScope.connectedProfiles = {};
-            x.forEach(function(elem, ind, arr){
+            response.data.forEach(function(elem, ind, arr){
                 $http.get('/profiles/' + elem.profile.profile_name)
                     .then(function(response){
                         $rootScope.connectedProfiles[elem.profile.profile_name] = response.data;
@@ -158,6 +159,7 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
     $scope.master = function(option){
 
         console.log('in scope.master: ', option, $rootScope.panels);
+
 
         var now = new Date();
         now.setSeconds(now.getSeconds()+5);

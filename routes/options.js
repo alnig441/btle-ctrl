@@ -12,30 +12,24 @@ router.post('/schedule', function(req, res, error){
 
     var on = '58010301ff00ffffff';
     var off = '58010301ff00000000';
-    var setpoint;
+    var setpoint = new Date(req.body.setpoint);
     var gattArgs;
+    var begin;
 
-    if(req.body.turnOff || req.body.offAtSunrise) {
-        gattArgs = call.buildGattargs(req.body.mac, off);
-    }
-    if(req.body.turnOn || req.body.onAtSunset) {
-        gattArgs = call.buildGattargs(req.body.mac, on);
-    }
+    req.body.turnDevOn ? gattArgs = call.buildGattargs(req.body.mac, on) : gattArgs = call.buildGattargs(req.body.mac, off);
+    req.body.dateEnd !==undefined ? begin = new Date(req.body.dateBegin) : begin = new Date(req.body.today);
+
+    begin.setHours(setpoint.getHours());
+    begin.setMinutes(setpoint.getMinutes());
+    begin.setSeconds(setpoint.getSeconds());
 
     //RECURRING SCHEDULE - REGULAR CONTROL
     if(req.body.recurWeekly || req.body.recurDaily || req.body.dateEnd !== undefined){
 
-        var begin = new Date(req.body.dateBegin);
-        begin.setHours(parseInt(req.body.hour));
-        begin.setMinutes(parseInt(req.body.minute));
-
-        //if(begin < new Date()){
-        //
-        //}
 
         var recur = new schedule.RecurrenceRule();
-        recur.hour = parseInt(req.body.hour);
-        recur.minute = parseInt(req.body.minute);
+        recur.hour = begin.getHours();
+        recur.minute = begin.getMinutes();
 
         if(req.body.recurWeekly){
             recur.dayOfWeek = begin.getDay();
@@ -47,8 +41,6 @@ router.post('/schedule', function(req, res, error){
 
         //RECURRING SCHEDULE - REGULAR CONTROL
         console.log('setting up recurring schedule - regular control', recur, req.body);
-
-        req.body.turnOn ? req.body.device_on = true : req.body.device_on = false;
 
         var job = schedule.scheduleJob('Recur/regular '+ req.body.location, recur, function(){
 
@@ -86,7 +78,7 @@ router.post('/schedule', function(req, res, error){
 
             pg.connect(connectionString, function (err, client, done) {
 
-                var query = client.query("UPDATE devices SET device_on='" + req.body.device_on + "' where mac='" + req.body.mac + "'", function (error, result) {
+                var query = client.query("UPDATE devices SET device_on='" + req.body.turnDevOn + "' where mac='" + req.body.mac + "'", function (error, result) {
                     if (error) {
                         console.log('there was an error ', error);
                     }
@@ -106,16 +98,9 @@ router.post('/schedule', function(req, res, error){
     //NON-RECURRING SCHEDULE - REGULAR CONTROL
     else {
 
-        req.body.turnOn ? req.body.device_on = true : req.body.device_on = false;
+        //console.log('scheduling regular non-recurring control', begin);
 
-        setpoint = new Date(req.body.dateBegin);
-        setpoint.setHours(parseInt(req.body.hour));
-        setpoint.setMinutes(parseInt(req.body.minute));
-        setpoint.setSeconds(0);
-
-        console.log('scheduling regular non-recurring control', setpoint);
-
-        var job = schedule.scheduleJob('regular non-recur ' + req.body.location + ' ' + setpoint, setpoint, function () {
+        var job = schedule.scheduleJob('regular non-recur ' + req.body.location + ' ' + begin, begin, function () {
 
             var child = spawn('gatttool', gattArgs);
 
@@ -147,9 +132,7 @@ router.post('/schedule', function(req, res, error){
 
             pg.connect(connectionString, function (err, client, done) {
 
-                //console.log('regular - non recurring ', req.body);
-
-                var query = client.query("UPDATE devices SET device_on='" + req.body.device_on + "' where mac='" + req.body.mac + "'", function (error, result) {
+                var query = client.query("UPDATE devices SET device_on='" + req.body.turnDevOn + "' where mac='" + req.body.mac + "'", function (error, result) {
                     if (error) {
                         console.log('there was an error ', error);
                     }

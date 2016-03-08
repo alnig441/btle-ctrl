@@ -328,16 +328,19 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
 
 
     //Building scheduleDevice object with the required properties
-
-    $rootScope.scheduleDevice.dateBegin = new Date();
+    $rootScope.scheduleDevice.today = new Date();
     $rootScope.scheduleDevice.sunset = $rootScope.sunset;
     $rootScope.scheduleDevice.sunrise = $rootScope.sunrise;
 
     $scope.apply = function(option){
 
+        console.log('allo allo: ', $scope.form);
+
+        for(var prop in $scope.form){
+            $rootScope.scheduleDevice[prop] = $scope.form[prop];
+        }
+
         $rootScope.scheduleDevice.colour = $scope.color;
-        $rootScope.scheduleDevice.hour = $scope.selectedHours.value;
-        $rootScope.scheduleDevice.minute = $scope.selectedMinutes.value;
 
         function parseDate(date, hrs, mins, secs, ms){
             date.setHours(hrs);
@@ -414,55 +417,10 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
          $rootScope.template.url = $rootScope.template.default;
     };
 
-    $scope.hours = [
-
-        {name: 'Hr', value: 'null'},
-        {name: 0, value: '0'},
-        {name: 1, value: '1'},
-        {name: 2, value: '2'},
-        {name: 3, value: '3'},
-        {name: 4, value: '4'},
-        {name: 5, value: '5'},
-        {name: 6, value: '6'},
-        {name: 7, value: '7'},
-        {name: 8, value: '8'},
-        {name: 9, value: '9'},
-        {name: 10, value: '10'},
-        {name: 11, value: '11'},
-        {name: 12, value: '12'},
-        {name: 13, value: '13'},
-        {name: 14, value: '14'},
-        {name: 15, value: '15'},
-        {name: 16, value: '16'},
-        {name: 17, value: '17'},
-        {name: 18, value: '18'},
-        {name: 19, value: '19'},
-        {name: 20, value: '20'},
-        {name: 21, value: '21'},
-        {name: 22, value: '22'},
-        {name: 23, value: '23'}
-
+    $scope.turnDevOn = [
+        {name: 'ON', value:  true},
+        {name: 'OFF', value: false}
     ];
-
-    $scope.selectedHours = {name: 'Hr', value: 'null'};
-
-    $scope.minutes = [
-        {name: 'Min', value: 'null'},
-        {name: 0, value: '0'},
-        {name: 5, value: '5'},
-        {name: 10, value: '10'},
-        {name: 15, value: '15'},
-        {name: 20, value: '20'},
-        {name: 25, value: '25'},
-        {name: 30, value: '30'},
-        {name: 35, value: '35'},
-        {name: 40, value: '40'},
-        {name: 45, value: '45'},
-        {name: 50, value: '50'},
-        {name: 55, value: '55'}
-    ];
-
-    $scope.selectedMinutes = {name: 'Min', value: 'null'};
 
     $scope.color = {
         red: Math.floor(Math.random() * 255),
@@ -483,6 +441,7 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
 
     $http.get('http://api.sunrise-sunset.org/json?lat=44.891123.7201600&lng=-93.359752&formatted=0')
         .then(function (response) {
+            $rootScope.sun_data = response.data.results;
             $rootScope.sunset = response.data.results.sunset;
             $rootScope.sunrise = response.data.results.sunrise;
         });
@@ -492,12 +451,12 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
             $rootScope.panels = response.data;
         });
 
+
+
     $http.get('/profiles')
         .then(function(response){
-            $rootScope.profiles = response.data;
-            var x = response.data;
             $rootScope.connectedProfiles = {};
-            x.forEach(function(elem, ind, arr){
+            response.data.forEach(function(elem, ind, arr){
                 $http.get('/profiles/' + elem.profile.profile_name)
                     .then(function(response){
                         $rootScope.connectedProfiles[elem.profile.profile_name] = response.data;
@@ -637,6 +596,7 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
     $scope.master = function(option){
 
         console.log('in scope.master: ', option, $rootScope.panels);
+
 
         var now = new Date();
         now.setSeconds(now.getSeconds()+5);
