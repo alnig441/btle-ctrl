@@ -67,7 +67,7 @@ router.get('/', function(req, res, error){
     pg.connect(connectionString, function(err, client, done){
         var profiles = [];
 
-        var query = client.query("SELECT * FROM profiles", function(error, result){
+        var query = client.query("SELECT * FROM profiles WHERE active='true'", function(error, result){
             if(error){console.log('PETER there was an error ', error);}
         })
 
