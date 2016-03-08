@@ -148,6 +148,39 @@ router.put('/', function(req, res, error){
 
 });
 
+router.delete('/:profile_name?', function(req, res, error){
+
+    console.log('profile delete: ', req.params);
+
+    pg.connect(connectionString, function(err, client, done){
+
+        var query = client.query("DELETE FROM profiles * WHERE profile_name='"+req.params.profile_name+"'", function(error, result){
+          if(error){
+              console.log(error);
+          }
+        });
+
+        query.on('end', function(result){
+
+            pg.connect(connectionString, function(err, client, done){
+
+                var query = client.query("ALTER TABLE connectedprofiles DROP COLUMN " + req.params.profile_name, function(error, result){
+                    if(error){
+                        console.log(error);
+                    }
+                })
+                query.on('end', function(result){
+                    client.end();
+                    res.send(result);
+                })
+            })
+
+        })
+
+    })
+
+});
+
 module.exports = router;
 
 
