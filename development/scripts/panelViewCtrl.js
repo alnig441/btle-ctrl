@@ -18,11 +18,11 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
 
     $http.get('/profiles')
         .then(function(response){
-            $rootScope.connectedProfiles = {};
+            $rootScope.activeProfiles = {};
             response.data.forEach(function(elem, ind, arr){
                 $http.get('/profiles/' + elem.profile.profile_name)
                     .then(function(response){
-                        $rootScope.connectedProfiles[elem.profile.profile_name] = response.data;
+                        $rootScope.activeProfiles[elem.profile.profile_name] = response.data;
                     });
             });
         });
@@ -48,20 +48,20 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
             if(new Date() < new Date($rootScope.sunset)){
                 var setpoint = new Date($rootScope.sunset);
                 setpoint = Date.parse(setpoint);
-                for(var i = 0 ; i < $rootScope.connectedProfiles.on_at_sunset.length ; i ++){
+                for(var i = 0 ; i < $rootScope.activeProfiles.on_at_sunset.length ; i ++){
                     setpoint = +1000;
-                    $rootScope.connectedProfiles.on_at_sunset[i].sunset = setpoint;
-                    $http.post('/options/profile_recur', $rootScope.connectedProfiles.on_at_sunset[i]);
+                    $rootScope.activeProfiles.on_at_sunset[i].sunset = setpoint;
+                    $http.post('/options/profile_recur', $rootScope.activeProfiles.on_at_sunset[i]);
                 }
             }
         }).then(function(response){
             if(new Date() < new Date($rootScope.sunrise)){
                 var setpoint = new Date($rootScope.sunrise);
                 setpoint = Date.parse(setpoint);
-                for(var j = 0 ; j < $rootScope.connectedProfiles.off_at_sunrise.length ; j ++) {
+                for(var j = 0 ; j < $rootScope.activeProfiles.off_at_sunrise.length ; j ++) {
                     setpoint = 1000;
-                    $rootScope.connectedProfiles.off_at_sunrise[j].sunrise = setpoint;
-                    $http.post('/options/profile_recur', $rootScope.connectedProfiles.off_at_sunrise[j]);
+                    $rootScope.activeProfiles.off_at_sunrise[j].sunrise = setpoint;
+                    $http.post('/options/profile_recur', $rootScope.activeProfiles.off_at_sunrise[j]);
                 }
             }
         });
@@ -86,20 +86,20 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
                 if(new Date() < new Date($rootScope.sunset)){
                     var setpoint = new Date($rootScope.sunset);
                     setpoint = Date.parse(setpoint);
-                    for(var i = 0 ; i < $rootScope.connectedProfiles.on_at_sunset.length ; i ++){
+                    for(var i = 0 ; i < $rootScope.activeProfiles.on_at_sunset.length ; i ++){
                         setpoint += 1000;
-                        $rootScope.connectedProfiles.on_at_sunset[i].sunset = setpoint;
-                        $http.post('/options/profile_recur', $rootScope.connectedProfiles.on_at_sunset[i]);
+                        $rootScope.activeProfiles.on_at_sunset[i].sunset = setpoint;
+                        $http.post('/options/profile_recur', $rootScope.activeProfiles.on_at_sunset[i]);
                     }
                 }
             }).then(function(response){
                 if(new Date() < new Date($rootScope.sunrise)){
                     var setpoint = new Date($rootScope.sunrise);
                     setpoint = Date.parse(setpoint);
-                    for(var j = 0 ; j < $rootScope.connectedProfiles.off_at_sunrise.length ; j ++) {
+                    for(var j = 0 ; j < $rootScope.activeProfiles.off_at_sunrise.length ; j ++) {
                         setpoint += 1000;
-                        $rootScope.connectedProfiles.off_at_sunrise[j].sunrise = setpoint;
-                        $http.post('/options/profile_recur', $rootScope.connectedProfiles.off_at_sunrise[j]);
+                        $rootScope.activeProfiles.off_at_sunrise[j].sunrise = setpoint;
+                        $http.post('/options/profile_recur', $rootScope.activeProfiles.off_at_sunrise[j]);
                     }
                 }
             });
@@ -115,20 +115,20 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
                     if(new Date() < new Date($rootScope.sunset)){
                         var setpoint = new Date($rootScope.sunset);
                         setpoint = Date.parse(setpoint);
-                        for(var i = 0 ; i < $rootScope.connectedProfiles.on_at_sunset.length ; i ++){
+                        for(var i = 0 ; i < $rootScope.activeProfiles.on_at_sunset.length ; i ++){
                             setpoint += 1000;
-                            $rootScope.connectedProfiles.on_at_sunset[i].sunset = setpoint;
-                            $http.post('/options/profile_recur', $rootScope.connectedProfiles.on_at_sunset[i]);
+                            $rootScope.activeProfiles.on_at_sunset[i].sunset = setpoint;
+                            $http.post('/options/profile_recur', $rootScope.activeProfiles.on_at_sunset[i]);
                         }
                     }
                 }).then(function(response){
                     if(new Date() < new Date($rootScope.sunrise)){
                         var setpoint = new Date($rootScope.sunrise);
                         setpoint = Date.parse(setpoint);
-                        for(var j = 0 ; j < $rootScope.connectedProfiles.off_at_sunrise.length ; j ++) {
+                        for(var j = 0 ; j < $rootScope.activeProfiles.off_at_sunrise.length ; j ++) {
                             setpoint += 1000;
-                            $rootScope.connectedProfiles.off_at_sunrise[j].sunrise = setpoint;
-                            $http.post('/options/profile_recur', $rootScope.connectedProfiles.off_at_sunrise[j]);
+                            $rootScope.activeProfiles.off_at_sunrise[j].sunrise = setpoint;
+                            $http.post('/options/profile_recur', $rootScope.activeProfiles.off_at_sunrise[j]);
                         }
                     }
                 });

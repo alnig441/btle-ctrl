@@ -100,7 +100,7 @@ function LoginDialogController($scope, $mdDialog, $http, $location, $rootScope) 
 
 ;app.controller('adminViewCtrl',['$scope', '$rootScope', '$http', '$mdMedia', '$mdDialog', function($scope, $rootScope, $http, $mdMedia, $mdDialog){
 
-    //console.log('in adminViewCtrl - rootScope: ', $rootScope);
+    console.log('in adminViewCtrl - rootScope: ', $rootScope);
     $rootScope.setpoint = {};
 
     $scope.customFullscreen = $mdMedia('xs') || $mdMedia('sm');
@@ -175,9 +175,10 @@ function LoginDialogController($scope, $mdDialog, $http, $location, $rootScope) 
 
         if(option === 'modify_profile'){
 
-            $http.get('/profiles')
+            $http.get('/profiles/all')
                 .then(function(response){
-                    $rootScope.profiles = response.data;
+                    //$rootScope.profiles = response.data;
+                    $scope.profiles = response.data;
                     $mdDialog.show(configDialog);
                     $scope.$watch(function() {
                         return $mdMedia('xs') || $mdMedia('sm');
@@ -276,8 +277,17 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
 
         if(choice === 'update_profile'){
 
-            var hour = this.profile.profile.setpoint.getHours();
-            var minute = this.profile.profile.setpoint.getMinutes();
+            var hour;
+            var minute;
+
+            if(this.profile.profile.active){
+                hour = this.profile.profile.setpoint.getHours();
+                minute = this.profile.profile.setpoint.getMinutes();
+            }
+            if(!this.profile.profile.active){
+                hour = 0;
+                minute = 0;
+            }
             this.profile.profile.hour = hour;
             this.profile.profile.minute = minute;
             this.profile.profile.setpoint = null;
@@ -290,8 +300,6 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
         }
 
         if(choice === 'delete_profile'){
-
-            console.log('build code', this.profile.profile.profile_name);
 
             $http.delete('/profiles/' + this.profile.profile.profile_name)
                 .then(function(response){
@@ -469,11 +477,11 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
 
     $http.get('/profiles')
         .then(function(response){
-            $rootScope.connectedProfiles = {};
+            $rootScope.activeProfiles = {};
             response.data.forEach(function(elem, ind, arr){
                 $http.get('/profiles/' + elem.profile.profile_name)
                     .then(function(response){
-                        $rootScope.connectedProfiles[elem.profile.profile_name] = response.data;
+                        $rootScope.activeProfiles[elem.profile.profile_name] = response.data;
                     });
             });
         });
@@ -499,20 +507,20 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
             if(new Date() < new Date($rootScope.sunset)){
                 var setpoint = new Date($rootScope.sunset);
                 setpoint = Date.parse(setpoint);
-                for(var i = 0 ; i < $rootScope.connectedProfiles.on_at_sunset.length ; i ++){
+                for(var i = 0 ; i < $rootScope.activeProfiles.on_at_sunset.length ; i ++){
                     setpoint = +1000;
-                    $rootScope.connectedProfiles.on_at_sunset[i].sunset = setpoint;
-                    $http.post('/options/profile_recur', $rootScope.connectedProfiles.on_at_sunset[i]);
+                    $rootScope.activeProfiles.on_at_sunset[i].sunset = setpoint;
+                    $http.post('/options/profile_recur', $rootScope.activeProfiles.on_at_sunset[i]);
                 }
             }
         }).then(function(response){
             if(new Date() < new Date($rootScope.sunrise)){
                 var setpoint = new Date($rootScope.sunrise);
                 setpoint = Date.parse(setpoint);
-                for(var j = 0 ; j < $rootScope.connectedProfiles.off_at_sunrise.length ; j ++) {
+                for(var j = 0 ; j < $rootScope.activeProfiles.off_at_sunrise.length ; j ++) {
                     setpoint = 1000;
-                    $rootScope.connectedProfiles.off_at_sunrise[j].sunrise = setpoint;
-                    $http.post('/options/profile_recur', $rootScope.connectedProfiles.off_at_sunrise[j]);
+                    $rootScope.activeProfiles.off_at_sunrise[j].sunrise = setpoint;
+                    $http.post('/options/profile_recur', $rootScope.activeProfiles.off_at_sunrise[j]);
                 }
             }
         });
@@ -537,20 +545,20 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
                 if(new Date() < new Date($rootScope.sunset)){
                     var setpoint = new Date($rootScope.sunset);
                     setpoint = Date.parse(setpoint);
-                    for(var i = 0 ; i < $rootScope.connectedProfiles.on_at_sunset.length ; i ++){
+                    for(var i = 0 ; i < $rootScope.activeProfiles.on_at_sunset.length ; i ++){
                         setpoint += 1000;
-                        $rootScope.connectedProfiles.on_at_sunset[i].sunset = setpoint;
-                        $http.post('/options/profile_recur', $rootScope.connectedProfiles.on_at_sunset[i]);
+                        $rootScope.activeProfiles.on_at_sunset[i].sunset = setpoint;
+                        $http.post('/options/profile_recur', $rootScope.activeProfiles.on_at_sunset[i]);
                     }
                 }
             }).then(function(response){
                 if(new Date() < new Date($rootScope.sunrise)){
                     var setpoint = new Date($rootScope.sunrise);
                     setpoint = Date.parse(setpoint);
-                    for(var j = 0 ; j < $rootScope.connectedProfiles.off_at_sunrise.length ; j ++) {
+                    for(var j = 0 ; j < $rootScope.activeProfiles.off_at_sunrise.length ; j ++) {
                         setpoint += 1000;
-                        $rootScope.connectedProfiles.off_at_sunrise[j].sunrise = setpoint;
-                        $http.post('/options/profile_recur', $rootScope.connectedProfiles.off_at_sunrise[j]);
+                        $rootScope.activeProfiles.off_at_sunrise[j].sunrise = setpoint;
+                        $http.post('/options/profile_recur', $rootScope.activeProfiles.off_at_sunrise[j]);
                     }
                 }
             });
@@ -566,20 +574,20 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
                     if(new Date() < new Date($rootScope.sunset)){
                         var setpoint = new Date($rootScope.sunset);
                         setpoint = Date.parse(setpoint);
-                        for(var i = 0 ; i < $rootScope.connectedProfiles.on_at_sunset.length ; i ++){
+                        for(var i = 0 ; i < $rootScope.activeProfiles.on_at_sunset.length ; i ++){
                             setpoint += 1000;
-                            $rootScope.connectedProfiles.on_at_sunset[i].sunset = setpoint;
-                            $http.post('/options/profile_recur', $rootScope.connectedProfiles.on_at_sunset[i]);
+                            $rootScope.activeProfiles.on_at_sunset[i].sunset = setpoint;
+                            $http.post('/options/profile_recur', $rootScope.activeProfiles.on_at_sunset[i]);
                         }
                     }
                 }).then(function(response){
                     if(new Date() < new Date($rootScope.sunrise)){
                         var setpoint = new Date($rootScope.sunrise);
                         setpoint = Date.parse(setpoint);
-                        for(var j = 0 ; j < $rootScope.connectedProfiles.off_at_sunrise.length ; j ++) {
+                        for(var j = 0 ; j < $rootScope.activeProfiles.off_at_sunrise.length ; j ++) {
                             setpoint += 1000;
-                            $rootScope.connectedProfiles.off_at_sunrise[j].sunrise = setpoint;
-                            $http.post('/options/profile_recur', $rootScope.connectedProfiles.off_at_sunrise[j]);
+                            $rootScope.activeProfiles.off_at_sunrise[j].sunrise = setpoint;
+                            $http.post('/options/profile_recur', $rootScope.activeProfiles.off_at_sunrise[j]);
                         }
                     }
                 });

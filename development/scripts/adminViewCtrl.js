@@ -1,6 +1,6 @@
 app.controller('adminViewCtrl',['$scope', '$rootScope', '$http', '$mdMedia', '$mdDialog', function($scope, $rootScope, $http, $mdMedia, $mdDialog){
 
-    //console.log('in adminViewCtrl - rootScope: ', $rootScope);
+    console.log('in adminViewCtrl - rootScope: ', $rootScope);
     $rootScope.setpoint = {};
 
     $scope.customFullscreen = $mdMedia('xs') || $mdMedia('sm');
@@ -75,9 +75,10 @@ app.controller('adminViewCtrl',['$scope', '$rootScope', '$http', '$mdMedia', '$m
 
         if(option === 'modify_profile'){
 
-            $http.get('/profiles')
+            $http.get('/profiles/all')
                 .then(function(response){
-                    $rootScope.profiles = response.data;
+                    //$rootScope.profiles = response.data;
+                    $scope.profiles = response.data;
                     $mdDialog.show(configDialog);
                     $scope.$watch(function() {
                         return $mdMedia('xs') || $mdMedia('sm');
@@ -176,8 +177,17 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
 
         if(choice === 'update_profile'){
 
-            var hour = this.profile.profile.setpoint.getHours();
-            var minute = this.profile.profile.setpoint.getMinutes();
+            var hour;
+            var minute;
+
+            if(this.profile.profile.active){
+                hour = this.profile.profile.setpoint.getHours();
+                minute = this.profile.profile.setpoint.getMinutes();
+            }
+            if(!this.profile.profile.active){
+                hour = 0;
+                minute = 0;
+            }
             this.profile.profile.hour = hour;
             this.profile.profile.minute = minute;
             this.profile.profile.setpoint = null;
@@ -190,8 +200,6 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
         }
 
         if(choice === 'delete_profile'){
-
-            console.log('build code', this.profile.profile.profile_name);
 
             $http.delete('/profiles/' + this.profile.profile.profile_name)
                 .then(function(response){

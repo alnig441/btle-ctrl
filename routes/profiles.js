@@ -39,20 +39,7 @@ router.post('/add', function(req, res, error){
 
         query.on('end',function(result){
             client.end();
-
-            pg.connect(connectionString, function(err, client, done){
-
-                var query = client.query("ALTER TABLE connectedprofiles ADD COLUMN "+ req.body.name +" BOOLEAN", function(error, result){
-                    if(error){
-                        res.send(error);
-                    }
-                })
-                query.on('end', function(result){
-                    client.end();
-                    res.send(result);
-                })
-            })
-
+            res.send(result);
         })
 
     });
@@ -69,6 +56,30 @@ router.get('/', function(req, res, error){
 
         var query = client.query("SELECT * FROM profiles WHERE active='true'", function(error, result){
             if(error){console.log('PETER there was an error ', error);}
+        })
+
+        query.on('row', function(row, result){
+            profiles.push({profile: row});
+
+        })
+
+        query.on('end',function(result){
+            client.end();
+            res.send(profiles);
+        })
+
+    })
+
+
+});
+
+router.get('/all', function(req, res, error){
+
+    pg.connect(connectionString, function(err, client, done){
+        var profiles = [];
+
+        var query = client.query("SELECT * FROM profiles", function(error, result){
+            if(error){console.log('Holly, there was an error ', error);}
         })
 
         query.on('row', function(row, result){
@@ -120,6 +131,13 @@ router.put('/', function(req, res, error){
     var tmp = req.body.profile;
     var props = [];
     var values = [];
+    var modify;
+    var type;
+
+    tmp.active ? modify = 'ADD' : modify = 'DROP';
+    tmp.active ? type = 'BOOLEAN' : type = "";
+
+    console.log('update profile: ', modify, type);
 
     for(var prop in tmp){
         var x = "'";
@@ -142,9 +160,25 @@ router.put('/', function(req, res, error){
         });
         query.on('end', function(result){
             client.end();
-            res.send(result);
+
+            pg.connect(connectionString, function(err, client, done){
+                var qurey = client.query("ALTER TABLE connectedprofiles "+ modify +" COLUMN " + tmp.profile_name + " " + type, function(error, result){
+                    if(error){
+                        res.send(error);
+                    }
+                })
+                query.on('end', function(result){
+                    client.end();
+                    res.send(result);
+                })
+            })
+
+            //res.send(result);
         })
     })
+
+
+
 
 });
 
@@ -166,7 +200,7 @@ router.delete('/:profile_name?', function(req, res, error){
 
                 var query = client.query("ALTER TABLE connectedprofiles DROP COLUMN " + req.params.profile_name, function(error, result){
                     if(error){
-                        console.log(error);
+                        res.send(error);
                     }
                 })
                 query.on('end', function(result){
