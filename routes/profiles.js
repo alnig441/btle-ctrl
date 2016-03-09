@@ -29,7 +29,7 @@ router.post('/', function(req, res, error){
 
 router.post('/add', function(req, res, error){
 
-    console.log('profiles add: ', req.body);
+    //console.log('profiles add: ', req.body);
 
     pg.connect(connectionString, function(err, client, done){
 
@@ -49,7 +49,7 @@ router.post('/add', function(req, res, error){
 
 router.get('/', function(req, res, error){
 
-    console.log('.. GETTING PROFILES .. ');
+    //console.log('.. GETTING PROFILES .. ');
 
     pg.connect(connectionString, function(err, client, done){
         var profiles = [];
@@ -99,7 +99,7 @@ router.get('/all', function(req, res, error){
 
 router.get('/:profile?', function(req, res, error){
 
-    console.log('.. GETTING CONNECTED PROFILES ... ', req.params);
+    //console.log('.. GETTING CONNECTED PROFILES ... ', req.params);
 
     var profile = {};
 
@@ -126,7 +126,7 @@ router.get('/:profile?', function(req, res, error){
 
 router.put('/', function(req, res, error){
 
-    console.log('update profile: ', req.body);
+    //console.log('update profile: ', req.body);
 
     var tmp = req.body.profile;
     var props = [];
@@ -137,7 +137,7 @@ router.put('/', function(req, res, error){
     tmp.active ? modify = 'ADD' : modify = 'DROP';
     tmp.active ? type = 'BOOLEAN' : type = "";
 
-    console.log('update profile: ', modify, type);
+    //console.log('update profile: ', modify, type);
 
     for(var prop in tmp){
         var x = "'";
@@ -149,7 +149,7 @@ router.put('/', function(req, res, error){
         }
     }
 
-    console.log(props.toString(), values.toString());
+    //console.log(props.toString(), values.toString());
 
     pg.connect(connectionString, function(err, client, done){
 
@@ -184,7 +184,7 @@ router.put('/', function(req, res, error){
 
 router.delete('/:profile_name?', function(req, res, error){
 
-    console.log('profile delete: ', req.params);
+    //console.log('profile delete: ', req.params);
 
     pg.connect(connectionString, function(err, client, done){
 

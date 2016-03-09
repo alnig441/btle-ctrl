@@ -361,6 +361,15 @@ router.post('/colour', function(req, res, error){
 
 });
 
+router.post('/regular', function(req, res, error){
+
+    console.log('options/regular: ', req.body);
+
+
+
+
+    res.send(200);
+})
 
 
 module.exports = router;

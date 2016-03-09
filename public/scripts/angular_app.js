@@ -535,6 +535,17 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
 
         var refreshTimeOut = setTimeout(function(){
 
+            var x = $rootScope.activeProfiles;
+
+            for(var prop in x){
+                if(prop !== 'on_at_sunset' || prop !== 'off_at_sunrise'){
+                    for(var i = 0 ; i < x[prop].length ; i ++){
+                        x[prop][i].second = i;
+                        $http.post('/options/regular', x[prop][i]);
+                    }
+                }
+            }
+
             $rootScope.refreshTimeOutID = refreshTimeOut;
 
             $http.get('http://api.sunrise-sunset.org/json?lat=44.891123.7201600&lng=-93.359752&formatted=0').then(function(response){
