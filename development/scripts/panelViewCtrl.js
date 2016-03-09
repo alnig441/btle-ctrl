@@ -51,7 +51,7 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
                 for(var i = 0 ; i < $rootScope.activeProfiles.on_at_sunset.length ; i ++){
                     setpoint = +1000;
                     $rootScope.activeProfiles.on_at_sunset[i].sunset = setpoint;
-                    $http.post('/options/profile_recur', $rootScope.activeProfiles.on_at_sunset[i]);
+                    $http.post('/options/profile_sun', $rootScope.activeProfiles.on_at_sunset[i]);
                 }
             }
         }).then(function(response){
@@ -61,7 +61,7 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
                 for(var j = 0 ; j < $rootScope.activeProfiles.off_at_sunrise.length ; j ++) {
                     setpoint = 1000;
                     $rootScope.activeProfiles.off_at_sunrise[j].sunrise = setpoint;
-                    $http.post('/options/profile_recur', $rootScope.activeProfiles.off_at_sunrise[j]);
+                    $http.post('/options/profile_sun', $rootScope.activeProfiles.off_at_sunrise[j]);
                 }
             }
         });
@@ -83,7 +83,7 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
                     console.log('active profile: ', prop, x[prop]);
                     for(var i = 0 ; i < x[prop].length ; i ++){
                         x[prop][i].second = i;
-                        $http.post('/options/regular', x[prop][i]);
+                        $http.post('/options/profile_regular', x[prop][i]);
                     }
                 }
             }
@@ -101,7 +101,7 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
                     for(var i = 0 ; i < $rootScope.activeProfiles.on_at_sunset.length ; i ++){
                         setpoint += 1000;
                         $rootScope.activeProfiles.on_at_sunset[i].sunset = setpoint;
-                        $http.post('/options/profile_recur', $rootScope.activeProfiles.on_at_sunset[i]);
+                        $http.post('/options/profile_sun', $rootScope.activeProfiles.on_at_sunset[i]);
                     }
                 }
             }).then(function(response){
@@ -111,7 +111,7 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
                     for(var j = 0 ; j < $rootScope.activeProfiles.off_at_sunrise.length ; j ++) {
                         setpoint += 1000;
                         $rootScope.activeProfiles.off_at_sunrise[j].sunrise = setpoint;
-                        $http.post('/options/profile_recur', $rootScope.activeProfiles.off_at_sunrise[j]);
+                        $http.post('/options/profile_sun', $rootScope.activeProfiles.off_at_sunrise[j]);
                     }
                 }
             });
@@ -130,7 +130,7 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
                         for(var i = 0 ; i < $rootScope.activeProfiles.on_at_sunset.length ; i ++){
                             setpoint += 1000;
                             $rootScope.activeProfiles.on_at_sunset[i].sunset = setpoint;
-                            $http.post('/options/profile_recur', $rootScope.activeProfiles.on_at_sunset[i]);
+                            $http.post('/options/profile_sun', $rootScope.activeProfiles.on_at_sunset[i]);
                         }
                     }
                 }).then(function(response){
@@ -140,7 +140,7 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
                         for(var j = 0 ; j < $rootScope.activeProfiles.off_at_sunrise.length ; j ++) {
                             setpoint += 1000;
                             $rootScope.activeProfiles.off_at_sunrise[j].sunrise = setpoint;
-                            $http.post('/options/profile_recur', $rootScope.activeProfiles.off_at_sunrise[j]);
+                            $http.post('/options/profile_sun', $rootScope.activeProfiles.off_at_sunrise[j]);
                         }
                     }
                 });

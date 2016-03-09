@@ -164,7 +164,6 @@ router.post('/sun', function(req, res, error){
     var off = '58010301ff00000000';
     var setpoint;
     var gattArgs;
-    var c;
 
     if((new Date(req.body.sunset) < new Date() && req.body.onAtSunset ) || (new Date(req.body.sunrise) < new Date() && req.body.offAtSunrise)){
         res.send('invalid request');
@@ -186,7 +185,6 @@ router.post('/sun', function(req, res, error){
 
         var job = schedule.scheduleJob('sunrise/sunset non-recur '+ req.body.location + ' ' + setpoint, setpoint, function(){
 
-            //do {
                 var child = spawn('gatttool', gattArgs);
 
                 child.stdout.on('data', function(data){
@@ -209,7 +207,6 @@ router.post('/sun', function(req, res, error){
 
                 });
 
-            //} while (c !== 0);
 
         });
 
@@ -244,11 +241,11 @@ router.post('/sun', function(req, res, error){
 
 });
 
-router.post('/profile_recur', function(req, res, error){
+router.post('/profile_sun', function(req, res, error){
 
     //PROFILE DRIVEN RECURRING SCHEDULE
 
-    console.log('in profile_recur ',req.body);
+    //console.log('in profile_sun ',req.body);
 
     var on = '58010301ff00ffffff';
     var off = '58010301ff00000000';
@@ -274,7 +271,7 @@ router.post('/profile_recur', function(req, res, error){
 
         gattArgs = call.buildGattargs(req.body.id, arg);
 
-        var job = schedule.scheduleJob('sunrise/sunset recur ' + req.body.id + ' ' + setpoint, setpoint, function(){
+        var job = schedule.scheduleJob('PROFILE: SUN ' + req.body.id + ' ' + setpoint, setpoint, function(){
 
                 var child = spawn('gatttool', gattArgs);
 
@@ -321,11 +318,12 @@ router.post('/profile_recur', function(req, res, error){
 
         });
 
+        var items = schedule.scheduledJobs;
+        console.log('scheduled jobs: ', Object.keys(items));
+        res.send(items);
+
     }
 
-    var items = schedule.scheduledJobs;
-    console.log('scheduled jobs: ', Object.keys(items));
-    res.send(items);
 
 
 });
@@ -362,9 +360,9 @@ router.post('/colour', function(req, res, error){
 
 });
 
-router.post('/regular', function(req, res, error){
+router.post('/profile_regular', function(req, res, error){
 
-    console.log('options/regular: ', req.body);
+    //console.log('options/regular: ', req.body);
 
     var on = '58010301ff00ffffff';
     var off = '58010301ff00000000';
@@ -372,13 +370,74 @@ router.post('/regular', function(req, res, error){
     var setpoint;
     var gattArgs;
 
+    req.body.turn_on ? arg = on : arg = off;
+    gattArgs = call.buildGattargs(req.body.mac, arg);
+
     setpoint = new Date();
     setpoint.setHours(parseInt(req.body.hour));
     setpoint.setMinutes(parseInt(req.body.minute));
     setpoint.setSeconds(req.body.second);
 
-    res.send(200);
-})
+    if(new Date() > setpoint){
+        res.send('bad request');
+    }
+
+    else {
+        var job = schedule.scheduleJob('PROFILE: REGULAR ' + req.body.id + ' ' + setpoint, setpoint, function(){
+
+            var child = spawn('gatttool', gattArgs);
+
+            child.stdout.on('data', function(data){
+
+                res.send(data);
+
+                child.kill();
+            });
+
+            child.on('exit', function (code) {
+                console.log('spawned process ended on exit code: ', code);
+                if (code === 0) {
+                    c = code;
+                    console.log('gatttool run success');
+
+                }
+                else {
+                    console.log('check hciconfig');
+                }
+
+            });
+
+
+        });
+
+        job.on('run', function(){
+            console.log('my job ran');
+
+            pg.connect(connectionString, function (err, client, done) {
+
+                var query = client.query("UPDATE devices SET device_on='" + req.body.turn_on + "' where mac='" + req.body.id + "'", function (error, result) {
+                    if (error) {
+                        console.log('there was an error ', error);
+                    }
+                })
+
+                query.on('end', function (result) {
+                    client.end();
+                })
+
+            });
+
+
+        });
+
+        var items = schedule.scheduledJobs;
+        console.log('scheduled jobs: ', Object.keys(items));
+        res.send(items);
+
+    }
+
+
+});
 
 
 module.exports = router;
