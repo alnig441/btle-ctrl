@@ -281,7 +281,7 @@ router.post('/profile_sun', function(req, res, error){
 
         gattArgs = call.buildGattargs(req.body.id, arg);
 
-        var job = schedule.scheduleJob('PROFILE: SUN ' + req.body.id + ' ' + setpoint, setpoint, function(){
+        var job = schedule.scheduleJob('PROFILE: '+ req.body.profile_name + ' - ' + req.body.id + ' - ' + setpoint, setpoint, function(){
 
                 var child = spawn('gatttool', gattArgs);
 
@@ -393,7 +393,7 @@ router.post('/profile_regular', function(req, res, error){
     }
 
     else {
-        var job = schedule.scheduleJob('PROFILE: REGULAR ' + req.body.id + ' ' + setpoint, setpoint, function(){
+        var job = schedule.scheduleJob('PROFILE: ' + req.body.profile_name +' - ' + req.body.id + ' - ' + setpoint, setpoint, function(){
 
             var child = spawn('gatttool', gattArgs);
 

@@ -5,8 +5,6 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
     $http.get('http://api.sunrise-sunset.org/json?lat=44.891123.7201600&lng=-93.359752&formatted=0')
         .then(function (response) {
             $rootScope.sun_data = response.data.results;
-            $rootScope.sunset = response.data.results.sunset;
-            $rootScope.sunrise = response.data.results.sunrise;
         });
 
     $http.get('/panel')
@@ -53,11 +51,10 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
 
         $http.get('http://api.sunrise-sunset.org/json?lat=44.891123.7201600&lng=-93.359752&formatted=0')
             .then(function (response) {
-                $rootScope.sunset = response.data.results.sunset;
-                $rootScope.sunrise = response.data.results.sunrise;
+                $rootScope.sun_data = response.data.results;
             }).then(function(response){
-            if(new Date() < new Date($rootScope.sunset)){
-                var setpoint = new Date($rootScope.sunset);
+            if(new Date() < new Date($rootScope.sun_data.sunset)){
+                var setpoint = new Date($rootScope.sun_data.sunset);
                 setpoint = Date.parse(setpoint);
                 for(var i = 0 ; i < $rootScope.activeProfiles.on_at_sunset.length ; i ++){
                     setpoint = +1000;
@@ -66,8 +63,8 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
                 }
             }
         }).then(function(response){
-            if(new Date() < new Date($rootScope.sunrise)){
-                var setpoint = new Date($rootScope.sunrise);
+            if(new Date() < new Date($rootScope.sun_data.sunrise)){
+                var setpoint = new Date($rootScope.sun_data.sunrise);
                 setpoint = Date.parse(setpoint);
                 for(var j = 0 ; j < $rootScope.activeProfiles.off_at_sunrise.length ; j ++) {
                     setpoint = 1000;
@@ -76,7 +73,7 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
                 }
             }
         });
-        console.log('Daily sunrise/sunset data update. SUNRISE: ' + new Date($rootScope.sunrise) + ' / SUNSET: ' + new Date($rootScope.sunset));
+        console.log('Daily sunrise/sunset data update. SUNRISE: ' + new Date($rootScope.sun_data.sunrise) + ' / SUNSET: ' + new Date($rootScope.sun_data.sunset));
 
     }
 
@@ -89,7 +86,7 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
 
             for(var prop in $rootScope.activeProfiles){
                 if(prop !== 'on_at_sunset' || prop !== 'off_at_sunrise'){
-                    console.log('active profile: ', prop, $rootScope.activeProfiles[prop]);
+                    //console.log('active profile: ', prop, $rootScope.activeProfiles[prop]);
                     for(var i = 0 ; i < $rootScope.activeProfiles[prop].length ; i ++){
                         $rootScope.activeProfiles[prop][i].second = i;
                         $http.post('/options/profile_regular', $rootScope.activeProfiles[prop][i]);
@@ -100,12 +97,11 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
             $rootScope.refreshTimeOutID = refreshTimeOut;
 
             $http.get('http://api.sunrise-sunset.org/json?lat=44.891123.7201600&lng=-93.359752&formatted=0').then(function(response){
-                $rootScope.sunset = response.data.results.sunset;
-                $rootScope.sunrise = response.data.results.sunrise;
-                console.log('sunset/sunrise data refresh on load. SUNRISE: ' + new Date($rootScope.sunrise) + ' / SUNSET: ' + new Date($rootScope.sunset));
+                $rootScope.sun_data = response.data.results;
+                console.log('sunset/sunrise data refresh on load. SUNRISE: ' + new Date($rootScope.sun_data.sunrise) + ' / SUNSET: ' + new Date($rootScope.sun_data.sunset));
             }).then(function(response){
-                if(new Date() < new Date($rootScope.sunset)){
-                    var setpoint = new Date($rootScope.sunset);
+                if(new Date() < new Date($rootScope.sun_data.sunset)){
+                    var setpoint = new Date($rootScope.sun_data.sunset);
                     setpoint = Date.parse(setpoint);
                     for(var i = 0 ; i < $rootScope.activeProfiles.on_at_sunset.length ; i ++){
                         setpoint += 1000;
@@ -114,8 +110,8 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
                     }
                 }
             }).then(function(response){
-                if(new Date() < new Date($rootScope.sunrise)){
-                    var setpoint = new Date($rootScope.sunrise);
+                if(new Date() < new Date($rootScope.sun_data.sunrise)){
+                    var setpoint = new Date($rootScope.sun_data.sunrise);
                     setpoint = Date.parse(setpoint);
                     for(var j = 0 ; j < $rootScope.activeProfiles.off_at_sunrise.length ; j ++) {
                         setpoint += 1000;
@@ -141,11 +137,10 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
 
 
                 $http.get('http://api.sunrise-sunset.org/json?lat=44.891123.7201600&lng=-93.359752&formatted=0').then(function(response){
-                    $rootScope.sunset = response.data.results.sunset;
-                    $rootScope.sunrise = response.data.results.sunrise;
+                    $rootScope.sun_data = response.data.results;
                 }).then(function(response){
-                    if(new Date() < new Date($rootScope.sunset)){
-                        var setpoint = new Date($rootScope.sunset);
+                    if(new Date() < new Date($rootScope.sun_data.sunset)){
+                        var setpoint = new Date($rootScope.sun_data.sunset);
                         setpoint = Date.parse(setpoint);
                         for(var i = 0 ; i < $rootScope.activeProfiles.on_at_sunset.length ; i ++){
                             setpoint += 1000;
@@ -154,8 +149,8 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
                         }
                     }
                 }).then(function(response){
-                    if(new Date() < new Date($rootScope.sunrise)){
-                        var setpoint = new Date($rootScope.sunrise);
+                    if(new Date() < new Date($rootScope.sun_data.sunrise)){
+                        var setpoint = new Date($rootScope.sun_data.sunrise);
                         setpoint = Date.parse(setpoint);
                         for(var j = 0 ; j < $rootScope.activeProfiles.off_at_sunrise.length ; j ++) {
                             setpoint += 1000;
@@ -165,7 +160,7 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
                     }
                 });
 
-                console.log('sunset/sunrise data refresh after initial delay. SUNRISE: ' + new Date($rootScope.sunrise) + ' / SUNSET: ' + new Date($rootScope.sunset));
+                console.log('sunset/sunrise data refresh after initial delay. SUNRISE: ' + new Date($rootScope.sun_data.sunrise) + ' / SUNSET: ' + new Date($rootScope.sun_data.sunset));
 
                 var x = setInterval(refreshSetOrRise, 86400000);
 

@@ -5,12 +5,10 @@ app.controller('optionsCtrl',['$scope', '$rootScope', '$http', '$location', '$md
 
     //Building scheduleDevice object with the required properties
     $rootScope.scheduleDevice.today = new Date();
-    $rootScope.scheduleDevice.sunset = $rootScope.sunset;
-    $rootScope.scheduleDevice.sunrise = $rootScope.sunrise;
+    $rootScope.scheduleDevice.sunset = $rootScope.sun_data.sunset;
+    $rootScope.scheduleDevice.sunrise = $rootScope.sun_data.sunrise;
 
     $scope.apply = function(option){
-
-        console.log('allo allo: ', $scope.form);
 
         for(var prop in $scope.form){
             $rootScope.scheduleDevice[prop] = $scope.form[prop];
