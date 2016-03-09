@@ -40,6 +40,17 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
     //Sunset/sunrise refresh data function - pulling fresh data every 24hrs and scheduling recurring profiles
 
     function refreshSetOrRise() {
+
+        for(var prop in $rootScope.activeProfiles){
+            if(prop !== 'on_at_sunset' || prop !== 'off_at_sunrise'){
+                console.log('active profile: ', prop, $rootScope.activeProfiles[prop]);
+                for(var i = 0 ; i < $rootScope.activeProfiles[prop].length ; i ++){
+                    $rootScope.activeProfiles[prop][i].second = i;
+                    $http.post('/options/profile_regular', $rootScope.activeProfiles[prop][i]);
+                }
+            }
+        }
+
         $http.get('http://api.sunrise-sunset.org/json?lat=44.891123.7201600&lng=-93.359752&formatted=0')
             .then(function (response) {
                 $rootScope.sunset = response.data.results.sunset;
@@ -76,14 +87,12 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
 
         var refreshTimeOut = setTimeout(function(){
 
-            var x = $rootScope.activeProfiles;
-
-            for(var prop in x){
+            for(var prop in $rootScope.activeProfiles){
                 if(prop !== 'on_at_sunset' || prop !== 'off_at_sunrise'){
-                    console.log('active profile: ', prop, x[prop]);
-                    for(var i = 0 ; i < x[prop].length ; i ++){
-                        x[prop][i].second = i;
-                        $http.post('/options/profile_regular', x[prop][i]);
+                    console.log('active profile: ', prop, $rootScope.activeProfiles[prop]);
+                    for(var i = 0 ; i < $rootScope.activeProfiles[prop].length ; i ++){
+                        $rootScope.activeProfiles[prop][i].second = i;
+                        $http.post('/options/profile_regular', $rootScope.activeProfiles[prop][i]);
                     }
                 }
             }
@@ -119,6 +128,17 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
             //console.log('refreshTimeOut timer - rootscope ', $rootScope);
 
             var tmp = setTimeout(function(){
+
+                for(var prop in $rootScope.activeProfiles){
+                    if(prop !== 'on_at_sunset' || prop !== 'off_at_sunrise'){
+                        console.log('active profile: ', prop, $rootScope.activeProfiles[prop]);
+                        for(var i = 0 ; i < $rootScope.activeProfiles[prop].length ; i ++){
+                            $rootScope.activeProfiles[prop][i].second = i;
+                            $http.post('/options/profile_regular', $rootScope.activeProfiles[prop][i]);
+                        }
+                    }
+                }
+
 
                 $http.get('http://api.sunrise-sunset.org/json?lat=44.891123.7201600&lng=-93.359752&formatted=0').then(function(response){
                     $rootScope.sunset = response.data.results.sunset;
