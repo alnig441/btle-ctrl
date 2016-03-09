@@ -99,59 +99,69 @@ router.post('/schedule', function(req, res, error){
     //NON-RECURRING SCHEDULE - REGULAR CONTROL
     else {
 
-        //console.log('scheduling regular non-recurring control', begin);
+        if(new Date() > begin){
+            console.log('Bad request: regular non-recur');
 
-        var job = schedule.scheduleJob('regular non-recur ' + req.body.location + ' ' + begin, begin, function () {
+        }
 
-            var child = spawn('gatttool', gattArgs);
+        else {
 
-            child.stdout.on('data', function (data) {
+            //console.log('scheduling regular non-recurring control', begin);
 
-                res.send(data);
-                child.kill();
-            });
+            var job = schedule.scheduleJob('regular non-recur ' + req.body.location + ' ' + begin, begin, function () {
 
-            child.on('exit', function (code) {
-                console.log('spawned process ended on exit code: ', code);
-                if (code === 0) {
-                    console.log('gatttool run success');
-                }
-                else {
-                    console.log('check hciconfig');
-                }
+                var child = spawn('gatttool', gattArgs);
 
-            });
+                child.stdout.on('data', function (data) {
 
-        });
+                    res.send(data);
+                    child.kill();
+                });
 
-        job.on('scheduled', function (date) {
-            console.log('job scheduled', date);
-        });
-
-        job.on('run', function () {
-            console.log('my job ran');
-
-            pg.connect(connectionString, function (err, client, done) {
-
-                var query = client.query("UPDATE devices SET device_on='" + req.body.turnDevOn + "' where mac='" + req.body.mac + "'", function (error, result) {
-                    if (error) {
-                        console.log('there was an error ', error);
+                child.on('exit', function (code) {
+                    console.log('spawned process ended on exit code: ', code);
+                    if (code === 0) {
+                        console.log('gatttool run success');
                     }
-                })
+                    else {
+                        console.log('check hciconfig');
+                    }
 
-                query.on('end', function (result) {
-                    client.end();
-                })
+                });
 
             });
 
-        });
+            job.on('scheduled', function (date) {
+                console.log('job scheduled', date);
+            });
+
+            job.on('run', function () {
+                console.log('my job ran');
+
+                pg.connect(connectionString, function (err, client, done) {
+
+                    var query = client.query("UPDATE devices SET device_on='" + req.body.turnDevOn + "' where mac='" + req.body.mac + "'", function (error, result) {
+                        if (error) {
+                            console.log('there was an error ', error);
+                        }
+                    })
+
+                    query.on('end', function (result) {
+                        client.end();
+                    })
+
+                });
+
+            });
+
+            var items = schedule.scheduledJobs;
+            console.log('scheduled jobs: ', Object.keys(items));
+            res.send(items);
+
+        }
+
 
     }
-
-    var items = schedule.scheduledJobs;
-    console.log('scheduled jobs: ', Object.keys(items));
-    res.send(items);
 
 
 });
