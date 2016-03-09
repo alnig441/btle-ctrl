@@ -6,6 +6,7 @@ var call = require('../public/scripts/myFunctions.min.js');
 var schedule = require('node-schedule');
 var ayb = require('all-your-base');
 
+
 var connectionString = process.env.DATABASE_URL || 'postgres://localhost:5432/btle-ctrl';
 
 router.post('/schedule', function(req, res, error){
@@ -365,8 +366,16 @@ router.post('/regular', function(req, res, error){
 
     console.log('options/regular: ', req.body);
 
+    var on = '58010301ff00ffffff';
+    var off = '58010301ff00000000';
+    var arg;
+    var setpoint;
+    var gattArgs;
 
-
+    setpoint = new Date();
+    setpoint.setHours(parseInt(req.body.hour));
+    setpoint.setMinutes(parseInt(req.body.minute));
+    setpoint.setSeconds(req.body.second);
 
     res.send(200);
 })

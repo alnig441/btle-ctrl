@@ -80,6 +80,7 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
 
             for(var prop in x){
                 if(prop !== 'on_at_sunset' || prop !== 'off_at_sunrise'){
+                    console.log('active profile: ', prop, x[prop]);
                     for(var i = 0 ; i < x[prop].length ; i ++){
                         x[prop][i].second = i;
                         $http.post('/options/regular', x[prop][i]);
