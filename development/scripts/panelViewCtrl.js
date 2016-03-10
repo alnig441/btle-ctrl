@@ -37,7 +37,7 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
 
     //Sunset/sunrise refresh data function - pulling fresh data every 24hrs and scheduling recurring profiles
 
-    function refreshSetOrRise() {
+    function refreshSunData() {
 
         $http.get('http://api.sunrise-sunset.org/json?lat=44.891123.7201600&lng=-93.359752&formatted=0')
             .then(function (response) {
@@ -151,14 +151,14 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
         }, 1000);
     }
 
-    if($rootScope.recurWeeklyID === undefined){
-        console.log('write code for weekly recurring profiles');
-
-        $rootScope.recurWeeklyID = setTimeout(function(){
-
-            clearTimeout($rootScope.recurWeeklyID);
-        }, 1500);
-    }
+    //if($rootScope.recurWeeklyID === undefined){
+    //    console.log('write code for weekly recurring profiles');
+    //
+    //    $rootScope.recurWeeklyID = setTimeout(function(){
+    //
+    //        clearTimeout($rootScope.recurWeeklyID);
+    //    }, 1500);
+    //}
 
     //Running refreshTimeOut function when the associated ID on first page load, then scheduling recurring profiles
 
@@ -179,7 +179,7 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
 
                 console.log('sunset/sunrise data refresh after initial delay. SUNRISE: ' + new Date($rootScope.sun_data.sunrise) + ' / SUNSET: ' + new Date($rootScope.sun_data.sunset));
 
-                var x = setInterval(refreshSetOrRise, 86400000);
+                var x = setInterval(refreshSunData, 86400000);
 
                 clearTimeout(tmp);
 

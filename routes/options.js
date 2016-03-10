@@ -286,7 +286,7 @@ router.post('/colour', function(req, res, error){
 
 router.post('/profile', function(req, res, error){
 
-    //console.log('options/regular: ', req.body);
+    console.log('options/regular: ', req.body);
 
     var on = '58010301ff00ffffff';
     var off = '58010301ff00000000';
@@ -300,7 +300,7 @@ router.post('/profile', function(req, res, error){
     //SUN RELATED DATA
 
     if(((req.body.sunrise === false || req.body.sunrise === null) && (req.body.sunset !== undefined || req.body.sunset !== null)) || ((req.body.sunset === false || req.body.sunset === null) && (req.body.sunrise !== undefined || req.body.sunrise !== null))){
-        //console.log('we have sun related data', req.body);
+        console.log('we have sun related data', req.body);
 
         if(new Date() > new Date(req.body.sunrise) && new Date() > new Date(req.body.sunset)){
             //console.log('date is in the past - sun data');
