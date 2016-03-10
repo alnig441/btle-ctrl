@@ -255,7 +255,7 @@ router.post('/profile_sun', function(req, res, error){
 
     //PROFILE DRIVEN RECURRING SCHEDULE
 
-    //console.log('in profile_sun ',req.body);
+    console.log('in profile_sun ',req.body);
 
     var on = '58010301ff00ffffff';
     var off = '58010301ff00000000';
@@ -372,7 +372,7 @@ router.post('/colour', function(req, res, error){
 
 router.post('/profile_regular', function(req, res, error){
 
-    //console.log('options/regular: ', req.body);
+    console.log('options/regular: ', req.body);
 
     var on = '58010301ff00ffffff';
     var off = '58010301ff00000000';
