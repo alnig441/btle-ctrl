@@ -251,92 +251,6 @@ router.post('/sun', function(req, res, error){
 
 });
 
-router.post('/profile_sun', function(req, res, error){
-
-    //PROFILE DRIVEN RECURRING SCHEDULE
-
-    console.log('in profile_sun ',req.body);
-
-    var on = '58010301ff00ffffff';
-    var off = '58010301ff00000000';
-    var arg;
-    var setpoint;
-    var gattArgs;
-
-    req.body.turn_on ? arg = on : arg = off;
-
-    if(new Date() > req.body.sunrise || new Date() > req.body.sunset){
-        res.send('invalid request');
-    }
-
-    else {
-
-        if(req.body.sunset){
-            setpoint = new Date(req.body.sunset);
-        }
-
-        if(req.body.sunrise){
-            setpoint = new Date(req.body.sunrise);
-        }
-
-        gattArgs = call.buildGattargs(req.body.id, arg);
-
-        var job = schedule.scheduleJob('PROFILE: '+ req.body.profile_name + ' - ' + req.body.id + ' - ' + setpoint, setpoint, function(){
-
-                var child = spawn('gatttool', gattArgs);
-
-                child.stdout.on('data', function(data){
-
-                    res.send(data);
-
-                    child.kill();
-                });
-
-                child.on('exit', function (code) {
-                    console.log('spawned process ended on exit code: ', code);
-                    if (code === 0) {
-                        c = code;
-                        console.log('gatttool run success');
-
-                    }
-                    else {
-                        console.log('check hciconfig');
-                    }
-
-                });
-
-
-        });
-
-        job.on('run', function(){
-            console.log('my PROFILE: SUN job ran');
-
-            pg.connect(connectionString, function (err, client, done) {
-
-                var query = client.query("UPDATE devices SET device_on='" + req.body.turn_on + "' where mac='" + req.body.id + "'", function (error, result) {
-                    if (error) {
-                        console.log('there was an error ', error);
-                    }
-                })
-
-                query.on('end', function (result) {
-                    client.end();
-                })
-
-            });
-
-
-        });
-
-        var items = schedule.scheduledJobs;
-        console.log('scheduled jobs: ', Object.keys(items));
-        res.send(items);
-
-    }
-
-
-
-});
 
 router.post('/colour', function(req, res, error){
 
@@ -370,9 +284,9 @@ router.post('/colour', function(req, res, error){
 
 });
 
-router.post('/profile_regular', function(req, res, error){
+router.post('/profile', function(req, res, error){
 
-    console.log('options/regular: ', req.body);
+    //console.log('options/regular: ', req.body);
 
     var on = '58010301ff00ffffff';
     var off = '58010301ff00000000';
@@ -383,71 +297,156 @@ router.post('/profile_regular', function(req, res, error){
     req.body.turn_on ? arg = on : arg = off;
     gattArgs = call.buildGattargs(req.body.mac, arg);
 
-    setpoint = new Date();
-    setpoint.setHours(parseInt(req.body.hour));
-    setpoint.setMinutes(parseInt(req.body.minute));
-    setpoint.setSeconds(req.body.second);
+    //SUN RELATED DATA
 
-    if(new Date() > setpoint){
-        res.send('bad request');
-    }
+    if((req.body.sunrise === false && (req.body.sunset !== undefined || req.body.sunset !== null)) || (req.body.sunset === false && (req.body.sunrise !== undefined || req.body.sunrise !== null))){
+        //console.log('we have sun related data');
 
-    else {
-        var job = schedule.scheduleJob('PROFILE: ' + req.body.profile_name +' - ' + req.body.id + ' - ' + setpoint, setpoint, function(){
+        if(new Date() > new Date(req.body.sunrise) && new Date() > new Date(req.body.sunset)){
+            //console.log('date is in the past - sun data');
+            res.status(200).send('invalid date');
 
+        }
+        else{
 
-            console.log('testing regular profile');
-            //var child = spawn('gatttool', gattArgs);
-            //
-            //child.stdout.on('data', function(data){
-            //
-            //    res.send(data);
-            //
-            //    child.kill();
-            //});
-            //
-            //child.on('exit', function (code) {
-            //    console.log('spawned process ended on exit code: ', code);
-            //    if (code === 0) {
-            //        c = code;
-            //        console.log('gatttool run success');
-            //
-            //    }
-            //    else {
-            //        console.log('check hciconfig');
-            //    }
-            //
-            //});
+            if(!req.body.sunrise){
+                setpoint = new Date(req.body.sunset);
+                //console.log('SUNSET HIT!')
+            }
+
+            if(!req.body.sunset){
+                setpoint = new Date(req.body.sunrise);
+                //console.log('SUNRISE HIT!')
+
+            }
+
+            var job = schedule.scheduleJob('PROFILE: ' + req.body.profile_name +' - ' + req.body.id + ' - ' + setpoint, setpoint, function(){
 
 
-        });
+                var child = spawn('gatttool', gattArgs);
 
-        job.on('run', function(){
-            console.log('my PROFILE: REGULAR job ran');
+                child.stdout.on('data', function(data){
 
-            pg.connect(connectionString, function (err, client, done) {
+                    res.send(data);
 
-                var query = client.query("UPDATE devices SET device_on='" + req.body.turn_on + "' where mac='" + req.body.id + "'", function (error, result) {
-                    if (error) {
-                        console.log('there was an error ', error);
+                    child.kill();
+                });
+
+                child.on('exit', function (code) {
+                    console.log('spawned process ended on exit code: ', code);
+                    if (code === 0) {
+                        c = code;
+                        console.log('gatttool run success');
+
                     }
-                })
+                    else {
+                        console.log('check hciconfig');
+                    }
 
-                query.on('end', function (result) {
-                    client.end();
-                })
+                });
+
 
             });
 
+            job.on('run', function(){
+                console.log('my PROFILE: REGULAR job ran');
 
-        });
+                pg.connect(connectionString, function (err, client, done) {
 
-        var items = schedule.scheduledJobs;
-        console.log('scheduled jobs: ', Object.keys(items));
-        res.send(items);
+                    var query = client.query("UPDATE devices SET device_on='" + req.body.turn_on + "' where mac='" + req.body.id + "'", function (error, result) {
+                        if (error) {
+                            console.log('there was an error ', error);
+                        }
+                    })
+
+                    query.on('end', function (result) {
+                        client.end();
+                    })
+
+                });
+
+
+            });
+
+            var items = schedule.scheduledJobs;
+            console.log('scheduled jobs: ', Object.keys(items));
+            res.send(items);
+
+
+        }
 
     }
 
+    //SUN RELATED DATA END
+
+    else{
+        setpoint = new Date();
+        setpoint.setHours(parseInt(req.body.hour));
+        setpoint.setMinutes(parseInt(req.body.minute));
+        setpoint.setSeconds(req.body.second);
+
+        if(new Date() > setpoint){
+            //console.log('date is in the past - regular data');
+            res.status(200).send('invalid date');
+        }
+
+        else{
+            var job = schedule.scheduleJob('PROFILE: ' + req.body.profile_name +' - ' + req.body.id + ' - ' + setpoint, setpoint, function(){
+
+
+                var child = spawn('gatttool', gattArgs);
+
+                child.stdout.on('data', function(data){
+
+                    res.send(data);
+
+                    child.kill();
+                });
+
+                child.on('exit', function (code) {
+                    console.log('spawned process ended on exit code: ', code);
+                    if (code === 0) {
+                        c = code;
+                        console.log('gatttool run success');
+
+                    }
+                    else {
+                        console.log('check hciconfig');
+                    }
+
+                });
+
+
+            });
+
+            job.on('run', function(){
+                console.log('my PROFILE: REGULAR job ran');
+
+                pg.connect(connectionString, function (err, client, done) {
+
+                    var query = client.query("UPDATE devices SET device_on='" + req.body.turn_on + "' where mac='" + req.body.id + "'", function (error, result) {
+                        if (error) {
+                            console.log('there was an error ', error);
+                        }
+                    })
+
+                    query.on('end', function (result) {
+                        client.end();
+                    })
+
+                });
+
+
+            });
+
+            var items = schedule.scheduledJobs;
+            console.log('scheduled jobs: ', Object.keys(items));
+            res.send(items);
+
+
+        }
+
+    }
 
 });
 

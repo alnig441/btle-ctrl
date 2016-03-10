@@ -39,125 +39,142 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
 
     function refreshSetOrRise() {
 
-        for(var prop in $rootScope.activeProfiles){
-            if(prop !== 'on_at_sunset' || prop !== 'off_at_sunrise'){
-                console.log('active profile: ', prop, $rootScope.activeProfiles[prop]);
-                for(var i = 0 ; i < $rootScope.activeProfiles[prop].length ; i ++){
-                    $rootScope.activeProfiles[prop][i].second = i;
-                    $http.post('/options/profile_regular', $rootScope.activeProfiles[prop][i]);
-                }
-            }
-        }
-
         $http.get('http://api.sunrise-sunset.org/json?lat=44.891123.7201600&lng=-93.359752&formatted=0')
             .then(function (response) {
                 $rootScope.sun_data = response.data.results;
-            }).then(function(response){
-            if(new Date() < new Date($rootScope.sun_data.sunset)){
-                var setpoint = new Date($rootScope.sun_data.sunset);
-                setpoint = Date.parse(setpoint);
-                for(var i = 0 ; i < $rootScope.activeProfiles.on_at_sunset.length ; i ++){
-                    setpoint = +1000;
-                    $rootScope.activeProfiles.on_at_sunset[i].sunset = setpoint;
-                    $http.post('/options/profile_sun', $rootScope.activeProfiles.on_at_sunset[i]);
-                }
-            }
-        }).then(function(response){
-            if(new Date() < new Date($rootScope.sun_data.sunrise)){
-                var setpoint = new Date($rootScope.sun_data.sunrise);
-                setpoint = Date.parse(setpoint);
-                for(var j = 0 ; j < $rootScope.activeProfiles.off_at_sunrise.length ; j ++) {
-                    setpoint = 1000;
-                    $rootScope.activeProfiles.off_at_sunrise[j].sunrise = setpoint;
-                    $http.post('/options/profile_sun', $rootScope.activeProfiles.off_at_sunrise[j]);
-                }
-            }
-        });
+            });
+
         console.log('Daily sunrise/sunset data update. SUNRISE: ' + new Date($rootScope.sun_data.sunrise) + ' / SUNSET: ' + new Date($rootScope.sun_data.sunset));
 
     }
 
+    function recurDaily() {
 
-    //Running refreshTimeOut function when the associated ID on first page load, then scheduling recurring profiles
+        for(var prop in $rootScope.activeProfiles){
+            for(var i = 0 ; i < $rootScope.activeProfiles[prop].length ; i ++){
+                var date;
 
-    if($rootScope.refreshTimeOutID === undefined) {
+                if($rootScope.activeProfiles[prop][i].sunset || $rootScope.activeProfiles[prop][i].sunrise){
 
-        var refreshTimeOut = setTimeout(function(){
-
-            for(var prop in $rootScope.activeProfiles){
-                if(prop !== 'on_at_sunset' && prop !== 'off_at_sunrise'){
-                    //console.log('active profile: ', prop, $rootScope.activeProfiles[prop]);
-                    for(var i = 0 ; i < $rootScope.activeProfiles[prop].length ; i ++){
-                        $rootScope.activeProfiles[prop][i].second = i;
-                        $http.post('/options/profile_regular', $rootScope.activeProfiles[prop][i]);
+                    if($rootScope.activeProfiles[prop][i].sunset){
+                        date = Date.parse(new Date($rootScope.sun_data.sunset));
+                        date += i*1000;
+                        $rootScope.activeProfiles[prop][i].sunset = date;
                     }
+                    if($rootScope.activeProfiles[prop][i].sunrise){
+                        date = Date.parse(new Date($rootScope.sun_data.sunrise));
+                        date += i*1000;
+                        $rootScope.activeProfiles[prop][i].sunrise = date;
+
+                    }
+                    $http.post('/options/profile', $rootScope.activeProfiles[prop][i]);
+
+                }
+                else{
+                    $rootScope.activeProfiles[prop][i].second = i;
+                    $http.post('/options/profile', $rootScope.activeProfiles[prop][i]);
                 }
             }
+        }
 
-            $rootScope.refreshTimeOutID = refreshTimeOut;
+    }
 
-            $http.get('http://api.sunrise-sunset.org/json?lat=44.891123.7201600&lng=-93.359752&formatted=0').then(function(response){
-                $rootScope.sun_data = response.data.results;
-                console.log('sunset/sunrise data refresh on load. SUNRISE: ' + new Date($rootScope.sun_data.sunrise) + ' / SUNSET: ' + new Date($rootScope.sun_data.sunset));
-            }).then(function(response){
-                if(new Date() < new Date($rootScope.sun_data.sunset)){
-                    var setpoint = new Date($rootScope.sun_data.sunset);
-                    setpoint = Date.parse(setpoint);
-                    for(var i = 0 ; i < $rootScope.activeProfiles.on_at_sunset.length ; i ++){
-                        setpoint += 1000;
-                        $rootScope.activeProfiles.on_at_sunset[i].sunset = setpoint;
-                        $http.post('/options/profile_sun', $rootScope.activeProfiles.on_at_sunset[i]);
+    if($rootScope.recurDailyID === undefined){
+
+        $rootScope.recurDailyID = setTimeout(function(){
+
+            for(var prop in $rootScope.activeProfiles){
+
+                    for(var i = 0 ; i < $rootScope.activeProfiles[prop].length ; i ++){
+
+                        var date;
+
+                        if($rootScope.activeProfiles[prop][i].sunset || $rootScope.activeProfiles[prop][i].sunrise){
+
+                            if($rootScope.activeProfiles[prop][i].sunset){
+                                date = Date.parse(new Date($rootScope.sun_data.sunset));
+                                date += i*1000;
+                                $rootScope.activeProfiles[prop][i].sunset = date;
+                            }
+                            if($rootScope.activeProfiles[prop][i].sunrise){
+                                date = Date.parse(new Date($rootScope.sun_data.sunrise));
+                                date += i*1000;
+                                $rootScope.activeProfiles[prop][i].sunrise = date;
+
+                            }
+                            $http.post('/options/profile', $rootScope.activeProfiles[prop][i]);
+
+                        }
+                        else{
+                            $rootScope.activeProfiles[prop][i].second = i;
+                            $http.post('/options/profile', $rootScope.activeProfiles[prop][i]);
+                        }
                     }
-                }
-            }).then(function(response){
-                if(new Date() < new Date($rootScope.sun_data.sunrise)){
-                    var setpoint = new Date($rootScope.sun_data.sunrise);
-                    setpoint = Date.parse(setpoint);
-                    for(var j = 0 ; j < $rootScope.activeProfiles.off_at_sunrise.length ; j ++) {
-                        setpoint += 1000;
-                        $rootScope.activeProfiles.off_at_sunrise[j].sunrise = setpoint;
-                        $http.post('/options/profile_sun', $rootScope.activeProfiles.off_at_sunrise[j]);
-                    }
-                }
-            });
-
-            //console.log('refreshTimeOut timer - rootscope ', $rootScope);
+            }
 
             var tmp = setTimeout(function(){
 
                 for(var prop in $rootScope.activeProfiles){
-                    if(prop !== 'on_at_sunset' || prop !== 'off_at_sunrise'){
-                        console.log('active profile: ', prop, $rootScope.activeProfiles[prop]);
-                        for(var i = 0 ; i < $rootScope.activeProfiles[prop].length ; i ++){
+
+                    for(var i = 0 ; i < $rootScope.activeProfiles[prop].length ; i ++){
+                        var date;
+
+                        if($rootScope.activeProfiles[prop][i].sunset || $rootScope.activeProfiles[prop][i].sunrise){
+
+                            if($rootScope.activeProfiles[prop][i].sunset){
+                                date = Date.parse(new Date($rootScope.sun_data.sunset));
+                                date += i*1000;
+                                $rootScope.activeProfiles[prop][i].sunset = date;
+                            }
+                            if($rootScope.activeProfiles[prop][i].sunrise){
+                                date = Date.parse(new Date($rootScope.sun_data.sunrise));
+                                date += i*1000;
+                                $rootScope.activeProfiles[prop][i].sunrise = date;
+
+                            }
+                            $http.post('/options/profile', $rootScope.activeProfiles[prop][i]);
+
+                        }
+                        else{
                             $rootScope.activeProfiles[prop][i].second = i;
-                            $http.post('/options/profile_regular', $rootScope.activeProfiles[prop][i]);
+                            $http.post('/options/profile', $rootScope.activeProfiles[prop][i]);
                         }
                     }
                 }
 
+                var x = setInterval(recurDaily, 86400000);
+                clearTimeout(tmp);
+            },delay);
+
+
+            clearTimeout($rootScope.recurDailyID);
+        }, 1000);
+    }
+
+    if($rootScope.recurWeeklyID === undefined){
+        console.log('write code for weekly recurring profiles');
+
+        $rootScope.recurWeeklyID = setTimeout(function(){
+
+            clearTimeout($rootScope.recurWeeklyID);
+        }, 1500);
+    }
+
+    //Running refreshTimeOut function when the associated ID on first page load, then scheduling recurring profiles
+
+    if($rootScope.refreshSunDataID === undefined) {
+
+        $rootScope.refreshSunDataID = setTimeout(function(){
+
+            $http.get('http://api.sunrise-sunset.org/json?lat=44.891123.7201600&lng=-93.359752&formatted=0').then(function(response){
+                $rootScope.sun_data = response.data.results;
+                console.log('sunset/sunrise data refresh on load. SUNRISE: ' + new Date($rootScope.sun_data.sunrise) + ' / SUNSET: ' + new Date($rootScope.sun_data.sunset));
+            });
+
+            var tmp = setTimeout(function(){
 
                 $http.get('http://api.sunrise-sunset.org/json?lat=44.891123.7201600&lng=-93.359752&formatted=0').then(function(response){
                     $rootScope.sun_data = response.data.results;
-                }).then(function(response){
-                    if(new Date() < new Date($rootScope.sun_data.sunset)){
-                        var setpoint = new Date($rootScope.sun_data.sunset);
-                        setpoint = Date.parse(setpoint);
-                        for(var i = 0 ; i < $rootScope.activeProfiles.on_at_sunset.length ; i ++){
-                            setpoint += 1000;
-                            $rootScope.activeProfiles.on_at_sunset[i].sunset = setpoint;
-                            $http.post('/options/profile_sun', $rootScope.activeProfiles.on_at_sunset[i]);
-                        }
-                    }
-                }).then(function(response){
-                    if(new Date() < new Date($rootScope.sun_data.sunrise)){
-                        var setpoint = new Date($rootScope.sun_data.sunrise);
-                        setpoint = Date.parse(setpoint);
-                        for(var j = 0 ; j < $rootScope.activeProfiles.off_at_sunrise.length ; j ++) {
-                            setpoint += 1000;
-                            $rootScope.activeProfiles.off_at_sunrise[j].sunrise = setpoint;
-                            $http.post('/options/profile_sun', $rootScope.activeProfiles.off_at_sunrise[j]);
-                        }
-                    }
                 });
 
                 console.log('sunset/sunrise data refresh after initial delay. SUNRISE: ' + new Date($rootScope.sun_data.sunrise) + ' / SUNSET: ' + new Date($rootScope.sun_data.sunset));
@@ -169,7 +186,7 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
             }, delay);
 
 
-            clearTimeout(refreshTimeOut);
+            clearTimeout($rootScope.refreshSunDataID);
         }, 2500);
 
     }
