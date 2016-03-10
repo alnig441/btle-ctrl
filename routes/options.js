@@ -299,8 +299,8 @@ router.post('/profile', function(req, res, error){
 
     //SUN RELATED DATA
 
-    if((req.body.sunrise === false && (req.body.sunset !== undefined || req.body.sunset !== null)) || (req.body.sunset === false && (req.body.sunrise !== undefined || req.body.sunrise !== null))){
-        //console.log('we have sun related data');
+    if(((req.body.sunrise === false || req.body.sunrise === null) && (req.body.sunset !== undefined || req.body.sunset !== null)) || ((req.body.sunset === false || req.body.sunset === null) && (req.body.sunrise !== undefined || req.body.sunrise !== null))){
+        //console.log('we have sun related data', req.body);
 
         if(new Date() > new Date(req.body.sunrise) && new Date() > new Date(req.body.sunset)){
             //console.log('date is in the past - sun data');
@@ -311,12 +311,12 @@ router.post('/profile', function(req, res, error){
 
             if(!req.body.sunrise){
                 setpoint = new Date(req.body.sunset);
-                //console.log('SUNSET HIT!')
+                //console.log('SUNSET HIT!', setpoint)
             }
 
             if(!req.body.sunset){
                 setpoint = new Date(req.body.sunrise);
-                //console.log('SUNRISE HIT!')
+                //console.log('SUNRISE HIT!', setpoint)
 
             }
 
@@ -384,6 +384,9 @@ router.post('/profile', function(req, res, error){
         setpoint.setHours(parseInt(req.body.hour));
         setpoint.setMinutes(parseInt(req.body.minute));
         setpoint.setSeconds(req.body.second);
+
+        console.log('we have regular data', req.body, setpoint);
+
 
         if(new Date() > setpoint){
             //console.log('date is in the past - regular data');
