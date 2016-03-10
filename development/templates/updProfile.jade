@@ -11,12 +11,16 @@ md-dialog(ng-controller='adminViewCtrl')
                 md-input-container.md-block(flex-gt-sm)
                     md-checkbox(ng-model='profile.profile.active', name='profile active', value=false) Active
                 md-input-container.md-block(flex-gt-sm)
-                    md-checkbox(ng-model='profile.profile.recur_daily', name='profile recur daily', value=false, ng-disabled='profile.profile.recur_weekly || !profile.profile.active') Recur Daily
+                    md-checkbox(ng-model='profile.profile.sunset', name='sunset on', value=false, ng-disabled='profile.profile.sunrise || !profile.profile.active') On @ Sunset
                 md-input-container.md-block(flex-gt-sm)
-                    md-checkbox(ng-model='profile.profile.recur_weekly', name='profile recur weekly', value=false, ng-disabled='profile.profile.recur_daily || !profile.profile.active') Recur Weekly
+                    md-checkbox(ng-model='profile.profile.sunrise', name='sunset off', value=false, ng-disabled='profile.profile.sunset || !profile.profile.active') Off @ Sunrise
+                //md-input-container.md-block(flex-gt-sm)
+                //    md-checkbox(ng-model='profile.profile.recur_daily', name='profile recur daily', value=false, ng-disabled='profile.profile.recur_weekly || !profile.profile.active') Recur Daily
+                //md-input-container.md-block(flex-gt-sm)
+                //    md-checkbox(ng-model='profile.profile.recur_weekly', name='profile recur weekly', value=false, ng-disabled='profile.profile.recur_daily || !profile.profile.active') Recur Weekly
                 md-input-container.md-block(flex-gt-sm)
                     md-label Run Profile At: {{profile.profile.hour}}hrs {{profile.profile.minute}}mins
-                    input(type='time', min='00:00:00', max='23:59:59', ng-model='profile.profile.setpoint', aria-label='setpoint', ng-disabled='!profile.profile.active')
+                    input(type='time', min='00:00:00', max='23:59:59', ng-model='form.setpoint', aria-label='setpoint', ng-disabled='!profile.profile.active || profile.profile.sunset || profile.profile.sunrise')
 
                 md-button.md-primary(ng-click="submit('update_profile')") Update
                     md-icon update

@@ -147,6 +147,10 @@ router.put('/', function(req, res, error){
             x += "'";
             values.push(x);
         }
+        if(tmp[prop] === null){
+            props.push(prop);
+            values.push('null');
+        }
     }
 
     //console.log(props.toString(), values.toString());

@@ -349,7 +349,7 @@ router.post('/profile', function(req, res, error){
             });
 
             job.on('run', function(){
-                console.log('my PROFILE: REGULAR job ran');
+                console.log('my '+req.body.profile_name+' job ran');
 
                 pg.connect(connectionString, function (err, client, done) {
 
@@ -420,7 +420,7 @@ router.post('/profile', function(req, res, error){
             });
 
             job.on('run', function(){
-                console.log('my PROFILE: REGULAR job ran');
+                console.log('my '+req.body.profile_name+' job ran');
 
                 pg.connect(connectionString, function (err, client, done) {
 

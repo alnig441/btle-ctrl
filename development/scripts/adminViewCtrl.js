@@ -181,16 +181,22 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
             var minute;
 
             if(this.profile.profile.active){
-                hour = this.profile.profile.setpoint.getHours();
-                minute = this.profile.profile.setpoint.getMinutes();
+                if(this.profile.profile.sunset || this.profile.profile.sunrise){
+                    hour = null;
+                    minute = null;
+                }
+                else{
+                    hour = this.form.setpoint.getHours();
+                    minute = this.form.setpoint.getMinutes();
+                }
             }
             if(!this.profile.profile.active){
-                hour = 0;
-                minute = 0;
+                hour = null;
+                minute = null;
             }
             this.profile.profile.hour = hour;
             this.profile.profile.minute = minute;
-            this.profile.profile.setpoint = null;
+            //this.profile.profile.setpoint = null;
 
             $http.put('/profiles', this.profile)
                 .then(function(response){

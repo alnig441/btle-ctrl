@@ -48,108 +48,108 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
 
     }
 
-    function recurDaily() {
-
-        for(var prop in $rootScope.activeProfiles){
-            for(var i = 0 ; i < $rootScope.activeProfiles[prop].length ; i ++){
-                var date;
-
-                if($rootScope.activeProfiles[prop][i].sunset || $rootScope.activeProfiles[prop][i].sunrise){
-
-                    if($rootScope.activeProfiles[prop][i].sunset){
-                        date = Date.parse(new Date($rootScope.sun_data.sunset));
-                        date += i*1000;
-                        $rootScope.activeProfiles[prop][i].sunset = date;
-                    }
-                    if($rootScope.activeProfiles[prop][i].sunrise){
-                        date = Date.parse(new Date($rootScope.sun_data.sunrise));
-                        date += i*1000;
-                        $rootScope.activeProfiles[prop][i].sunrise = date;
-
-                    }
-                    $http.post('/options/profile', $rootScope.activeProfiles[prop][i]);
-
-                }
-                else{
-                    $rootScope.activeProfiles[prop][i].second = i;
-                    $http.post('/options/profile', $rootScope.activeProfiles[prop][i]);
-                }
-            }
-        }
-
-    }
-
-    if($rootScope.recurDailyID === undefined){
-
-        $rootScope.recurDailyID = setTimeout(function(){
-
-            for(var prop in $rootScope.activeProfiles){
-
-                    for(var i = 0 ; i < $rootScope.activeProfiles[prop].length ; i ++){
-
-                        var date;
-
-                        if($rootScope.activeProfiles[prop][i].sunset || $rootScope.activeProfiles[prop][i].sunrise){
-
-                            if($rootScope.activeProfiles[prop][i].sunset){
-                                date = Date.parse(new Date($rootScope.sun_data.sunset));
-                                date += i*1000;
-                                $rootScope.activeProfiles[prop][i].sunset = date;
-                            }
-                            if($rootScope.activeProfiles[prop][i].sunrise){
-                                date = Date.parse(new Date($rootScope.sun_data.sunrise));
-                                date += i*1000;
-                                $rootScope.activeProfiles[prop][i].sunrise = date;
-
-                            }
-                            $http.post('/options/profile', $rootScope.activeProfiles[prop][i]);
-
-                        }
-                        else{
-                            $rootScope.activeProfiles[prop][i].second = i;
-                            $http.post('/options/profile', $rootScope.activeProfiles[prop][i]);
-                        }
-                    }
-            }
-
-            var tmp = setTimeout(function(){
-
-                for(var prop in $rootScope.activeProfiles){
-
-                    for(var i = 0 ; i < $rootScope.activeProfiles[prop].length ; i ++){
-                        var date;
-
-                        if($rootScope.activeProfiles[prop][i].sunset || $rootScope.activeProfiles[prop][i].sunrise){
-
-                            if($rootScope.activeProfiles[prop][i].sunset){
-                                date = Date.parse(new Date($rootScope.sun_data.sunset));
-                                date += i*1000;
-                                $rootScope.activeProfiles[prop][i].sunset = date;
-                            }
-                            if($rootScope.activeProfiles[prop][i].sunrise){
-                                date = Date.parse(new Date($rootScope.sun_data.sunrise));
-                                date += i*1000;
-                                $rootScope.activeProfiles[prop][i].sunrise = date;
-
-                            }
-                            $http.post('/options/profile', $rootScope.activeProfiles[prop][i]);
-
-                        }
-                        else{
-                            $rootScope.activeProfiles[prop][i].second = i;
-                            $http.post('/options/profile', $rootScope.activeProfiles[prop][i]);
-                        }
-                    }
-                }
-
-                var x = setInterval(recurDaily, 86400000);
-                clearTimeout(tmp);
-            },delay);
-
-
-            clearTimeout($rootScope.recurDailyID);
-        }, 1000);
-    }
+    //function recurDaily() {
+    //
+    //    for(var prop in $rootScope.activeProfiles){
+    //        for(var i = 0 ; i < $rootScope.activeProfiles[prop].length ; i ++){
+    //            var date;
+    //
+    //            if($rootScope.activeProfiles[prop][i].sunset || $rootScope.activeProfiles[prop][i].sunrise){
+    //
+    //                if($rootScope.activeProfiles[prop][i].sunset){
+    //                    date = Date.parse(new Date($rootScope.sun_data.sunset));
+    //                    date += i*1000;
+    //                    $rootScope.activeProfiles[prop][i].sunset = date;
+    //                }
+    //                if($rootScope.activeProfiles[prop][i].sunrise){
+    //                    date = Date.parse(new Date($rootScope.sun_data.sunrise));
+    //                    date += i*1000;
+    //                    $rootScope.activeProfiles[prop][i].sunrise = date;
+    //
+    //                }
+    //                $http.post('/options/profile', $rootScope.activeProfiles[prop][i]);
+    //
+    //            }
+    //            else{
+    //                $rootScope.activeProfiles[prop][i].second = i;
+    //                $http.post('/options/profile', $rootScope.activeProfiles[prop][i]);
+    //            }
+    //        }
+    //    }
+    //
+    //}
+    //
+    //if($rootScope.recurDailyID === undefined){
+    //
+    //    $rootScope.recurDailyID = setTimeout(function(){
+    //
+    //        for(var prop in $rootScope.activeProfiles){
+    //
+    //                for(var i = 0 ; i < $rootScope.activeProfiles[prop].length ; i ++){
+    //
+    //                    var date;
+    //
+    //                    if($rootScope.activeProfiles[prop][i].sunset || $rootScope.activeProfiles[prop][i].sunrise){
+    //
+    //                        if($rootScope.activeProfiles[prop][i].sunset){
+    //                            date = Date.parse(new Date($rootScope.sun_data.sunset));
+    //                            date += i*1000;
+    //                            $rootScope.activeProfiles[prop][i].sunset = date;
+    //                        }
+    //                        if($rootScope.activeProfiles[prop][i].sunrise){
+    //                            date = Date.parse(new Date($rootScope.sun_data.sunrise));
+    //                            date += i*1000;
+    //                            $rootScope.activeProfiles[prop][i].sunrise = date;
+    //
+    //                        }
+    //                        $http.post('/options/profile', $rootScope.activeProfiles[prop][i]);
+    //
+    //                    }
+    //                    else{
+    //                        $rootScope.activeProfiles[prop][i].second = i;
+    //                        $http.post('/options/profile', $rootScope.activeProfiles[prop][i]);
+    //                    }
+    //                }
+    //        }
+    //
+    //        var tmp = setTimeout(function(){
+    //
+    //            for(var prop in $rootScope.activeProfiles){
+    //
+    //                for(var i = 0 ; i < $rootScope.activeProfiles[prop].length ; i ++){
+    //                    var date;
+    //
+    //                    if($rootScope.activeProfiles[prop][i].sunset || $rootScope.activeProfiles[prop][i].sunrise){
+    //
+    //                        if($rootScope.activeProfiles[prop][i].sunset){
+    //                            date = Date.parse(new Date($rootScope.sun_data.sunset));
+    //                            date += i*1000;
+    //                            $rootScope.activeProfiles[prop][i].sunset = date;
+    //                        }
+    //                        if($rootScope.activeProfiles[prop][i].sunrise){
+    //                            date = Date.parse(new Date($rootScope.sun_data.sunrise));
+    //                            date += i*1000;
+    //                            $rootScope.activeProfiles[prop][i].sunrise = date;
+    //
+    //                        }
+    //                        $http.post('/options/profile', $rootScope.activeProfiles[prop][i]);
+    //
+    //                    }
+    //                    else{
+    //                        $rootScope.activeProfiles[prop][i].second = i;
+    //                        $http.post('/options/profile', $rootScope.activeProfiles[prop][i]);
+    //                    }
+    //                }
+    //            }
+    //
+    //            var x = setInterval(recurDaily, 86400000);
+    //            clearTimeout(tmp);
+    //        },delay);
+    //
+    //
+    //        clearTimeout($rootScope.recurDailyID);
+    //    }, 1000);
+    //}
 
     if($rootScope.recurWeeklyID === undefined){
         console.log('write code for weekly recurring profiles');
