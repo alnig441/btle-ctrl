@@ -395,27 +395,29 @@ router.post('/profile_regular', function(req, res, error){
     else {
         var job = schedule.scheduleJob('PROFILE: ' + req.body.profile_name +' - ' + req.body.id + ' - ' + setpoint, setpoint, function(){
 
-            var child = spawn('gatttool', gattArgs);
 
-            child.stdout.on('data', function(data){
-
-                res.send(data);
-
-                child.kill();
-            });
-
-            child.on('exit', function (code) {
-                console.log('spawned process ended on exit code: ', code);
-                if (code === 0) {
-                    c = code;
-                    console.log('gatttool run success');
-
-                }
-                else {
-                    console.log('check hciconfig');
-                }
-
-            });
+            console.log('testing regular profile');
+            //var child = spawn('gatttool', gattArgs);
+            //
+            //child.stdout.on('data', function(data){
+            //
+            //    res.send(data);
+            //
+            //    child.kill();
+            //});
+            //
+            //child.on('exit', function (code) {
+            //    console.log('spawned process ended on exit code: ', code);
+            //    if (code === 0) {
+            //        c = code;
+            //        console.log('gatttool run success');
+            //
+            //    }
+            //    else {
+            //        console.log('check hciconfig');
+            //    }
+            //
+            //});
 
 
         });

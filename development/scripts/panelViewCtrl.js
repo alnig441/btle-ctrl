@@ -85,7 +85,7 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
         var refreshTimeOut = setTimeout(function(){
 
             for(var prop in $rootScope.activeProfiles){
-                if(prop !== 'on_at_sunset' || prop !== 'off_at_sunrise'){
+                if(prop !== 'on_at_sunset' && prop !== 'off_at_sunrise'){
                     //console.log('active profile: ', prop, $rootScope.activeProfiles[prop]);
                     for(var i = 0 ; i < $rootScope.activeProfiles[prop].length ; i ++){
                         $rootScope.activeProfiles[prop][i].second = i;
