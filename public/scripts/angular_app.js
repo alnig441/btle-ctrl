@@ -294,8 +294,8 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
             $http.put('/profiles', this.profile)
                 .then(function(response){
                     console.log(response);
-                });
-
+                }).then(function(response){
+            });
         }
 
         if(choice === 'delete_profile'){
@@ -436,7 +436,8 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
                                 .then(function(response){
                                     $rootScope.panels = response.data;
                                 });
-                        });
+                        }).then(function(response){
+                    });
 
                 }
 
@@ -452,6 +453,8 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
         }
 
         if(option === 'profiles'){
+
+            $rootScope.recurDailyID = undefined;
 
             var x = this.scheduleDevice.profiles;
             var mac = this.scheduleDevice.mac;
@@ -495,7 +498,7 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
 
 ;app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$mdMedia', '$mdDialog', '$timeout', '$interval', function($scope, $rootScope, $http, $location, $mdMedia, $mdDialog, $timeout, $interval){
 
-    console.log('in panelViewCtrl - rootScope: ', $rootScope);
+    console.log('in panelViewCtrl - rootScope: ', $rootScope.recurDailyID);
 
     $http.get('http://api.sunrise-sunset.org/json?lat=44.891123.7201600&lng=-93.359752&formatted=0')
         .then(function (response) {

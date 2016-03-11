@@ -1,6 +1,6 @@
 app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$mdMedia', '$mdDialog', '$timeout', '$interval', function($scope, $rootScope, $http, $location, $mdMedia, $mdDialog, $timeout, $interval){
 
-    console.log('in panelViewCtrl - rootScope: ', $rootScope);
+    console.log('in panelViewCtrl - rootScope: ', $rootScope.recurDailyID);
 
     $http.get('http://api.sunrise-sunset.org/json?lat=44.891123.7201600&lng=-93.359752&formatted=0')
         .then(function (response) {

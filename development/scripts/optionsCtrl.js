@@ -91,7 +91,8 @@ app.controller('optionsCtrl',['$scope', '$rootScope', '$http', '$location', '$md
                                 .then(function(response){
                                     $rootScope.panels = response.data;
                                 });
-                        });
+                        }).then(function(response){
+                    });
 
                 }
 
@@ -107,6 +108,8 @@ app.controller('optionsCtrl',['$scope', '$rootScope', '$http', '$location', '$md
         }
 
         if(option === 'profiles'){
+
+            $rootScope.recurDailyID = undefined;
 
             var x = this.scheduleDevice.profiles;
             var mac = this.scheduleDevice.mac;
