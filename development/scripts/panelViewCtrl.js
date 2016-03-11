@@ -50,6 +50,8 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
 
     function recurDaily() {
 
+        console.log('Executing active profiles - daily')
+
         for(var prop in $rootScope.activeProfiles){
             for(var i = 0 ; i < $rootScope.activeProfiles[prop].length ; i ++){
                 var date;
@@ -83,6 +85,8 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
 
         $rootScope.recurDailyID = setTimeout(function(){
 
+            console.log('Executing active profiles on load');
+
             for(var prop in $rootScope.activeProfiles){
 
                     for(var i = 0 ; i < $rootScope.activeProfiles[prop].length ; i ++){
@@ -115,6 +119,8 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
             var tmp = setTimeout(function(){
 
                 for(var prop in $rootScope.activeProfiles){
+
+                    console.log('Executing active profiles after initial delay');
 
                     for(var i = 0 ; i < $rootScope.activeProfiles[prop].length ; i ++){
                         var date;
