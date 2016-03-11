@@ -1,5 +1,5 @@
 app.factory('profilesService',['$http', '$rootScope', function($http, $rootScope) {
-    var recurringProfiles = {};
+    var _profilesFactory = {};
 
     _profilesFactory.runActive = function(){
 

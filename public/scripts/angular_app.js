@@ -226,7 +226,7 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
             });
         }
 
-        if(choice === 'delete') {
+        if(choice === 'delete_device') {
 
             $http.delete('/admin/' + this.installation.device.mac)
                 .then(function(response){
@@ -239,7 +239,7 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
 
         }
 
-        if(choice === 'update') {
+        if(choice === 'update_device') {
 
             $http.post('/admin/update', this.installation.device)
                 .then(function(response){
@@ -250,27 +250,10 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
 
         if(choice === 'add') {
 
-            console.log('in add device ');
-
-            if(this.form.profile){
-                console.log('we have profile');
-
-                $http.post('/profiles/add', this.form.profile)
-                    .then(function(response){
-                        console.log(response);
-                    });
-            }
-
-            if(this.form.device){
-                console.log('we have a device');
-
-                $http.post('/admin', this.form.device)
-                    .then(function(response){
-                        console.log(response);
-                    });
-
-            }
-
+            $http.post('/admin', this.form.device)
+                .then(function(response){
+                    console.log(response);
+                });
 
         }
 
@@ -343,7 +326,7 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
         $mdDialog.cancel();
     };
 };app.factory('profilesService',['$http', '$rootScope', function($http, $rootScope) {
-    var recurringProfiles = {};
+    var _profilesFactory = {};
 
     _profilesFactory.runActive = function(){
 

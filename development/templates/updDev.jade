@@ -8,9 +8,9 @@ md-dialog(ng-controller='adminViewCtrl')
                 md-input-container.md-block(flex-gt-sm)
                     label(for='location') Location: {{installation.device.location}}
                     input(type='text',name='location', ng-model='installation.device.location')
-                md-button.md-primary(ng-click="submit('update')") Update
+                md-button.md-primary(ng-click="submit('update_device')") Update
                     md-icon update
-                md-button.md-primary(ng-click="submit('delete')") Delete
+                md-button.md-primary(ng-click="submit('delete_device')") Delete
                     md-icon delete
 
         md-dialog-actions
