@@ -276,6 +276,8 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
 
         if(choice === 'update_profile'){
 
+            $rootScope.recurDailyID = undefined;
+
             if(this.profile.profile.active){
                 if(this.profile.profile.sunset || this.profile.profile.sunrise){
                     this.profile.profile.hour = null;
@@ -498,7 +500,7 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
 
 ;app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$mdMedia', '$mdDialog', '$timeout', '$interval', function($scope, $rootScope, $http, $location, $mdMedia, $mdDialog, $timeout, $interval){
 
-    console.log('in panelViewCtrl - rootScope: ', $rootScope.recurDailyID);
+    console.log('in panelViewCtrl - rootScope: ', $rootScope);
 
     $http.get('http://api.sunrise-sunset.org/json?lat=44.891123.7201600&lng=-93.359752&formatted=0')
         .then(function (response) {

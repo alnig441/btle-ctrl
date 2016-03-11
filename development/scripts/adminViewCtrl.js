@@ -176,6 +176,8 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
 
         if(choice === 'update_profile'){
 
+            $rootScope.recurDailyID = undefined;
+
             if(this.profile.profile.active){
                 if(this.profile.profile.sunset || this.profile.profile.sunrise){
                     this.profile.profile.hour = null;
