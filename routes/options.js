@@ -295,7 +295,7 @@ router.post('/profile', function(req, res, error){
     var gattArgs;
 
     req.body.turn_on ? arg = on : arg = off;
-    gattArgs = call.buildGattargs(req.body.mac, arg);
+    gattArgs = call.buildGattargs(req.body.id, arg);
 
     //SUN RELATED DATA
 
