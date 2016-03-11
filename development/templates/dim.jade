@@ -6,9 +6,9 @@ div(ng-controller="optionsCtrl", ng-cloak)
         div(layout)
             div(flex="10", layout, layout-align="center center")
                 span.md-body-1
-            md-slider(flex min="0", max="255", ng-model="color.red", aria-label="red", id="red-slider", class)
+            md-slider(flex min="0", max="10", ng-model="dim.brightness", aria-label="red", id="dim-slider", class)
             div(flex="20", layout, layout-align="center center")
-                input(flex, type="number", ng-model="", aria-label="red", aria-controls="red-slider")
+                input(flex, type="number", ng-model="dim.brightness", aria-label="brightness", aria-controls="dim-slider")
         md-button(ng-click='apply("dim")') Apply
             md-icon done
         md-button(ng-click='dismiss()') Cancel

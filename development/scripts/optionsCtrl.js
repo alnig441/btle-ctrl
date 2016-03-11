@@ -15,6 +15,7 @@ app.controller('optionsCtrl',['$scope', '$rootScope', '$http', '$location', '$md
         }
 
         $rootScope.scheduleDevice.colour = $scope.color;
+        $rootScope.scheduleDevice.dim = $scope.dim;
 
         function parseDate(date, hrs, mins, secs, ms){
             date.setHours(hrs);
@@ -100,6 +101,10 @@ app.controller('optionsCtrl',['$scope', '$rootScope', '$http', '$location', '$md
         red: Math.floor(Math.random() * 255),
         green: Math.floor(Math.random() * 255),
         blue: Math.floor(Math.random() * 255)
+    };
+
+    $scope.dim = {
+      brightness: Math.floor(Math.random()*10)
     };
 
     $scope.dismiss = function() {
