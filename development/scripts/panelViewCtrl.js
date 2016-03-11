@@ -1,15 +1,9 @@
-app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$mdMedia', '$mdDialog', '$timeout', '$interval', 'profilesService', 'sunDataService', function($scope, $rootScope, $http, $location, $mdMedia, $mdDialog, $timeout, $interval, profilesService, sunDataService){
+app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$mdMedia', '$mdDialog', '$timeout', '$interval', 'profilesService', 'refreshService', function($scope, $rootScope, $http, $location, $mdMedia, $mdDialog, $timeout, $interval, profilesService, refreshService){
 
     console.log('in panelViewCtrl - rootScope: ', $rootScope);
 
-    sunDataService.refresh();
-
-    $http.get('/panel')
-        .then(function(response){
-            $rootScope.panels = response.data;
-        });
-
-
+    refreshService.sunData();
+    refreshService.panels();
 
     $http.get('/profiles')
         .then(function(response){
@@ -36,8 +30,7 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
 
     function refreshSunData() {
 
-        sunDataService.refresh();
-
+        refreshService.sunData();
         console.log('Daily sunrise/sunset data update. SUNRISE: ' + new Date($rootScope.sun_data.sunrise) + ' / SUNSET: ' + new Date($rootScope.sun_data.sunset));
 
     }
@@ -45,7 +38,7 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
     function recurDaily() {
 
         console.log('Executing active profiles - daily');
-        profilesService.run();
+        profilesService.runActive();
 
     }
 
@@ -53,12 +46,11 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
 
         $rootScope.recurDailyID = setTimeout(function(){
 
-            console.log('Executing active profiles on load');
-            profilesService.run();
+            profilesService.runActive();
 
             var tmp = setTimeout(function(){
 
-                profilesService.run();
+                profilesService.runActive();
                 var x = setInterval(recurDaily, 86400000);
                 clearTimeout(tmp);
             },delay);
@@ -73,11 +65,11 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
 
         $rootScope.refreshSunDataID = setTimeout(function(){
 
-            sunDataService.refresh();
+            refreshService.sunData();
 
             var tmp = setTimeout(function(){
 
-                sunDataService.refresh();
+                refreshService.sunData();
 
                 console.log('sunset/sunrise data refresh after initial delay. SUNRISE: ' + new Date($rootScope.sun_data.sunrise) + ' / SUNSET: ' + new Date($rootScope.sun_data.sunset));
 
@@ -134,21 +126,17 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
     };
 
     $scope.showOptions = function(url){
-        //console.log('..changing to options view..', this);
         $rootScope.scheduleDevice = this.panel.device;
         $rootScope.template.url = $rootScope.template[url];
     };
 
     $scope.switch = function(url){
-        //console.log('..loading option '+ url +' ..');
         $rootScope.template.url = $rootScope.template[url];
 
     };
 
     $scope.showAdvOptions = function(ev, option) {
         var useFullScreen = ($mdMedia('sm') || $mdMedia('xs'))  && $scope.customFullscreen;
-
-        //console.log('in showAdvOptions ', this);
 
         var configDialog = {
             scope: $scope,

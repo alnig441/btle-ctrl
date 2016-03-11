@@ -1,4 +1,4 @@
-app.controller('optionsCtrl',['$scope', '$rootScope', '$http', '$location', '$mdDialog', function($scope, $rootScope, $http, $location, $mdDialog){
+app.controller('optionsCtrl',['$scope', '$rootScope', '$http', '$location', '$mdDialog', 'refreshService', function($scope, $rootScope, $http, $location, $mdDialog, refreshService){
 
     //console.log('in optionsCtrl ', $rootScope, this);
 
@@ -61,10 +61,7 @@ app.controller('optionsCtrl',['$scope', '$rootScope', '$http', '$location', '$md
                         }
                         $http.post('/profiles/add', this.form)
                             .then(function(response){
-                                $http.get('/panel')
-                                    .then(function(response){
-                                        $rootScope.panels = response.data;
-                                    });
+                                refreshService.panels();
                             });
 
 
@@ -87,10 +84,7 @@ app.controller('optionsCtrl',['$scope', '$rootScope', '$http', '$location', '$md
                     this.form.minute = this.form.setpoint.getMinutes();
                     $http.post('/profiles/add', this.form)
                         .then(function(response){
-                            $http.get('/panel')
-                                .then(function(response){
-                                    $rootScope.panels = response.data;
-                                });
+                            refreshService.panels();
                         }).then(function(response){
                     });
 
@@ -98,10 +92,7 @@ app.controller('optionsCtrl',['$scope', '$rootScope', '$http', '$location', '$md
 
                 $http.post('/options/schedule', $rootScope.scheduleDevice).then(function(response){
                         console.log('response from options/schedule', response);
-                        $http.get('/panel')
-                            .then(function(response){
-                                $rootScope.panels = response.data;
-                            });
+                        refreshService.panels();
                     });
             }
 

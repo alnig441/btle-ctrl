@@ -1,7 +1,7 @@
 app.factory('profilesService',['$http', '$rootScope', function($http, $rootScope) {
     var recurringProfiles = {};
 
-    recurringProfiles.run = function(){
+    _profilesFactory.runActive = function(){
 
         console.log('..factory executing acitve profiles..');
         for(var prop in $rootScope.activeProfiles){
@@ -32,30 +32,18 @@ app.factory('profilesService',['$http', '$rootScope', function($http, $rootScope
                 }
             }
         }
-        return;
-    };
-    return recurringProfiles;
-}]);
-
-app.factory('panelService', ['$http', '$rootScope', function($http, $rootScope){
-
-    var panels = {};
-
-    panels.refresh = function(){
-
     };
 
-    return panels;
-
+    return _profilesFactory;
 }]);
 
-app.factory('sunDataService', ['$http', '$rootScope', function($http, $rootScope){
+app.factory('refreshService', ['$http', '$rootScope', function($http, $rootScope){
 
-    var sunData = {};
+    var _refreshFactory = {};
 
-    sunData.refresh = function(){
+    _refreshFactory.sunData = function(){
 
-        console.log('..factory updating sunData..');
+        console.log('..factory refreshing sunData..');
 
         $http.get('http://api.sunrise-sunset.org/json?lat=44.891123.7201600&lng=-93.359752&formatted=0')
             .then(function (response) {
@@ -64,6 +52,18 @@ app.factory('sunDataService', ['$http', '$rootScope', function($http, $rootScope
             });
     };
 
-    return sunData;
+    _refreshFactory.panels = function(){
+
+        console.log('..factory refreshing panels..');
+
+        $http.get('/panel')
+            .then(function(response){
+                $rootScope.panels = response.data;
+            });
+
+    };
+
+
+    return _refreshFactory;
 
 }]);
