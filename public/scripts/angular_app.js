@@ -383,6 +383,8 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
 
         if(option === 'schedule') {
 
+            console.log('...scheduling...', this.scheduleDevice, this.form.create_profile);
+
             if($rootScope.scheduleDevice.onAtSunset || $rootScope.scheduleDevice.offAtSunrise){
 
                 // Schedule sunset/sunrise range event
@@ -394,6 +396,24 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
 
                 // Schedule single sunset/sunrise event
                 else {
+                    //check if new profiles is to be created
+                    if(this.form.active){
+                        if(this.form.onAtSunset){
+                            this.form.sunset = true;
+                        }
+                        if(this.form.offAtSunrise){
+                            this.form.sunrise = true;
+                        }
+                        $http.post('/profiles/add', this.form)
+                            .then(function(response){
+                                $http.get('/panel')
+                                    .then(function(response){
+                                        $rootScope.panels = response.data;
+                                    });
+                            });
+
+
+                    }
                         $http.post('/options/sun', $rootScope.scheduleDevice).then(function(response){
                         console.log('response from options/sun', response);
 
@@ -406,7 +426,21 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
 
             // Schedule normal event
             else {
-                    $http.post('/options/schedule', $rootScope.scheduleDevice).then(function(response){
+                //check if new profiles is to be created
+                if(this.form.active){
+                    this.form.hour = this.form.setpoint.getHours();
+                    this.form.minute = this.form.setpoint.getMinutes();
+                    $http.post('/profiles/add', this.form)
+                        .then(function(response){
+                            $http.get('/panel')
+                                .then(function(response){
+                                    $rootScope.panels = response.data;
+                                });
+                        });
+
+                }
+
+                $http.post('/options/schedule', $rootScope.scheduleDevice).then(function(response){
                         console.log('response from options/schedule', response);
                         $http.get('/panel')
                             .then(function(response){
@@ -437,7 +471,7 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
          $rootScope.template.url = $rootScope.template.default;
     };
 
-    $scope.turnDevOn = [
+    $scope.turn_on = [
         {name: 'ON', value:  true},
         {name: 'OFF', value: false}
     ];

@@ -29,17 +29,52 @@ router.post('/', function(req, res, error){
 
 router.post('/add', function(req, res, error){
 
-    //console.log('profiles add: ', req.body);
+    console.log('profiles add: ', req.body);
+
+    var tmp = req.body;
+    var props = [];
+    var values = [];
+
+    for(var prop in tmp){
+        var x = "'";
+        if(prop !== 'setpoint' && prop !== 'offAtSunrise' && prop !== 'onAtSunset'){
+            if(tmp[prop] !== null ){
+                props.push(prop);
+                x += tmp[prop];
+                x += "'";
+                values.push(x);
+            }
+            if(tmp[prop] === null){
+                props.push(prop);
+                values.push('null');
+            }
+
+        }
+    }
+
+    console.log('profile add: ', props.toString(), values.toString());
 
     pg.connect(connectionString, function(err, client, done){
 
-        var query = client.query("INSERT INTO profiles (profile_name, turn_on) values($1, $2)", [req.body.name, req.body.state], function(error, result){
+        var query = client.query("INSERT INTO profiles ("+ props.toString()+") values("+values.toString()+")", function(error, result){
             if(error){res.send(error);}
         })
 
         query.on('end',function(result){
             client.end();
-            res.send(result);
+
+            pg.connect(connectionString, function(err, client, done){
+                var qurey = client.query("ALTER TABLE connectedprofiles ADD COLUMN " + tmp.profile_name + " BOOLEAN", function(error, result){
+                    if(error){
+                        res.send(error);
+                    }
+                })
+                query.on('end', function(result){
+                    client.end();
+                    res.send(result);
+                })
+            })
+
         })
 
     });

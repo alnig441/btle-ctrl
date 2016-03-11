@@ -17,7 +17,7 @@ router.post('/schedule', function(req, res, error){
     var gattArgs;
     var begin;
 
-    req.body.turnDevOn ? gattArgs = call.buildGattargs(req.body.mac, on) : gattArgs = call.buildGattargs(req.body.mac, off);
+    req.body.turn_on ? gattArgs = call.buildGattargs(req.body.mac, on) : gattArgs = call.buildGattargs(req.body.mac, off);
     req.body.dateEnd !==undefined ? begin = new Date(req.body.dateBegin) : begin = new Date(req.body.today);
 
     begin.setHours(setpoint.getHours());
@@ -25,14 +25,14 @@ router.post('/schedule', function(req, res, error){
     begin.setSeconds(setpoint.getSeconds());
 
     //RECURRING SCHEDULE - REGULAR CONTROL
-    if(req.body.recurWeekly || req.body.recurDaily || req.body.dateEnd !== undefined){
+    if(req.body.recur_weekly || req.body.recur_daily || req.body.dateEnd !== undefined){
 
 
         var recur = new schedule.RecurrenceRule();
         recur.hour = begin.getHours();
         recur.minute = begin.getMinutes();
 
-        if(req.body.recurWeekly){
+        if(req.body.recur_weekly){
             recur.dayOfWeek = begin.getDay();
         }
         if(req.body.dateEnd !== undefined){
@@ -79,7 +79,7 @@ router.post('/schedule', function(req, res, error){
 
             pg.connect(connectionString, function (err, client, done) {
 
-                var query = client.query("UPDATE devices SET device_on='" + req.body.turnDevOn + "' where mac='" + req.body.mac + "'", function (error, result) {
+                var query = client.query("UPDATE devices SET device_on='" + req.body.turn_on + "' where mac='" + req.body.mac + "'", function (error, result) {
                     if (error) {
                         console.log('there was an error ', error);
                     }
@@ -140,7 +140,7 @@ router.post('/schedule', function(req, res, error){
 
                 pg.connect(connectionString, function (err, client, done) {
 
-                    var query = client.query("UPDATE devices SET device_on='" + req.body.turnDevOn + "' where mac='" + req.body.mac + "'", function (error, result) {
+                    var query = client.query("UPDATE devices SET device_on='" + req.body.turn_on + "' where mac='" + req.body.mac + "'", function (error, result) {
                         if (error) {
                             console.log('there was an error ', error);
                         }
