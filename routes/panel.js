@@ -71,12 +71,10 @@ router.put('/', function(req, res, error){
 
             switch(newRes.device_on){
                 case true:
-                    console.log('case true');
                     newRes.device_on = false;
                     gattArgs = call.buildGattargs(newRes.mac, off);
                     break;
                 case false:
-                    console.log('case false');
                     newRes.device_on = true;
                     gattArgs = call.buildGattargs(newRes.mac, on);
                     break;

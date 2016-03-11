@@ -50,7 +50,7 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
 
     function recurDaily() {
 
-        console.log('Executing active profiles - daily')
+        console.log('Executing active profiles - daily');
 
         for(var prop in $rootScope.activeProfiles){
             for(var i = 0 ; i < $rootScope.activeProfiles[prop].length ; i ++){

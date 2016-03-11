@@ -101,7 +101,6 @@ function LoginDialogController($scope, $mdDialog, $http, $location, $rootScope) 
 ;app.controller('adminViewCtrl',['$scope', '$rootScope', '$http', '$mdMedia', '$mdDialog', function($scope, $rootScope, $http, $mdMedia, $mdDialog){
 
     console.log('in adminViewCtrl - rootScope: ', $rootScope);
-    $rootScope.setpoint = {};
 
     $scope.customFullscreen = $mdMedia('xs') || $mdMedia('sm');
 
@@ -277,26 +276,20 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
 
         if(choice === 'update_profile'){
 
-            var hour;
-            var minute;
-
             if(this.profile.profile.active){
                 if(this.profile.profile.sunset || this.profile.profile.sunrise){
-                    hour = null;
-                    minute = null;
+                    this.profile.profile.hour = null;
+                    this.profile.profile.minute = null;
                 }
                 else{
-                    hour = this.form.setpoint.getHours();
-                    minute = this.form.setpoint.getMinutes();
+                    this.profile.profile.hour = this.form.setpoint.getHours();
+                    this.profile.profile.minute = this.form.setpoint.getMinutes();
                 }
             }
             if(!this.profile.profile.active){
-                hour = null;
-                minute = null;
+                this.profile.profile.hour = null;
+                this.profile.profile.minute = null;
             }
-            this.profile.profile.hour = hour;
-            this.profile.profile.minute = minute;
-            //this.profile.profile.setpoint = null;
 
             $http.put('/profiles', this.profile)
                 .then(function(response){
@@ -513,6 +506,8 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
 
     function recurDaily() {
 
+        console.log('Executing active profiles - daily');
+
         for(var prop in $rootScope.activeProfiles){
             for(var i = 0 ; i < $rootScope.activeProfiles[prop].length ; i ++){
                 var date;
@@ -546,6 +541,8 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
 
         $rootScope.recurDailyID = setTimeout(function(){
 
+            console.log('Executing active profiles on load');
+
             for(var prop in $rootScope.activeProfiles){
 
                     for(var i = 0 ; i < $rootScope.activeProfiles[prop].length ; i ++){
@@ -578,6 +575,8 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
             var tmp = setTimeout(function(){
 
                 for(var prop in $rootScope.activeProfiles){
+
+                    console.log('Executing active profiles after initial delay');
 
                     for(var i = 0 ; i < $rootScope.activeProfiles[prop].length ; i ++){
                         var date;

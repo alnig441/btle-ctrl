@@ -286,7 +286,7 @@ router.post('/colour', function(req, res, error){
 
 router.post('/profile', function(req, res, error){
 
-    console.log('options/regular: ', req.body);
+    //console.log('options/regular: ', req.body);
 
     var on = '58010301ff00ffffff';
     var off = '58010301ff00000000';
@@ -299,7 +299,7 @@ router.post('/profile', function(req, res, error){
 
     //SUN RELATED DATA
 
-    console.log('priting gattArgs: ', gattArgs);
+    //console.log('priting gattArgs: ', gattArgs);
 
     if(typeof req.body.sunset === 'number' || typeof req.body.sunrise === 'number'){
         //console.log('we have sun related data', req.body);
@@ -366,21 +366,6 @@ router.post('/profile', function(req, res, error){
 
             job.on('run', function(){
                 console.log('my '+req.body.profile_name+' job ran');
-
-                //pg.connect(connectionString, function (err, client, done) {
-                //
-                //    var query = client.query("UPDATE devices SET device_on='" + req.body.turn_on + "' where mac='" + req.body.id + "'", function (error, result) {
-                //        if (error) {
-                //            console.log('there was an error ', error);
-                //        }
-                //    })
-                //
-                //    query.on('end', function (result) {
-                //        client.end();
-                //    })
-                //
-                //});
-
 
             });
 
@@ -454,20 +439,6 @@ router.post('/profile', function(req, res, error){
 
             job.on('run', function(){
                 console.log('my '+req.body.profile_name+' job ran');
-
-                //pg.connect(connectionString, function (err, client, done) {
-                //
-                //    var query = client.query("UPDATE devices SET device_on='" + req.body.turn_on + "' where mac='" + req.body.id + "'", function (error, result) {
-                //        if (error) {
-                //            console.log('there was an error ', error);
-                //        }
-                //    })
-                //
-                //    query.on('end', function (result) {
-                //        client.end();
-                //    })
-                //
-                //});
 
             });
 
