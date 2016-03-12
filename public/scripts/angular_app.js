@@ -118,30 +118,7 @@ function LoginDialogController($scope, $mdDialog, $http, $location, $rootScope) 
             fullscreen: useFullScreen
         };
 
-        if(option === 'modify_device'){
 
-                    refreshService.panels();
-
-                    $mdDialog.show(configDialog);
-                    $scope.$watch(function() {
-                        return $mdMedia('xs') || $mdMedia('sm');
-                    }, function(wantsFullScreen) {
-                        $scope.customFullscreen = (wantsFullScreen === true);
-                    });
-
-
-        }
-
-        if(option === 'add'){
-
-            $mdDialog.show(configDialog);
-            $scope.$watch(function() {
-                return $mdMedia('xs') || $mdMedia('sm');
-            }, function(wantsFullScreen) {
-                $scope.customFullscreen = (wantsFullScreen === true);
-            });
-
-        }
 
         if(option === 'scan'){
 
@@ -164,6 +141,31 @@ function LoginDialogController($scope, $mdDialog, $http, $location, $rootScope) 
                         });
 
                 });
+
+        }
+
+        if(option === 'add'){
+
+            $mdDialog.show(configDialog);
+            $scope.$watch(function() {
+                return $mdMedia('xs') || $mdMedia('sm');
+            }, function(wantsFullScreen) {
+                $scope.customFullscreen = (wantsFullScreen === true);
+            });
+
+        }
+
+        if(option === 'modify_device'){
+
+            refreshService.panels();
+
+            $mdDialog.show(configDialog);
+            $scope.$watch(function() {
+                return $mdMedia('xs') || $mdMedia('sm');
+            }, function(wantsFullScreen) {
+                $scope.customFullscreen = (wantsFullScreen === true);
+            });
+
 
         }
 
@@ -220,6 +222,26 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
             });
         }
 
+        if(choice === 'add') {
+
+            $http.post('/admin', this.form.device)
+                .then(function(response){
+                    console.log(response);
+                });
+
+        }
+
+        if(choice === 'update_device') {
+
+            $http.post('/admin/update', this.panel.device)
+                .then(function(response){
+                    console.log(response);
+                }).then(function(response){
+                refreshService.panels();
+            });
+
+        }
+
         if(choice === 'delete_device') {
 
             console.log('in delete_device dialog: ', $rootScope);
@@ -231,25 +253,7 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
 
         }
 
-        if(choice === 'update_device') {
 
-            $http.post('/admin/update', this.panel.device)
-                .then(function(response){
-                    console.log(response);
-                }).then(function(response){
-                    refreshService.panels();
-            });
-
-        }
-
-        if(choice === 'add') {
-
-            $http.post('/admin', this.form.device)
-                .then(function(response){
-                    console.log(response);
-                });
-
-        }
 
         if(choice === 'update_profile'){
 

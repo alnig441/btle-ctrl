@@ -69,6 +69,9 @@ p {
 }
 
 /* ANGULAR MATERIAL DESIGN */
+.override {
+    border-radius: 5px;
+    border: 1px solid}
 
 .fabToolbardemoBasicUsage md-fab-toolbar.md-right md-fab-trigger.align-with-text {
     left: 7px; }

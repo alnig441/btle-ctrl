@@ -3,11 +3,11 @@ div#panel(ng-controller='panelViewCtrl')
         md-whiteframe.md-whiteframe-1dp(flex-sm="45", flex-gt-sm="35", flex-gt-md="25", layout, layout-align="center center")
             span
                 .md-whiteframe-3dp
-                    md-button(ng-click='master("on")', layout, layout-align="center center") Master ON
-                    button(ng-click='master("off")', layout, layout-align="center center") Master OFF
+                    md-button.override(ng-click='master("on")', layout, layout-align="center center") Master ON
+                    md-button.override(ng-click='master("off")', layout, layout-align="center center") Master OFF
     div(layout="row", layout-padding layout-wrap, layout-fill, style="padding: 5px, margin: auto;", ng-cloak, ng-repeat='panel in panels')
         md-whiteframe.md-whiteframe-1dp(flex-sm="45", flex-gt-sm="35", flex-gt-md="25", layout, layout-align="center center")
             span
                 .md-whiteframe-3dp
-                    md-button(ng-click='newState()', layout, layout-align="center center") {{panel.device.location}}
-                    button(ng-click='showOptions("options")', layout, layout-align="center center") Options
+                    md-button.override(ng-click='newState()', layout, layout-align="center center") {{panel.device.location}}
+                    md-button.override(ng-click='showOptions("options")', layout, layout-align="center center") Options
