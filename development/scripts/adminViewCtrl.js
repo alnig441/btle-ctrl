@@ -1,4 +1,4 @@
-app.controller('adminViewCtrl',['$scope', '$rootScope', '$http', '$mdMedia', '$mdDialog', function($scope, $rootScope, $http, $mdMedia, $mdDialog){
+app.controller('adminViewCtrl',['$scope', '$rootScope', '$http', '$mdMedia', '$mdDialog', 'refreshService', function($scope, $rootScope, $http, $mdMedia, $mdDialog, refreshService){
 
     console.log('in adminViewCtrl - rootScope: ', $rootScope);
 
@@ -20,9 +20,7 @@ app.controller('adminViewCtrl',['$scope', '$rootScope', '$http', '$mdMedia', '$m
 
         if(option === 'modify_device'){
 
-            $http.get('/panel')
-                .then(function(response){
-                    $scope.installations = response.data;
+                    refreshService.panels();
 
                     $mdDialog.show(configDialog);
                     $scope.$watch(function() {
@@ -30,9 +28,6 @@ app.controller('adminViewCtrl',['$scope', '$rootScope', '$http', '$mdMedia', '$m
                     }, function(wantsFullScreen) {
                         $scope.customFullscreen = (wantsFullScreen === true);
                     });
-
-                });
-
 
 
         }
@@ -76,7 +71,6 @@ app.controller('adminViewCtrl',['$scope', '$rootScope', '$http', '$mdMedia', '$m
 
             $http.get('/profiles/all')
                 .then(function(response){
-                    //$rootScope.profiles = response.data;
                     $scope.profiles = response.data;
                     $mdDialog.show(configDialog);
                     $scope.$watch(function() {
@@ -95,7 +89,7 @@ app.controller('adminViewCtrl',['$scope', '$rootScope', '$http', '$mdMedia', '$m
 
 }]);
 
-function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, $mdMedia) {
+function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, $mdMedia, refreshService) {
 
     //console.log('in adminDialogCtrl - rootScope: ', $rootScope);
     $scope.submit = function(choice, ev){
@@ -128,23 +122,23 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
 
         if(choice === 'delete_device') {
 
-            $http.delete('/admin/' + this.installation.device.mac)
+            console.log('in delete_device dialog: ', $rootScope);
+
+            $http.delete('/admin/' + this.panel.device.mac)
                 .then(function(response){
-                    $http.get('/panel')
-                        .then(function(response){
-                            $rootScope.installations = response.data;
-                            console.log(response);
-                        });
+                    refreshService.panels();
                 });
 
         }
 
         if(choice === 'update_device') {
 
-            $http.post('/admin/update', this.installation.device)
+            $http.post('/admin/update', this.panel.device)
                 .then(function(response){
                     console.log(response);
-                });
+                }).then(function(response){
+                    refreshService.panels();
+            });
 
         }
 

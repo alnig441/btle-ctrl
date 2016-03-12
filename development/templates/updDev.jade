@@ -3,11 +3,13 @@ md-dialog(ng-controller='adminViewCtrl')
         md-toolbar
             div.md-toolbar-tools
                 h2 Modify Device
-        md-dialog-content(ng-repeat='installation in installations')
+        //md-dialog-content(ng-repeat='installation in installations')
+        md-dialog-content(ng-repeat='panel in panels')
+
             div.md-dialog-content
                 md-input-container.md-block(flex-gt-sm)
-                    label(for='location') Location: {{installation.device.location}}
-                    input(type='text',name='location', ng-model='installation.device.location')
+                    label(for='location') Location: {{panel.device.location}}
+                    input(type='text',name='location', ng-model='panel.device.location')
                 md-button.md-primary(ng-click="submit('update_device')") Update
                     md-icon update
                 md-button.md-primary(ng-click="submit('delete_device')") Delete
