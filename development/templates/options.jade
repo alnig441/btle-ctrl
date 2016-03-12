@@ -2,11 +2,11 @@ div#admin(ng-controller='panelViewCtrl', layout="row", layout-padding layout-wra
     md-whiteframe.md-whiteframe-1dp(flex-sm="45", flex-gt-sm="35", flex-gt-md="25", layout, layout-align="center center")
         span
             .md-whiteframe-3dp
-                button(ng-click='showAdvOptions($event, "schedule")', layout, layout-align="center center") Schedule
-                button(ng-click='showAdvOptions($event, "dim")', layout, layout-align="center center") Dim
+                md-button.override.override(ng-click='showAdvOptions($event, "schedule")', layout, layout-align="center center") Schedule
+                md-button.override(ng-click='showAdvOptions($event, "dim")', layout, layout-align="center center") Dim
 div#admin(ng-controller='panelViewCtrl', layout="row", layout-padding layout-wrap, layout-fill, style="padding: 5px, margin: auto;", ng-cloak)
     md-whiteframe.md-whiteframe-1dp(flex-sm="45", flex-gt-sm="35", flex-gt-md="25", layout, layout-align="center center")
         span
             .md-whiteframe-3dp
-                button(ng-click='showAdvOptions($event, "colour")', layout, layout-align="center center") Colour
-                button(ng-click='showAdvOptions($event, "profiles")', layout, layout-align="center center") Profiles
+                md-button.override(ng-click='showAdvOptions($event, "colour")', layout, layout-align="center center") Colour
+                md-button.override(ng-click='showAdvOptions($event, "profiles")', layout, layout-align="center center") Profiles
