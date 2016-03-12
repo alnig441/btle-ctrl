@@ -328,10 +328,12 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
 
     _profilesFactory.runActive = function(){
 
+        var i;
+
         console.log('..factory executing acitve profiles..');
         for(var prop in $rootScope.activeProfiles){
 
-            for(var i = 0 ; i < $rootScope.activeProfiles[prop].length ; i ++){
+            for(i = 0 ; i < $rootScope.activeProfiles[prop].length ; i ++){
 
                 var date;
 
@@ -356,6 +358,13 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
                     $http.post('/options/profile', $rootScope.activeProfiles[prop][i]);
                 }
             }
+        }
+
+        if(i === $rootScope.activeProfiles[prop].length){
+                $http.get('/jobs')
+                    .then(function(response){
+                        $rootScope.scheduledJobs = response.data;
+                    });
         }
     };
 

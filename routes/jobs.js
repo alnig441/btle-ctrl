@@ -3,7 +3,7 @@ var express = require('express'),
 var schedule = require('node-schedule');
 var call = require('../public/scripts/myFunctions.min.js');
 
-router.get('/:name?',function(req, res, error){
+router.get('/',function(req, res, error){
 
     console.log(req.params);
     var jobs = schedule.scheduledJobs;
@@ -30,19 +30,3 @@ router.delete('/:name?', function(req, res, error){
 
 module.exports = router;
 
-
-
-
-//    var jobs = schedule.scheduledJobs;
-//
-//    var smsJob = jobs["job_sms_" + reminderId];
-//    var callJob = jobs["job_call_" + reminderId];
-//
-//    if (smsJob) {
-//        smsJob.cancel();
-//    }
-//    if (callJob) {
-//        callJob.cancel();
-//    }
-//    return true;
-//}
