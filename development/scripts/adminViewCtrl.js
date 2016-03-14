@@ -1,4 +1,4 @@
-app.controller('adminViewCtrl',['$scope', '$rootScope', '$http', '$mdMedia', '$mdDialog', 'refreshService', function($scope, $rootScope, $http, $mdMedia, $mdDialog, refreshService){
+app.controller('adminViewCtrl',['$scope', '$rootScope', '$http', '$mdMedia', '$mdDialog', 'refreshService','jobService', function($scope, $rootScope, $http, $mdMedia, $mdDialog, refreshService, jobService){
 
     console.log('in adminViewCtrl - rootScope: ', $rootScope);
 
@@ -85,13 +85,29 @@ app.controller('adminViewCtrl',['$scope', '$rootScope', '$http', '$mdMedia', '$m
 
         }
 
+        if(option === 'jobs'){
+
+            console.log('in adminViewCtrl - ', option);
+
+            jobService.getJobs();
+
+            $mdDialog.show(configDialog);
+            $scope.$watch(function() {
+                return $mdMedia('xs') || $mdMedia('sm');
+            }, function(wantsFullScreen) {
+                $scope.customFullscreen = (wantsFullScreen === true);
+            });
+
+
+        }
+
 
     };
 
 
 }]);
 
-function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, $mdMedia, refreshService) {
+function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, $mdMedia, refreshService, jobService) {
 
     //console.log('in adminDialogCtrl - rootScope: ', $rootScope);
     $scope.submit = function(choice, ev){
@@ -188,6 +204,13 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
                     console.log(response);
                 });
 
+        }
+
+        if(choice === 'delete_job'){
+
+            console.log('in delete_job: ', this.scheduledJob.name);
+
+            jobService.deleteJob(this.scheduledJob.name);
         }
 
         $mdDialog.hide();

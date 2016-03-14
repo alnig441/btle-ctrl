@@ -5,7 +5,6 @@ var call = require('../public/scripts/myFunctions.min.js');
 
 router.get('/',function(req, res, error){
 
-    console.log(req.params);
     var jobs = schedule.scheduledJobs;
     res.send(jobs);
 
@@ -13,7 +12,7 @@ router.get('/',function(req, res, error){
 
 router.delete('/:name?', function(req, res, error){
 
-    console.log(req.params);
+    console.log('in jobs/delete: ', req.params);
 
     var jobs = schedule.scheduledJobs;
 

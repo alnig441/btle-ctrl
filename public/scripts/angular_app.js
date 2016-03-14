@@ -48,7 +48,8 @@ app.config(function($routeProvider, $locationProvider, $mdThemingProvider, $mdIc
         scan: '/views/scanDev.html',
         add: '/views/addDev.html',
         modify_device: '/views/updDev.html',
-        modify_profile: '/views/updProfile.html'
+        modify_profile: '/views/updProfile.html',
+        jobs: '/views/jobs.html'
     };
 
 
@@ -98,7 +99,7 @@ function LoginDialogController($scope, $mdDialog, $http, $location, $rootScope) 
     };
 }
 
-;app.controller('adminViewCtrl',['$scope', '$rootScope', '$http', '$mdMedia', '$mdDialog', 'refreshService', function($scope, $rootScope, $http, $mdMedia, $mdDialog, refreshService){
+;app.controller('adminViewCtrl',['$scope', '$rootScope', '$http', '$mdMedia', '$mdDialog', 'refreshService','jobService', function($scope, $rootScope, $http, $mdMedia, $mdDialog, refreshService, jobService){
 
     console.log('in adminViewCtrl - rootScope: ', $rootScope);
 
@@ -185,13 +186,29 @@ function LoginDialogController($scope, $mdDialog, $http, $location, $rootScope) 
 
         }
 
+        if(option === 'jobs'){
+
+            console.log('in adminViewCtrl - ', option);
+
+            jobService.getJobs();
+
+            $mdDialog.show(configDialog);
+            $scope.$watch(function() {
+                return $mdMedia('xs') || $mdMedia('sm');
+            }, function(wantsFullScreen) {
+                $scope.customFullscreen = (wantsFullScreen === true);
+            });
+
+
+        }
+
 
     };
 
 
 }]);
 
-function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, $mdMedia, refreshService) {
+function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, $mdMedia, refreshService, jobService) {
 
     //console.log('in adminDialogCtrl - rootScope: ', $rootScope);
     $scope.submit = function(choice, ev){
@@ -288,6 +305,13 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
                     console.log(response);
                 });
 
+        }
+
+        if(choice === 'delete_job'){
+
+            console.log('in delete_job: ', this.scheduledJob.name);
+
+            jobService.deleteJob(this.scheduledJob.name);
         }
 
         $mdDialog.hide();
@@ -399,6 +423,37 @@ app.factory('refreshService', ['$http', '$rootScope', function($http, $rootScope
 
 
     return _refreshFactory;
+
+}]);
+
+app.factory('jobService', ['$http', '$rootScope', function($http, $rootScope){
+
+    var _jobFactory = {};
+
+    _jobFactory.getJobs = function(){
+        $http.get('/jobs')
+            .then(function(response){
+                $rootScope.scheduledJobs = response.data;
+            });
+    };
+
+    _jobFactory.deleteJob = function(job){
+
+        console.log('jobService : ', job);
+        $http.delete('/jobs/' + job )
+            .then(function(){
+
+            })
+            .then(function(){
+                $http.get('/jobs')
+                    .then(function(response){
+                        $rootScope.scheduledJobs = response.data;
+                    });
+            });
+
+    };
+
+    return _jobFactory;
 
 }]);;app.controller('optionsCtrl',['$scope', '$rootScope', '$http', '$location', '$mdDialog', 'refreshService', function($scope, $rootScope, $http, $location, $mdDialog, refreshService){
 

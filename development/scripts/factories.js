@@ -76,3 +76,34 @@ app.factory('refreshService', ['$http', '$rootScope', function($http, $rootScope
     return _refreshFactory;
 
 }]);
+
+app.factory('jobService', ['$http', '$rootScope', function($http, $rootScope){
+
+    var _jobFactory = {};
+
+    _jobFactory.getJobs = function(){
+        $http.get('/jobs')
+            .then(function(response){
+                $rootScope.scheduledJobs = response.data;
+            });
+    };
+
+    _jobFactory.deleteJob = function(job){
+
+        console.log('jobService : ', job);
+        $http.delete('/jobs/' + job )
+            .then(function(){
+
+            })
+            .then(function(){
+                $http.get('/jobs')
+                    .then(function(response){
+                        $rootScope.scheduledJobs = response.data;
+                    });
+            });
+
+    };
+
+    return _jobFactory;
+
+}]);

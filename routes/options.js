@@ -11,13 +11,23 @@ var connectionString = process.env.DATABASE_URL || 'postgres://localhost:5432/bt
 
 router.post('/schedule', function(req, res, error){
 
+    console.log('options/schedule; ', req.body);
+
     var on = '58010301ff00ffffff';
     var off = '58010301ff00000000';
     var setpoint = new Date(req.body.setpoint);
     var gattArgs;
     var begin;
+    var flip;
 
-    req.body.turn_on ? gattArgs = call.buildGattargs(req.body.mac, on) : gattArgs = call.buildGattargs(req.body.mac, off);
+    //req.body.turn_on ? gattArgs = call.buildGattargs(req.body.mac, on) : gattArgs = call.buildGattargs(req.body.mac, off);
+    if(req.body.turn_on){
+        gattArgs = call.buildGattargs(req.body.mac, on);
+        flip = 'ON';
+    } else {
+        gattArgs = call.buildGattargs(req.body.mac, off);
+        flip ='OFF';
+    }
     req.body.dateEnd !==undefined ? begin = new Date(req.body.dateBegin) : begin = new Date(req.body.today);
 
     begin.setHours(setpoint.getHours());
@@ -43,7 +53,7 @@ router.post('/schedule', function(req, res, error){
         //RECURRING SCHEDULE - REGULAR CONTROL
         console.log('setting up recurring schedule - regular control', recur, req.body);
 
-        var job = schedule.scheduleJob('Recur/regular '+ req.body.location, recur, function(){
+        var job = schedule.scheduleJob('RECUR ID_'+ Date.parse(begin) + ' '+ req.body.location + ' '+ flip +' @ ' + recur.hour + ':'+ recur.minute, recur, function(){
 
             var child = spawn('gatttool', gattArgs);
 
@@ -108,7 +118,7 @@ router.post('/schedule', function(req, res, error){
 
             //console.log('scheduling regular non-recurring control', begin);
 
-            var job = schedule.scheduleJob('regular non-recur ' + req.body.location + ' ' + begin, begin, function () {
+            var job = schedule.scheduleJob('ID_' + Date.parse(begin) + ': ' + req.body.location +' '+ flip + ' @ ' + begin.getHours() + ':' + begin.getMinutes(), begin, function () {
 
                 var child = spawn('gatttool', gattArgs);
 
@@ -174,6 +184,8 @@ router.post('/sun', function(req, res, error){
     var off = '58010301ff00000000';
     var setpoint;
     var gattArgs;
+    var sun;
+    var flip;
 
     if((new Date(req.body.sunset) < new Date() && req.body.onAtSunset ) || (new Date(req.body.sunrise) < new Date() && req.body.offAtSunrise)){
         res.send('invalid request');
@@ -183,9 +195,13 @@ router.post('/sun', function(req, res, error){
 
         if(req.body.offAtSunrise) {
             gattArgs = call.buildGattargs(req.body.mac, off);
+            sun = 'Sunrise'
+            flip = 'OFF';
         }
         if(req.body.onAtSunset) {
             gattArgs = call.buildGattargs(req.body.mac, on);
+            sun = 'Sunset';
+            flip = 'ON';
         }
 
         req.body.onAtSunset ? (setpoint = new Date(req.body.sunset)) : (setpoint = new Date (req.body.sunrise));
@@ -193,7 +209,7 @@ router.post('/sun', function(req, res, error){
 
         console.log('schedulling non-recurring sunrise/sunset control in options/sun', setpoint);
 
-        var job = schedule.scheduleJob('sunrise/sunset non-recur '+ req.body.location + ' ' + setpoint, setpoint, function(){
+        var job = schedule.scheduleJob('ID_'+ Date.parse(setpoint) +': '+ req.body.location + ' '+ flip + ' @ ' + sun, setpoint, function(){
 
                 var child = spawn('gatttool', gattArgs);
 
@@ -286,7 +302,7 @@ router.post('/colour', function(req, res, error){
 
 router.post('/profile', function(req, res, error){
 
-    console.log('options/regular: ', req.body);
+    console.log('options/profile    : ', req.body);
 
     var on = '58010301ff00ffffff';
     var off = '58010301ff00000000';
@@ -322,7 +338,7 @@ router.post('/profile', function(req, res, error){
 
             }
 
-            var job = schedule.scheduleJob('PROFILE: ' + req.body.profile_name +' - ' + req.body.id + ' - ' + setpoint, setpoint, function(){
+            var job = schedule.scheduleJob('PROFILE: ' + req.body.profile_name +'   ID_' + Date.parse(setpoint) + '/' + req.body.id, setpoint, function(){
 
 
                 var child = spawn('gatttool', gattArgs);
@@ -395,7 +411,7 @@ router.post('/profile', function(req, res, error){
         }
 
         else{
-            var job = schedule.scheduleJob('PROFILE: ' + req.body.profile_name +' - ' + req.body.id + ' - ' + setpoint, setpoint, function(){
+            var job = schedule.scheduleJob('PROFILE: ' + req.body.profile_name +'   ID_' + req.body.id + '/' + Date.parse(setpoint), setpoint, function(){
 
 
                 var child = spawn('gatttool', gattArgs);

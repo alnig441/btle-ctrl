@@ -15,6 +15,11 @@ div#admin(ng-controller='adminViewCtrl', layout="row", layout-padding layout-wra
             .md-whiteframe-3dp
                 md-button.override(ng-click="showAdvanced($event, 'modify_device')", layout, layout-align="center center") Devices
                 md-button.override(ng-click="showAdvanced($event, 'modify_profile')", layout, layout-align="center center") Profiles
+div#admin(ng-controller='adminViewCtrl', layout="row", layout-padding layout-wrap, layout-fill, style="padding: 5px, margin: auto;", ng-cloak)
+    md-whiteframe.md-whiteframe-1dp(flex-sm="45", flex-gt-sm="35", flex-gt-md="25", layout, layout-align="center center")
+        span
+            .md-whiteframe-3dp
+                md-button.override(ng-click="showAdvanced($event, 'jobs')", layout, layout-align="center center") Scheduled Jobs
 
 //div(ng-include='template.url')
 
