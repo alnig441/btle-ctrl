@@ -5,22 +5,26 @@ var call = require('../public/scripts/myFunctions.min.js');
 
 router.get('/',function(req, res, error){
 
-    var jobs = schedule.scheduledJobs;
+    var tmp = schedule.scheduledJobs;
+
+    var jobs = call.discardNullJobs(tmp);
+
     res.send(jobs);
 
 });
 
 router.delete('/:name?', function(req, res, error){
 
-    console.log('in jobs/delete: ', req.params);
+    //console.log('in jobs/delete: ', req.params);
 
-    var jobs = schedule.scheduledJobs;
-
-    var remove = jobs[req.params.name];
+    var tmp = schedule.scheduledJobs;
+    var remove = tmp[req.params.name];
 
     if(remove){
         remove.cancel();
     }
+
+    var jobs = call.discardNullJobs(tmp);
 
     res.send(jobs);
 

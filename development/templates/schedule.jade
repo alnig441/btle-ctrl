@@ -6,10 +6,10 @@ div(class='md-inline-form', layout='column', ng-cloak, ng-controller='optionsCtr
         md-content(layout-gt-sm='row', layout-padding)
             md-dialog-content
                 md-datepicker(ng-model='form.today', md-placeholder='Begin')
-        md-content(layout-gt-sm='row', layout-padding)
+                        //md-content(layout-gt-sm='row', layout-padding)
             md-dialog-content
-                md-input-container.md-block(flex-gt-sm)
-                md-label Time Of Day
+                        //md-input-container.md-block(flex-gt-sm)
+                    md-label Time Of Day
                     input(type='time', min='00:00:00', max='23:59:59', ng-model='form.setpoint', required, ng-disabled='form.onAtSunset || form.offAtSunrise')
         md-content(layout-gt-sm='row', layout-padding)
             md-dialog-content
@@ -17,25 +17,27 @@ div(class='md-inline-form', layout='column', ng-cloak, ng-controller='optionsCtr
                     md-label Device State
                     md-select(ng-model='form.turn_on', placeholder='State')
                         md-option(ng-value='turn_on.value', ng-repeat='turn_on in turn_on', ng-disabled='form.offAtSunrise || form.onAtSunset') {{turn_on.name}}
+            md-dialog-content
                 md-input-container.md-block(flex-gt-sm)
                     md-checkbox(ng-model='form.offAtSunrise', value=false, aria-label='off at sunrise', ng-disabled='form.turn_on !== undefined || form.onAtSunset || form.setpoint') Off @ Sunrise
+            md-dialog-content
                 md-input-container.md-block(flex-gt-sm)
                     md-checkbox(ng-model='form.onAtSunset', value=false, aria-label='on at sunset', ng-disabled='form.turn_on !== undefined || form.offAtSunrise || form.setpoint') On @ Sunset
 
-        md-toolbar
+        md-toolbar(ng-show='form.turn_on !== undefined || form.turn_on !== undefined')
             div.md-toolbar-tools
-                h2 Temporary Recurrence
-        md-content(layout-gt-sm='row', layout-padding, ng-blur='form.recur_weekly')
+                h2 Temporary Recurrence - Single Device
+        md-content(layout-gt-sm='row', layout-padding, ng-blur='form.recur_weekly', ng-show='form.turn_on !== undefined || form.turn_on !== undefined')
             md-dialog-content
                 md-datepicker(ng-model='form.dateBegin', md-placeholder='Begin', ng-disabled='form.recur_daily || form.recur_weekly')
-        md-content(layout-gt-sm='row', layout-padding, ng-blur='form.recur_weekly')
+        md-content(layout-gt-sm='row', layout-padding, ng-blur='form.recur_weekly', ng-show='form.turn_on !== undefined || form.turn_on !== undefined')
             md-dialog-content
                 md-datepicker(ng-model='form.dateEnd', md-placeholder='End', ng-disabled='form.recur_daily || form.recur_weekly')
 
-        md-toolbar
+        md-toolbar(ng-show='form.turn_on !== undefined || form.turn_on !== undefined')
             div.md-toolbar-tools
-                h2 Indefinite Recurrence
-        md-content(layout-gt-sm='row', layout-padding)
+                h2 Indefinite Recurrence - Single Device
+        md-content(layout-gt-sm='row', layout-padding, ng-show='form.turn_on !== undefined || form.turn_on !== undefined')
             md-dialog-content(layout-gt-sm='row', layout-padding)
                 md-input-container
                     md-checkbox(ng-model='form.recur_daily', value=false, aria-label='repeat daily', ng-disabled='form.recur_weekly || form.dateEnd !== undefined') Repeat Daily

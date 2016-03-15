@@ -92,16 +92,9 @@ app.factory('jobService', ['$http', '$rootScope', function($http, $rootScope){
 
         console.log('jobService : ', job);
         $http.delete('/jobs/' + job )
-            .then(function(){
-
-            })
-            .then(function(){
-                $http.get('/jobs')
-                    .then(function(response){
-                        $rootScope.scheduledJobs = response.data;
-                    });
+            .then(function(response){
+                $rootScope.scheduledJobs = response.data;
             });
-
     };
 
     return _jobFactory;

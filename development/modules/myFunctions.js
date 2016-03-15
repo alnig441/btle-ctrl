@@ -74,6 +74,20 @@ var call = {
         });
         return temp;
 
+    },
+
+    discardNullJobs: function(obj){
+        var tmp = obj;
+        var jobs = {}
+
+        for(var prop in tmp){
+
+            if(tmp[prop] !== null){
+                console.log('HIT; ', prop);
+                jobs[prop] = tmp[prop];
+            }
+        }
+        return jobs;
     }
 };
 
