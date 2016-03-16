@@ -5,6 +5,7 @@ app.controller('adminViewCtrl',['$scope', '$rootScope', '$http', '$mdMedia', '$m
     $scope.customFullscreen = $mdMedia('xs') || $mdMedia('sm');
 
     $scope.showAdvanced = function(ev, option) {
+
         var useFullScreen = ($mdMedia('sm') || $mdMedia('xs'))  && $scope.customFullscreen;
 
         var configDialog = {
@@ -112,8 +113,6 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
     //console.log('in adminDialogCtrl - rootScope: ', $rootScope);
     $scope.submit = function(choice, ev){
 
-        //console.log('in AdminDialogController ', choice, $scope);
-
         if(choice === 'add_from_scan') {
 
             var useFullScreen = ($mdMedia('sm') || $mdMedia('xs'))  && $scope.customFullscreen;
@@ -143,6 +142,7 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
             $http.post('/admin', this.form.device)
                 .then(function(response){
                     console.log(response);
+                    refreshService.panels();
                 });
 
         }

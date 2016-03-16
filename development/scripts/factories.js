@@ -54,6 +54,8 @@ app.factory('profilesService',['$http', '$rootScope', 'jobService', function($ht
                 });
             });
 
+        return true;
+
     };
 
     return _profilesFactory;

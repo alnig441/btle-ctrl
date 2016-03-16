@@ -83,7 +83,6 @@ var call = {
         for(var prop in tmp){
 
             if(tmp[prop] !== null){
-                console.log('HIT; ', prop);
                 jobs[prop] = tmp[prop];
             }
         }

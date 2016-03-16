@@ -47,7 +47,7 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
             }, delay);
 
             $timeout.cancel($rootScope.recurDailyID);
-        },5000); //5 sec delay to allow for $rootScope.activeProfiles to build
+        },1000); //adding delay to allow for $rootScope.activeProfiles to build
 
     }
 

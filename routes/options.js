@@ -302,8 +302,6 @@ router.post('/colour', function(req, res, error){
 
 router.post('/profile', function(req, res, error){
 
-    console.log('options/profile    : ', req.body);
-
     var on = '58010301ff00ffffff';
     var off = '58010301ff00000000';
     var arg;

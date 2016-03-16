@@ -7,10 +7,6 @@ var call = require('../public/scripts/myFunctions.min.js');
 
 var connectionString = process.env.DATABASE_URL || 'postgres://localhost:5432/btle-ctrl';
 
-router.put('/', function(req, res, error){
-
-});
-
 router.post('/test', function(req, res, error){
 
     //console.log('this is from test', req.body);
@@ -116,7 +112,7 @@ router.get('/scan', function(req, res, error){
 
 router.post('/', function(req, res, error){
 
-    console.log('from admin post: ', req.body);
+    //console.log('from admin post: ', req.body);
 
     pg.connect(connectionString, function(err, client, done){
         if(err){console.log(err);}
