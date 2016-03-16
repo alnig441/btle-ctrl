@@ -199,6 +199,8 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
 
         if(choice === 'delete_profile'){
 
+            $rootScope.recurDailyID = undefined;
+
             $http.delete('/profiles/' + this.profile.profile.profile_name)
                 .then(function(response){
                     console.log(response);

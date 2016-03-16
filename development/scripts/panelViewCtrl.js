@@ -1,8 +1,7 @@
-app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$mdMedia', '$mdDialog', '$timeout', '$interval', 'profilesService', 'refreshService', function($scope, $rootScope, $http, $location, $mdMedia, $mdDialog, $timeout, $interval, profilesService, refreshService){
+app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$mdMedia', '$mdDialog', '$timeout', '$interval', 'profilesService', 'refreshService', 'jobService', function($scope, $rootScope, $http, $location, $mdMedia, $mdDialog, $timeout, $interval, profilesService, refreshService, jobService){
 
     console.log('in panelViewCtrl - rootScope: ', $rootScope);
 
-    refreshService.sunData();
     refreshService.panels();
 
     $http.get('/profiles')
@@ -14,6 +13,27 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
                         $rootScope.activeProfiles[elem.profile.profile_name] = response.data;
                     });
             });
+        })
+        .then(function(){
+            if($rootScope.recurDailyID === undefined){
+
+                    $rootScope.recurDailyID = $timeout(function(){
+
+                        console.log('Executing profiles on load');
+                        profilesService.runActive();
+
+                        var tmp = $timeout(function(){
+
+                            console.log('Executing profiles after initial delay');
+                            profilesService.runActive();
+                            $interval(recurDaily, 86400000);
+                            $timeout.cancel(tmp);
+                        }, delay);
+
+                        $timeout.cancel($rootScope.recurDailyID);
+                    });
+
+            }
         });
 
     //Setting timeout delay to 1hr past midnight
@@ -27,7 +47,6 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
     var delay = date - new Date();
 
     //Sunset/sunrise refresh data function - pulling fresh data every 24hrs and scheduling recurring profiles
-
     function refreshSunData() {
 
         refreshService.sunData();
@@ -42,34 +61,15 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
 
     }
 
-    if($rootScope.recurDailyID === undefined){
-
-        $rootScope.recurDailyID = setTimeout(function(){
-
-            console.log('Executing profiles on load');
-            profilesService.runActive();
-
-            var tmp = setTimeout(function(){
-
-                console.log('Execuring profiles after initial delay');
-                profilesService.runActive();
-                var x = setInterval(recurDaily, 10000);
-                clearTimeout(tmp);
-            },delay);
-
-            clearTimeout($rootScope.recurDailyID);
-        }, 1000);
-    }
-
     //Running refreshTimeOut function when the associated ID on first page load, then scheduling recurring profiles
 
     if($rootScope.refreshSunDataID === undefined) {
 
-        $rootScope.refreshSunDataID = setTimeout(function(){
+        $rootScope.refreshSunDataID = setTimeout(function() {
 
             refreshService.sunData();
 
-            var tmp = setTimeout(function(){
+            var tmp = setTimeout(function () {
 
                 refreshService.sunData();
 
@@ -83,7 +83,7 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
 
 
             clearTimeout($rootScope.refreshSunDataID);
-        }, 2500);
+        });
 
     }
 

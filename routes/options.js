@@ -302,7 +302,7 @@ router.post('/colour', function(req, res, error){
 
 router.post('/profile', function(req, res, error){
 
-    console.log('options/profile    : ', req.body);
+    //console.log('options/profile    : ', req.body);
 
     var on = '58010301ff00ffffff';
     var off = '58010301ff00000000';
@@ -386,7 +386,7 @@ router.post('/profile', function(req, res, error){
             });
 
             var items = schedule.scheduledJobs;
-            console.log('scheduled jobs: ', Object.keys(items));
+            //console.log('scheduled jobs: ', Object.keys(items));
             res.send(items);
 
 
@@ -459,7 +459,7 @@ router.post('/profile', function(req, res, error){
             });
 
             var items = schedule.scheduledJobs;
-            console.log('scheduled jobs: ', Object.keys(items));
+            //console.log('scheduled jobs: ', Object.keys(items));
             res.send(items);
 
 

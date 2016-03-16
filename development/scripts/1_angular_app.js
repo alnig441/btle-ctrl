@@ -22,7 +22,7 @@ app.config(function($routeProvider, $locationProvider, $mdThemingProvider, $mdIc
         })
         .when('/default',{
             templateUrl: 'views/default.html',
-            controller: 'panelViewCtrl'
+            controller: 'loginCtrl'
         })
         .otherwise({redirectTo: '/default'});
 

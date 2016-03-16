@@ -1,13 +1,14 @@
-app.factory('profilesService',['$http', '$rootScope', function($http, $rootScope) {
+app.factory('profilesService',['$http', '$rootScope', 'jobService', function($http, $rootScope, jobService) {
     var _profilesFactory = {};
+    var i;
 
     _profilesFactory.runActive = function(){
 
-        var i;
+        //var i;
 
-        console.log('..factory executing acitve profiles..');
+        console.log('..factory executing active profiles..');
         for(var prop in $rootScope.activeProfiles){
-
+            //console.log('profileService: ', prop);
             for(i = 0 ; i < $rootScope.activeProfiles[prop].length ; i ++){
 
                 var date;
@@ -35,12 +36,6 @@ app.factory('profilesService',['$http', '$rootScope', function($http, $rootScope
             }
         }
 
-        if(i === $rootScope.activeProfiles[prop].length){
-                $http.get('/jobs')
-                    .then(function(response){
-                        $rootScope.scheduledJobs = response.data;
-                    });
-        }
     };
 
     return _profilesFactory;
@@ -82,6 +77,7 @@ app.factory('jobService', ['$http', '$rootScope', function($http, $rootScope){
     var _jobFactory = {};
 
     _jobFactory.getJobs = function(){
+        console.log('in jobService getJobs');
         $http.get('/jobs')
             .then(function(response){
                 $rootScope.scheduledJobs = response.data;
@@ -90,7 +86,7 @@ app.factory('jobService', ['$http', '$rootScope', function($http, $rootScope){
 
     _jobFactory.deleteJob = function(job){
 
-        console.log('jobService : ', job);
+        console.log('jobService deleteJob: ', job);
         $http.delete('/jobs/' + job )
             .then(function(response){
                 $rootScope.scheduledJobs = response.data;
