@@ -2,24 +2,24 @@ div.md-padding(ng-controller="loginCtrl", id="popupContainer", ng-cloak)
     div.dialog-demo-content(layout="row", layout-wrap, layout-margin)
         md-button.md-primary.md-raised(flex="100", flex-gt-md="auto")
             md-icon(ng-click="logout()") lock_outline
-
-div#admin(ng-controller='adminViewCtrl', layout="row", layout-padding layout-wrap, layout-fill, style="padding: 5px, margin: auto;", ng-cloak)
-    md-whiteframe.md-whiteframe-1dp(flex-sm="45", flex-gt-sm="35", flex-gt-md="25", layout, layout-align="center center")
-        span
-            .md-whiteframe-3dp
-                md-button.override(ng-click="showAdvanced($event, 'scan')", layout, layout-align="center center") Scan
-                md-button.override(ng-click="showAdvanced($event, 'add')", layout, layout-align="center center") Add
-div#admin(ng-controller='adminViewCtrl', layout="row", layout-padding layout-wrap, layout-fill, style="padding: 5px, margin: auto;", ng-cloak)
-    md-whiteframe.md-whiteframe-1dp(flex-sm="45", flex-gt-sm="35", flex-gt-md="25", layout, layout-align="center center")
-        span
-            .md-whiteframe-3dp
-                md-button.override(ng-click="showAdvanced($event, 'modify_device')", layout, layout-align="center center") Devices
-                md-button.override(ng-click="showAdvanced($event, 'modify_profile')", layout, layout-align="center center") Profiles
-div#admin(ng-controller='adminViewCtrl', layout="row", layout-padding layout-wrap, layout-fill, style="padding: 5px, margin: auto;", ng-cloak)
-    md-whiteframe.md-whiteframe-1dp(flex-sm="45", flex-gt-sm="35", flex-gt-md="25", layout, layout-align="center center")
-        span
-            .md-whiteframe-3dp
-                md-button.override(ng-click="showAdvanced($event, 'jobs')", layout, layout-align="center center") Scheduled Jobs
+div(ng-controller='adminViewCtrl')
+    div#admin(layout="row", layout-padding layout-wrap, layout-fill, style="padding: 5px, margin: auto;", ng-cloak)
+        md-whiteframe.md-whiteframe-1dp(flex-sm="45", flex-gt-sm="35", flex-gt-md="25", layout, layout-align="center center")
+            span
+                .md-whiteframe-3dp
+                    md-button.override(ng-click="showAdvanced($event, 'scan')", layout, layout-align="center center") Scan
+                    md-button.override(ng-click="showAdvanced($event, 'add')", layout, layout-align="center center") Add
+    div#admin(layout="row", layout-padding layout-wrap, layout-fill, style="padding: 5px, margin: auto;", ng-cloak)
+        md-whiteframe.md-whiteframe-1dp(flex-sm="45", flex-gt-sm="35", flex-gt-md="25", layout, layout-align="center center")
+            span
+                .md-whiteframe-3dp
+                    md-button.override(ng-click="showAdvanced($event, 'modify_device')", layout, layout-align="center center") Devices
+                    md-button.override(ng-click="showAdvanced($event, 'modify_profile')", layout, layout-align="center center") Profiles
+    div#admin(layout="row", layout-padding layout-wrap, layout-fill, style="padding: 5px, margin: auto;", ng-cloak)
+        md-whiteframe.md-whiteframe-1dp(flex-sm="45", flex-gt-sm="35", flex-gt-md="25", layout, layout-align="center center")
+            span
+                .md-whiteframe-3dp
+                    md-button.override(ng-click="showAdvanced($event, 'jobs')", layout, layout-align="center center") Scheduled Jobs
 
 //div(ng-include='template.url')
 

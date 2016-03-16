@@ -1,7 +1,5 @@
 app.controller('loginCtrl',['$scope', '$rootScope', '$http', '$location', '$mdDialog', '$mdMedia', function ($scope, $rootScope, $http, $location, $mdDialog, $mdMedia){
 
-    //console.log('in login Ctrl - rootScopes ', $rootScope);
-
     $rootScope.scheduleDevice = {};
 
     $rootScope.template = {
@@ -45,11 +43,10 @@ app.controller('loginCtrl',['$scope', '$rootScope', '$http', '$location', '$mdDi
         });
     };
 
+
 }]);
 
 function LoginDialogController($scope, $mdDialog, $http, $location, $rootScope) {
-
-    console.log('in LoginDialogCtrl - rootScope: ', $rootScope);
 
     $scope.login = function() {
         $http.post('/login/authenticate', $scope.form)

@@ -35,9 +35,13 @@ app.factory('profilesService',['$http', '$rootScope', 'jobService', function($ht
             }
         }
 
+        jobService.getJobs();
+
     };
 
     _profilesFactory.rebuildActive = function(){
+
+        console.log('..factory rebuilding activeProfiles..');
 
         $http.get('/profiles')
             .then(function(response){
@@ -91,7 +95,7 @@ app.factory('jobService', ['$http', '$rootScope', function($http, $rootScope){
     var _jobFactory = {};
 
     _jobFactory.getJobs = function(){
-        console.log('in jobService getJobs');
+        console.log('..factory refreshing scheduled jobs..');
         $http.get('/jobs')
             .then(function(response){
                 $rootScope.scheduledJobs = response.data;
@@ -100,7 +104,7 @@ app.factory('jobService', ['$http', '$rootScope', function($http, $rootScope){
 
     _jobFactory.deleteJob = function(job){
 
-        console.log('jobService deleteJob: ', job);
+        console.log('..factory deleting job: ', job);
         $http.delete('/jobs/' + job )
             .then(function(response){
                 $rootScope.scheduledJobs = response.data;

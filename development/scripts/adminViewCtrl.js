@@ -192,6 +192,7 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
 
             $http.put('/profiles', this.profile)
                 .then(function(response){
+                    refreshService.panels();
                     profilesService.rebuildActive();
 
             });
@@ -203,7 +204,8 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
 
             $http.delete('/profiles/' + this.profile.profile.profile_name)
                 .then(function(response){
-                    console.log(response);
+                    refreshService.panels();
+                    profilesService.rebuildActive();
                 });
 
         }

@@ -1,4 +1,4 @@
-app.controller('optionsCtrl',['$scope', '$rootScope', '$http', '$location', '$mdDialog', 'refreshService', function($scope, $rootScope, $http, $location, $mdDialog, refreshService){
+app.controller('optionsCtrl',['$scope', '$rootScope', '$http', '$location', '$mdDialog', 'refreshService', 'jobService', function($scope, $rootScope, $http, $location, $mdDialog, refreshService, jobService){
 
     //console.log('in optionsCtrl ', $rootScope, this);
 
@@ -51,7 +51,7 @@ app.controller('optionsCtrl',['$scope', '$rootScope', '$http', '$location', '$md
 
                 // Schedule single sunset/sunrise event
                 else {
-                    //check if new profiles is to be created
+                    //check if new profiles is to be created before scheduling individual job
                     if(this.form.active){
                         if(this.form.onAtSunset){
                             this.form.sunset = true;
@@ -62,13 +62,15 @@ app.controller('optionsCtrl',['$scope', '$rootScope', '$http', '$location', '$md
                         $http.post('/profiles/add', this.form)
                             .then(function(response){
                                 refreshService.panels();
+                                jobService.getJobs();
                             });
 
 
                     }
-                        $http.post('/options/sun', $rootScope.scheduleDevice).then(function(response){
-                        console.log('response from options/sun', response);
-
+                        $http.post('/options/sun', $rootScope.scheduleDevice)
+                            .then(function(response){
+                                //console.log('response from options/sun', response);
+                                jobService.getJobs();
                     });
 
                 }
@@ -78,21 +80,21 @@ app.controller('optionsCtrl',['$scope', '$rootScope', '$http', '$location', '$md
 
             // Schedule normal event
             else {
-                //check if new profiles is to be created
+                //check if new profiles is to be created before scheduling individual job
                 if(this.form.active){
                     this.form.hour = this.form.setpoint.getHours();
                     this.form.minute = this.form.setpoint.getMinutes();
                     $http.post('/profiles/add', this.form)
                         .then(function(response){
                             refreshService.panels();
-                        }).then(function(response){
                     });
 
                 }
 
-                $http.post('/options/schedule', $rootScope.scheduleDevice).then(function(response){
-                        console.log('response from options/schedule', response);
-                        refreshService.panels();
+                $http.post('/options/schedule', $rootScope.scheduleDevice)
+                    .then(function(response){
+                        //console.log('response from options/schedule', response);
+                        jobService.getJobs();
                     });
             }
 

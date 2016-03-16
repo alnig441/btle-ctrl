@@ -18,7 +18,7 @@ app.config(function($routeProvider, $locationProvider, $mdThemingProvider, $mdIc
     $routeProvider
         .when('/admin', {
             templateUrl: 'views/admin.html',
-            controller: 'adminViewCtrl'
+            controller: 'loginCtrl'
         })
         .when('/default',{
             templateUrl: 'views/default.html',
@@ -32,8 +32,6 @@ app.config(function($routeProvider, $locationProvider, $mdThemingProvider, $mdIc
 });
 
 ;app.controller('loginCtrl',['$scope', '$rootScope', '$http', '$location', '$mdDialog', '$mdMedia', function ($scope, $rootScope, $http, $location, $mdDialog, $mdMedia){
-
-    //console.log('in login Ctrl - rootScopes ', $rootScope);
 
     $rootScope.scheduleDevice = {};
 
@@ -78,11 +76,10 @@ app.config(function($routeProvider, $locationProvider, $mdThemingProvider, $mdIc
         });
     };
 
+
 }]);
 
 function LoginDialogController($scope, $mdDialog, $http, $location, $rootScope) {
-
-    console.log('in LoginDialogCtrl - rootScope: ', $rootScope);
 
     $scope.login = function() {
         $http.post('/login/authenticate', $scope.form)
@@ -293,6 +290,7 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
 
             $http.put('/profiles', this.profile)
                 .then(function(response){
+                    refreshService.panels();
                     profilesService.rebuildActive();
 
             });
@@ -304,7 +302,8 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
 
             $http.delete('/profiles/' + this.profile.profile.profile_name)
                 .then(function(response){
-                    console.log(response);
+                    refreshService.panels();
+                    profilesService.rebuildActive();
                 });
 
         }
@@ -386,9 +385,13 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
             }
         }
 
+        jobService.getJobs();
+
     };
 
     _profilesFactory.rebuildActive = function(){
+
+        console.log('..factory rebuilding activeProfiles..');
 
         $http.get('/profiles')
             .then(function(response){
@@ -442,7 +445,7 @@ app.factory('jobService', ['$http', '$rootScope', function($http, $rootScope){
     var _jobFactory = {};
 
     _jobFactory.getJobs = function(){
-        console.log('in jobService getJobs');
+        console.log('..factory refreshing scheduled jobs..');
         $http.get('/jobs')
             .then(function(response){
                 $rootScope.scheduledJobs = response.data;
@@ -451,7 +454,7 @@ app.factory('jobService', ['$http', '$rootScope', function($http, $rootScope){
 
     _jobFactory.deleteJob = function(job){
 
-        console.log('jobService deleteJob: ', job);
+        console.log('..factory deleting job: ', job);
         $http.delete('/jobs/' + job )
             .then(function(response){
                 $rootScope.scheduledJobs = response.data;
@@ -461,7 +464,7 @@ app.factory('jobService', ['$http', '$rootScope', function($http, $rootScope){
     return _jobFactory;
 
 }]);
-;app.controller('optionsCtrl',['$scope', '$rootScope', '$http', '$location', '$mdDialog', 'refreshService', function($scope, $rootScope, $http, $location, $mdDialog, refreshService){
+;app.controller('optionsCtrl',['$scope', '$rootScope', '$http', '$location', '$mdDialog', 'refreshService', 'jobService', function($scope, $rootScope, $http, $location, $mdDialog, refreshService, jobService){
 
     //console.log('in optionsCtrl ', $rootScope, this);
 
@@ -514,7 +517,7 @@ app.factory('jobService', ['$http', '$rootScope', function($http, $rootScope){
 
                 // Schedule single sunset/sunrise event
                 else {
-                    //check if new profiles is to be created
+                    //check if new profiles is to be created before scheduling individual job
                     if(this.form.active){
                         if(this.form.onAtSunset){
                             this.form.sunset = true;
@@ -525,13 +528,15 @@ app.factory('jobService', ['$http', '$rootScope', function($http, $rootScope){
                         $http.post('/profiles/add', this.form)
                             .then(function(response){
                                 refreshService.panels();
+                                jobService.getJobs();
                             });
 
 
                     }
-                        $http.post('/options/sun', $rootScope.scheduleDevice).then(function(response){
-                        console.log('response from options/sun', response);
-
+                        $http.post('/options/sun', $rootScope.scheduleDevice)
+                            .then(function(response){
+                                //console.log('response from options/sun', response);
+                                jobService.getJobs();
                     });
 
                 }
@@ -541,21 +546,21 @@ app.factory('jobService', ['$http', '$rootScope', function($http, $rootScope){
 
             // Schedule normal event
             else {
-                //check if new profiles is to be created
+                //check if new profiles is to be created before scheduling individual job
                 if(this.form.active){
                     this.form.hour = this.form.setpoint.getHours();
                     this.form.minute = this.form.setpoint.getMinutes();
                     $http.post('/profiles/add', this.form)
                         .then(function(response){
                             refreshService.panels();
-                        }).then(function(response){
                     });
 
                 }
 
-                $http.post('/options/schedule', $rootScope.scheduleDevice).then(function(response){
-                        console.log('response from options/schedule', response);
-                        refreshService.panels();
+                $http.post('/options/schedule', $rootScope.scheduleDevice)
+                    .then(function(response){
+                        //console.log('response from options/schedule', response);
+                        jobService.getJobs();
                     });
             }
 
@@ -609,10 +614,6 @@ app.factory('jobService', ['$http', '$rootScope', function($http, $rootScope){
 
     console.log('in panelViewCtrl - rootScope: ', $rootScope);
 
-    refreshService.panels();
-
-    profilesService.rebuildActive();
-
     //Setting timeout delay to 1hr past midnight
 
     var date = new Date();
@@ -639,6 +640,10 @@ app.factory('jobService', ['$http', '$rootScope', function($http, $rootScope){
     }
 
     if($rootScope.recurDailyID === undefined) {
+
+        refreshService.panels();
+        profilesService.rebuildActive();
+
 
         $rootScope.recurDailyID = $timeout(function(){
 
@@ -759,11 +764,10 @@ app.factory('jobService', ['$http', '$rootScope', function($http, $rootScope){
 
     };
 
-
 }]);
 
 function OptionsDialogController($scope, $mdDialog, $http, $rootScope, $location, $mdMedia) {
-    console.log('..this merely opens the dialog window...');
+    //console.log('..this merely opens the dialog window...');
 
 }
 

@@ -18,7 +18,7 @@ app.config(function($routeProvider, $locationProvider, $mdThemingProvider, $mdIc
     $routeProvider
         .when('/admin', {
             templateUrl: 'views/admin.html',
-            controller: 'adminViewCtrl'
+            controller: 'loginCtrl'
         })
         .when('/default',{
             templateUrl: 'views/default.html',

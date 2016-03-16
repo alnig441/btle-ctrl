@@ -2,10 +2,6 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
 
     console.log('in panelViewCtrl - rootScope: ', $rootScope);
 
-    refreshService.panels();
-
-    profilesService.rebuildActive();
-
     //Setting timeout delay to 1hr past midnight
 
     var date = new Date();
@@ -32,6 +28,10 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
     }
 
     if($rootScope.recurDailyID === undefined) {
+
+        refreshService.panels();
+        profilesService.rebuildActive();
+
 
         $rootScope.recurDailyID = $timeout(function(){
 
@@ -152,11 +152,10 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
 
     };
 
-
 }]);
 
 function OptionsDialogController($scope, $mdDialog, $http, $rootScope, $location, $mdMedia) {
-    console.log('..this merely opens the dialog window...');
+    //console.log('..this merely opens the dialog window...');
 
 }
 
