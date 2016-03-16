@@ -99,7 +99,7 @@ function LoginDialogController($scope, $mdDialog, $http, $location, $rootScope) 
     };
 }
 
-;app.controller('adminViewCtrl',['$scope', '$rootScope', '$http', '$mdMedia', '$mdDialog', 'refreshService','jobService', function($scope, $rootScope, $http, $mdMedia, $mdDialog, refreshService, jobService){
+;app.controller('adminViewCtrl',['$scope', '$rootScope', '$http', '$mdMedia', '$mdDialog', 'refreshService','jobService', 'profilesService', function($scope, $rootScope, $http, $mdMedia, $mdDialog, refreshService, jobService, profilesService){
 
     console.log('in adminViewCtrl - rootScope: ', $rootScope);
 
@@ -208,7 +208,7 @@ function LoginDialogController($scope, $mdDialog, $http, $location, $rootScope) 
 
 }]);
 
-function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, $mdMedia, refreshService, jobService) {
+function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, $mdMedia, refreshService, jobService, profilesService) {
 
     //console.log('in adminDialogCtrl - rootScope: ', $rootScope);
     $scope.submit = function(choice, ev){
@@ -293,8 +293,8 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
 
             $http.put('/profiles', this.profile)
                 .then(function(response){
-                    console.log(response);
-                }).then(function(response){
+                    profilesService.rebuildActive();
+
             });
         }
 
@@ -356,10 +356,9 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
     _profilesFactory.runActive = function(){
 
         //var i;
-
-        console.log('..factory executing active profiles..');
+        console.log('..factory executing active profiles..', $rootScope.activeProfiles);
         for(var prop in $rootScope.activeProfiles){
-            //console.log('profileService: ', prop);
+            console.log('profileService printing activeProfiles: ', prop);
             for(i = 0 ; i < $rootScope.activeProfiles[prop].length ; i ++){
 
                 var date;
@@ -386,6 +385,21 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
                 }
             }
         }
+
+    };
+
+    _profilesFactory.rebuildActive = function(){
+
+        $http.get('/profiles')
+            .then(function(response){
+                $rootScope.activeProfiles = {};
+                response.data.forEach(function(elem, ind, arr){
+                    $http.get('/profiles/' + elem.profile.profile_name)
+                        .then(function(response){
+                            $rootScope.activeProfiles[elem.profile.profile_name] = response.data;
+                        });
+                });
+            });
 
     };
 
@@ -446,7 +460,8 @@ app.factory('jobService', ['$http', '$rootScope', function($http, $rootScope){
 
     return _jobFactory;
 
-}]);;app.controller('optionsCtrl',['$scope', '$rootScope', '$http', '$location', '$mdDialog', 'refreshService', function($scope, $rootScope, $http, $location, $mdDialog, refreshService){
+}]);
+;app.controller('optionsCtrl',['$scope', '$rootScope', '$http', '$location', '$mdDialog', 'refreshService', function($scope, $rootScope, $http, $location, $mdDialog, refreshService){
 
     //console.log('in optionsCtrl ', $rootScope, this);
 
@@ -596,37 +611,7 @@ app.factory('jobService', ['$http', '$rootScope', function($http, $rootScope){
 
     refreshService.panels();
 
-    $http.get('/profiles')
-        .then(function(response){
-            $rootScope.activeProfiles = {};
-            response.data.forEach(function(elem, ind, arr){
-                $http.get('/profiles/' + elem.profile.profile_name)
-                    .then(function(response){
-                        $rootScope.activeProfiles[elem.profile.profile_name] = response.data;
-                    });
-            });
-        })
-        .then(function(){
-            if($rootScope.recurDailyID === undefined){
-
-                    $rootScope.recurDailyID = $timeout(function(){
-
-                        console.log('Executing profiles on load');
-                        profilesService.runActive();
-
-                        var tmp = $timeout(function(){
-
-                            console.log('Executing profiles after initial delay');
-                            profilesService.runActive();
-                            $interval(recurDaily, 86400000);
-                            $timeout.cancel(tmp);
-                        }, delay);
-
-                        $timeout.cancel($rootScope.recurDailyID);
-                    });
-
-            }
-        });
+    profilesService.rebuildActive();
 
     //Setting timeout delay to 1hr past midnight
 
@@ -646,35 +631,56 @@ app.factory('jobService', ['$http', '$rootScope', function($http, $rootScope){
 
     }
 
-    function recurDaily() {
+    function runActiveProfiles() {
 
         console.log('Executing active profiles - daily');
         profilesService.runActive();
 
     }
 
+    if($rootScope.recurDailyID === undefined) {
+
+        $rootScope.recurDailyID = $timeout(function(){
+
+            console.log('Executing profiles on load');
+            profilesService.runActive();
+
+            var tmp = $timeout(function(){
+
+                console.log('Executing profiles after initial delay');
+                profilesService.runActive();
+                $interval(runActiveProfiles, 86400000);
+                $timeout.cancel(tmp);
+            }, delay);
+
+            $timeout.cancel($rootScope.recurDailyID);
+        },5000); //5 sec delay to allow for $rootScope.activeProfiles to build
+
+    }
+
+
     //Running refreshTimeOut function when the associated ID on first page load, then scheduling recurring profiles
 
     if($rootScope.refreshSunDataID === undefined) {
 
-        $rootScope.refreshSunDataID = setTimeout(function() {
+        $rootScope.refreshSunDataID = $timeout(function() {
 
             refreshService.sunData();
 
-            var tmp = setTimeout(function () {
+            var tmp = $timeout(function () {
 
                 refreshService.sunData();
 
                 console.log('sunset/sunrise data refresh after initial delay. SUNRISE: ' + new Date($rootScope.sun_data.sunrise) + ' / SUNSET: ' + new Date($rootScope.sun_data.sunset));
 
-                var x = setInterval(refreshSunData, 86400000);
+                $interval(refreshSunData, 86400000);
 
-                clearTimeout(tmp);
+                $timeout.cancel(tmp);
 
             }, delay);
 
 
-            clearTimeout($rootScope.refreshSunDataID);
+            $timeout.cancel($rootScope.refreshSunDataID);
         });
 
     }

@@ -5,10 +5,9 @@ app.factory('profilesService',['$http', '$rootScope', 'jobService', function($ht
     _profilesFactory.runActive = function(){
 
         //var i;
-
-        console.log('..factory executing active profiles..');
+        console.log('..factory executing active profiles..', $rootScope.activeProfiles);
         for(var prop in $rootScope.activeProfiles){
-            //console.log('profileService: ', prop);
+            console.log('profileService printing activeProfiles: ', prop);
             for(i = 0 ; i < $rootScope.activeProfiles[prop].length ; i ++){
 
                 var date;
@@ -35,6 +34,21 @@ app.factory('profilesService',['$http', '$rootScope', 'jobService', function($ht
                 }
             }
         }
+
+    };
+
+    _profilesFactory.rebuildActive = function(){
+
+        $http.get('/profiles')
+            .then(function(response){
+                $rootScope.activeProfiles = {};
+                response.data.forEach(function(elem, ind, arr){
+                    $http.get('/profiles/' + elem.profile.profile_name)
+                        .then(function(response){
+                            $rootScope.activeProfiles[elem.profile.profile_name] = response.data;
+                        });
+                });
+            });
 
     };
 

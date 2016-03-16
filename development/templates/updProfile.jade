@@ -22,10 +22,10 @@ md-dialog(ng-controller='adminViewCtrl')
                     md-label(ng-hide='profile.profile.sunset || profile.profile.sunrise') Run Profile At: {{profile.profile.hour}}hrs {{profile.profile.minute}}mins
                     input(type='time', min='00:00:00', max='23:59:59', ng-model='form.setpoint', aria-label='setpoint', ng-disabled='!profile.profile.active || profile.profile.sunset || profile.profile.sunrise')
 
-                md-button.md-primary(ng-click="submit('update_profile')") Update
-                    md-icon update
-                md-button.md-primary(ng-click="submit('delete_profile')") Delete
-                    md-icon delete
+                //md-button.md-primary(ng-click="submit('update_profile')") Update
+                //    md-icon update
+                //md-button.md-primary(ng-click="submit('delete_profile')") Delete
+                //    md-icon delete
 
         md-dialog-actions
             span(flex)

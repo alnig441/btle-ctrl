@@ -4,37 +4,7 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
 
     refreshService.panels();
 
-    $http.get('/profiles')
-        .then(function(response){
-            $rootScope.activeProfiles = {};
-            response.data.forEach(function(elem, ind, arr){
-                $http.get('/profiles/' + elem.profile.profile_name)
-                    .then(function(response){
-                        $rootScope.activeProfiles[elem.profile.profile_name] = response.data;
-                    });
-            });
-        })
-        .then(function(){
-            if($rootScope.recurDailyID === undefined){
-
-                    $rootScope.recurDailyID = $timeout(function(){
-
-                        console.log('Executing profiles on load');
-                        profilesService.runActive();
-
-                        var tmp = $timeout(function(){
-
-                            console.log('Executing profiles after initial delay');
-                            profilesService.runActive();
-                            $interval(recurDaily, 86400000);
-                            $timeout.cancel(tmp);
-                        }, delay);
-
-                        $timeout.cancel($rootScope.recurDailyID);
-                    });
-
-            }
-        });
+    profilesService.rebuildActive();
 
     //Setting timeout delay to 1hr past midnight
 
@@ -54,35 +24,56 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
 
     }
 
-    function recurDaily() {
+    function runActiveProfiles() {
 
         console.log('Executing active profiles - daily');
         profilesService.runActive();
 
     }
 
+    if($rootScope.recurDailyID === undefined) {
+
+        $rootScope.recurDailyID = $timeout(function(){
+
+            console.log('Executing profiles on load');
+            profilesService.runActive();
+
+            var tmp = $timeout(function(){
+
+                console.log('Executing profiles after initial delay');
+                profilesService.runActive();
+                $interval(runActiveProfiles, 86400000);
+                $timeout.cancel(tmp);
+            }, delay);
+
+            $timeout.cancel($rootScope.recurDailyID);
+        },5000); //5 sec delay to allow for $rootScope.activeProfiles to build
+
+    }
+
+
     //Running refreshTimeOut function when the associated ID on first page load, then scheduling recurring profiles
 
     if($rootScope.refreshSunDataID === undefined) {
 
-        $rootScope.refreshSunDataID = setTimeout(function() {
+        $rootScope.refreshSunDataID = $timeout(function() {
 
             refreshService.sunData();
 
-            var tmp = setTimeout(function () {
+            var tmp = $timeout(function () {
 
                 refreshService.sunData();
 
                 console.log('sunset/sunrise data refresh after initial delay. SUNRISE: ' + new Date($rootScope.sun_data.sunrise) + ' / SUNSET: ' + new Date($rootScope.sun_data.sunset));
 
-                var x = setInterval(refreshSunData, 86400000);
+                $interval(refreshSunData, 86400000);
 
-                clearTimeout(tmp);
+                $timeout.cancel(tmp);
 
             }, delay);
 
 
-            clearTimeout($rootScope.refreshSunDataID);
+            $timeout.cancel($rootScope.refreshSunDataID);
         });
 
     }

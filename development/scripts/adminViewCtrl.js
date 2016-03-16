@@ -1,4 +1,4 @@
-app.controller('adminViewCtrl',['$scope', '$rootScope', '$http', '$mdMedia', '$mdDialog', 'refreshService','jobService', function($scope, $rootScope, $http, $mdMedia, $mdDialog, refreshService, jobService){
+app.controller('adminViewCtrl',['$scope', '$rootScope', '$http', '$mdMedia', '$mdDialog', 'refreshService','jobService', 'profilesService', function($scope, $rootScope, $http, $mdMedia, $mdDialog, refreshService, jobService, profilesService){
 
     console.log('in adminViewCtrl - rootScope: ', $rootScope);
 
@@ -107,7 +107,7 @@ app.controller('adminViewCtrl',['$scope', '$rootScope', '$http', '$mdMedia', '$m
 
 }]);
 
-function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, $mdMedia, refreshService, jobService) {
+function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, $mdMedia, refreshService, jobService, profilesService) {
 
     //console.log('in adminDialogCtrl - rootScope: ', $rootScope);
     $scope.submit = function(choice, ev){
@@ -192,8 +192,8 @@ function AdminDialogController($scope, $mdDialog, $http, $rootScope, $location, 
 
             $http.put('/profiles', this.profile)
                 .then(function(response){
-                    console.log(response);
-                }).then(function(response){
+                    profilesService.rebuildActive();
+
             });
         }
 
