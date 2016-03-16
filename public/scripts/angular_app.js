@@ -640,6 +640,7 @@ app.factory('jobService', ['$http', '$rootScope', function($http, $rootScope){
 
         $rootScope.recurDailyID = setTimeout(function(){
 
+            console.log('Executing active profiles after initial delay');
             profilesService.runActive();
 
             var tmp = setTimeout(function(){
