@@ -9,6 +9,8 @@ router.get('/',function(req, res, error){
 
     var jobs = call.discardNullJobs(tmp);
 
+    console.log('in get jobs' , jobs);
+
     res.send(jobs);
 
 });

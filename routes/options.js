@@ -77,6 +77,8 @@ router.post('/schedule', function(req, res, error){
 
             });
 
+        }, function(){
+            job.cancel();
         });
 
         job.on('scheduled', function(date){
@@ -139,6 +141,8 @@ router.post('/schedule', function(req, res, error){
 
                 });
 
+            }, function(){
+                job.cancel();
             });
 
             job.on('scheduled', function (date) {
@@ -165,7 +169,7 @@ router.post('/schedule', function(req, res, error){
             });
 
             var items = schedule.scheduledJobs;
-            console.log('scheduled jobs: ', Object.keys(items));
+            //console.log('scheduled jobs: ', Object.keys(items));
             res.send(items);
 
         }
@@ -234,6 +238,8 @@ router.post('/sun', function(req, res, error){
                 });
 
 
+        }, function(){
+            job.cancel();
         });
 
         job.on('scheduled',function(date){
@@ -261,7 +267,6 @@ router.post('/sun', function(req, res, error){
     }
 
     var items = schedule.scheduledJobs;
-    console.log('scheduled jobs: ', Object.keys(items));
     res.send(items);
 
 
@@ -376,6 +381,8 @@ router.post('/profile', function(req, res, error){
                 });
 
 
+            }, function(){
+                job.cancel();
             });
 
             job.on('run', function(){
@@ -449,6 +456,8 @@ router.post('/profile', function(req, res, error){
                 });
 
 
+            }, function(){
+                job.cancel();
             });
 
             job.on('run', function(){

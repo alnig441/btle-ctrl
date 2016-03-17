@@ -38,7 +38,7 @@ app.controller('optionsCtrl',['$scope', '$rootScope', '$http', '$location', '$md
 
         if(option === 'schedule') {
 
-            console.log('...scheduling...', this.scheduleDevice, this.form.create_profile);
+            console.log('...scheduling...');
 
             if($rootScope.scheduleDevice.onAtSunset || $rootScope.scheduleDevice.offAtSunrise){
 

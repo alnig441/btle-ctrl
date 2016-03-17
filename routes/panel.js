@@ -138,6 +138,8 @@ router.post('/master', function(req, res, error) {
 
     var job = schedule.scheduleJob('master ON/OFF ' + req.body.location + ' ' + setpoint, setpoint, function(){
 
+        console.log('turning lights off ', req.body.location, setpoint);
+
         var child = spawn('gatttool', gattArgs);
 
         child.stdout.on('data', function(data){
@@ -161,6 +163,8 @@ router.post('/master', function(req, res, error) {
         });
 
 
+    }, function(){
+        job.cancel();
     });
 
     job.on('run', function(){
@@ -185,7 +189,7 @@ router.post('/master', function(req, res, error) {
 
 
     var items = schedule.scheduledJobs;
-    console.log('scheduled jobs: ', Object.keys(items));
+    //console.log('scheduled jobs: ', Object.keys(items));
     res.send(items);
 
 

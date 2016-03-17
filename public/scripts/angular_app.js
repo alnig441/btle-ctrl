@@ -506,7 +506,7 @@ app.factory('jobService', ['$http', '$rootScope', function($http, $rootScope){
 
         if(option === 'schedule') {
 
-            console.log('...scheduling...', this.scheduleDevice, this.form.create_profile);
+            console.log('...scheduling...');
 
             if($rootScope.scheduleDevice.onAtSunset || $rootScope.scheduleDevice.offAtSunrise){
 
@@ -614,9 +614,8 @@ app.factory('jobService', ['$http', '$rootScope', function($http, $rootScope){
 
 ;app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$mdMedia', '$mdDialog', '$timeout', '$interval', 'profilesService', 'refreshService', 'jobService', function($scope, $rootScope, $http, $location, $mdMedia, $mdDialog, $timeout, $interval, profilesService, refreshService, jobService){
 
-    console.log('in panelViewCtrl - rootScope: ', $rootScope);
-
     //Setting timeout delay to 1hr past midnight
+    console.log('In panelViewCtrl', $rootScope);
 
     var date = new Date();
     date.setDate(date.getDate()+1);
@@ -696,27 +695,26 @@ app.factory('jobService', ['$http', '$rootScope', function($http, $rootScope){
 
         $http.put('/panel', this.panel.device)
             .then(function(response){
-                console.log('response from /panel put: ', response);
+                refreshService.panels();
             });
 
     };
 
     $scope.master = function(option){
 
-        console.log('in scope.master: ', option, $rootScope.panels);
-
-
         var now = new Date();
-        now.setSeconds(now.getSeconds()+5);
         now = Date.parse(now);
 
         if(option === 'on'){
 
-            for(var i = 0 ; i < $rootScope.panels.length ; i ++, now += 1000){
+            masterLoop: for(var i = 0 ; i < $rootScope.panels.length ; i ++, now += 1000){
                 $rootScope.panels[i].device.date = now;
                 $rootScope.panels[i].device.device_on = true;
                 $http.post('/panel/master', $rootScope.panels[i].device);
             }
+
+            refreshService.panels();
+            jobService.getJobs();
 
         }
 
@@ -727,6 +725,9 @@ app.factory('jobService', ['$http', '$rootScope', function($http, $rootScope){
                 $rootScope.panels[j].device.device_on = false;
                 $http.post('/panel/master', $rootScope.panels[j].device);
             }
+
+            refreshService.panels();
+            jobService.getJobs();
 
         }
 
