@@ -4,6 +4,7 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var http = require('http');
 
 var pg = require('pg'),
     connectionString = process.env.DATABASE_URL || 'postgres://localhost:5432/btle-ctrl';
@@ -75,5 +76,93 @@ app.use(function(err, req, res, next) {
   });
 });
 
+
+// set up app to pull sunrise/sunset data
+var date = new Date();
+date.setDate(date.getDate()+1);
+date.setHours(1);
+date.setMinutes(0);
+date.setSeconds(0);
+
+var delay = date - new Date();
+
+var incr = 0;
+
+var options = {
+  host: 'api.sunrise-sunset.org',
+  path: '/json?lat=44.891123.7201600&lng=-93.359752&formatted=0'
+};
+
+callback = function(response){
+  var obj = {};
+  var props = [];
+  var values = [];
+
+  response.on('data', function(data){
+    obj = JSON.parse(data);
+  });
+
+  response.on('end', function(){
+
+    for(var prop in obj.results){
+      var x = "'";
+        if(obj.results[prop] !== null ){
+          props.push(prop);
+          x += obj.results[prop];
+          x += "'";
+          values.push(x);
+        }
+        if(obj.results[prop] === null){
+          props.push(prop);
+          values.push('null');
+        }
+
+    }
+
+    if(incr <= 1 ){
+
+      pg.connect(connectionString, function(err, client, done){
+
+        var query = client.query("INSERT INTO sundata ("+ props.toString()+") values("+values.toString()+")", function(error, result){
+          if(error){res.send(error);}
+        })
+      })
+
+    }
+    else {
+
+      pg.connect(connectionString, function(err, client, done){
+
+        var query = client.query("UPDATE sundata SET ("+ props.toString()+") = ("+values.toString()+")", function(error, result){
+          if(error){res.send(error);}
+        })
+      })
+
+    }
+
+
+  });
+  incr++;
+};
+
+function refreshSunData(){
+  console.log('refreshing sundata daily: ', new Date());
+  http.get(options, callback).end();
+
+}
+
+var outer = setTimeout(function(){
+  console.log('refreshing sundata on load: ', new Date());
+  http.get(options, callback).end();
+
+  var inner = setTimeout(function(){
+    console.log('refreshing sundata after initial delay: ', new Date());
+    setInterval(refreshSunData, 86400000);
+    clearTimeout(inner);
+
+  }, delay);
+
+  clearTimeout(outer);
+});
 
 module.exports = app;

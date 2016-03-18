@@ -421,6 +421,7 @@ app.factory('refreshService', ['$http', '$rootScope', function($http, $rootScope
 
         $http.get('http://api.sunrise-sunset.org/json?lat=44.891123.7201600&lng=-93.359752&formatted=0')
             .then(function (response) {
+                console.log('from sunrise-sunset.org: ',response);
                 $rootScope.sun_data = response.data.results;
 
             });
