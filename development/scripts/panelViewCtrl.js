@@ -11,13 +11,15 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
 
     var delay = date - new Date();
 
+    $rootScope.sun_data = refreshService.sunData();
+
     //Sunset/sunrise refresh data function - pulling fresh data every 24hrs and scheduling recurring profiles
-    function refreshSunData() {
-
-        refreshService.sunData();
-        console.log('Daily sunrise/sunset data update. SUNRISE: ' + new Date($rootScope.sun_data.sunrise) + ' / SUNSET: ' + new Date($rootScope.sun_data.sunset));
-
-    }
+    //function refreshSunData() {
+    //
+    //    refreshService.sunData();
+    //    console.log('Daily sunrise/sunset data update. SUNRISE: ' + new Date($rootScope.sun_data.sunrise) + ' / SUNSET: ' + new Date($rootScope.sun_data.sunset));
+    //
+    //}
 
     function runActiveProfiles() {
 
@@ -53,29 +55,29 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
 
     //Running refreshTimeOut function when the associated ID on first page load, then scheduling recurring profiles
 
-    if($rootScope.refreshSunDataID === undefined) {
-
-        $rootScope.refreshSunDataID = $timeout(function() {
-
-            refreshService.sunData();
-
-            var tmp = $timeout(function () {
-
-                refreshService.sunData();
-
-                console.log('sunset/sunrise data refresh after initial delay. SUNRISE: ' + new Date($rootScope.sun_data.sunrise) + ' / SUNSET: ' + new Date($rootScope.sun_data.sunset));
-
-                $interval(refreshSunData, 86400000);
-
-                $timeout.cancel(tmp);
-
-            }, delay);
-
-
-            $timeout.cancel($rootScope.refreshSunDataID);
-        });
-
-    }
+    //if($rootScope.refreshSunDataID === undefined) {
+    //
+    //    $rootScope.refreshSunDataID = $timeout(function() {
+    //
+    //        refreshService.sunData();
+    //
+    //        var tmp = $timeout(function () {
+    //
+    //            refreshService.sunData();
+    //
+    //            console.log('sunset/sunrise data refresh after initial delay. SUNRISE: ' + new Date($rootScope.sun_data.sunrise) + ' / SUNSET: ' + new Date($rootScope.sun_data.sunset));
+    //
+    //            $interval(refreshSunData, 86400000);
+    //
+    //            $timeout.cancel(tmp);
+    //
+    //        }, delay);
+    //
+    //
+    //        $timeout.cancel($rootScope.refreshSunDataID);
+    //    });
+    //
+    //}
 
     $scope.newState = function(){
 

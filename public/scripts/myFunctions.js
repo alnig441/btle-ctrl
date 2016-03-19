@@ -1,3 +1,5 @@
+var http = require('http');
+
 var call = {
     cleanArray: function(array){
 
@@ -88,6 +90,7 @@ var call = {
         }
         return jobs;
     }
+
 };
 
 module.exports = call;

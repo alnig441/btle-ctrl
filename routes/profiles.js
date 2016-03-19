@@ -84,7 +84,7 @@ router.post('/add', function(req, res, error){
 
 router.get('/', function(req, res, error){
 
-    //console.log('.. GETTING PROFILES .. ');
+    console.log('.. GETTING PROFILES .. ');
 
     pg.connect(connectionString, function(err, client, done){
         var profiles = [];
@@ -100,6 +100,7 @@ router.get('/', function(req, res, error){
 
         query.on('end',function(result){
             client.end();
+            //console.log('', profiles);
             res.send(profiles);
         })
 
@@ -140,7 +141,7 @@ router.get('/:profile?', function(req, res, error){
 
     pg.connect(connectionString, function(err, client, done){
 
-        var query = client.query("SELECT result.profile_name, result.id, result.turn_on, result.hour, result.minute, result.sunrise, result.sunset FROM (profiles CROSS JOIN connectedprofiles)as result WHERE result.profile_name='" + req.params.profile + "' AND result." + req.params.profile + "='true' AND result.active='true'", function(error, result){
+        var query = client.query("select result.id, result.profile_name, result.turn_on, result.hour, result.minute, result.second, result.sunset, result.set, result.sunrise, result.rise from (profiles cross join (connectedprofiles cross join sundata)) as result WHERE result.profile_name='" + req.params.profile + "' AND result." + req.params.profile + "='true' AND result.active='true'", function(error, result){
             if(error){console.log('JOHN there was an error ', error);}
         })
 

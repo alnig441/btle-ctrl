@@ -419,12 +419,17 @@ app.factory('refreshService', ['$http', '$rootScope', function($http, $rootScope
 
         console.log('..factory refreshing sunData..');
 
-        $http.get('http://api.sunrise-sunset.org/json?lat=44.891123.7201600&lng=-93.359752&formatted=0')
-            .then(function (response) {
-                console.log('from sunrise-sunset.org: ',response);
-                $rootScope.sun_data = response.data.results;
-
+        $http.get('/sundata')
+            .then(function(response){
+                $rootScope.sun_data = response.data;
             });
+
+        //$http.get('http://api.sunrise-sunset.org/json?lat=44.891123.7201600&lng=-93.359752&formatted=0')
+        //    .then(function (response) {
+        //        console.log('from sunrise-sunset.org: ',response);
+        //        $rootScope.sun_data = response.data.results;
+        //
+        //    });
     };
 
     _refreshFactory.panels = function(){
@@ -523,10 +528,10 @@ app.factory('jobService', ['$http', '$rootScope', function($http, $rootScope){
                     //check if new profiles is to be created before scheduling individual job
                     if(this.form.active){
                         if(this.form.onAtSunset){
-                            this.form.sunset = true;
+                            this.form.set = true;
                         }
                         if(this.form.offAtSunrise){
-                            this.form.sunrise = true;
+                            this.form.rise = true;
                         }
                         $http.post('/profiles/add', this.form)
                             .then(function(response){
@@ -626,13 +631,15 @@ app.factory('jobService', ['$http', '$rootScope', function($http, $rootScope){
 
     var delay = date - new Date();
 
+    $rootScope.sun_data = refreshService.sunData();
+
     //Sunset/sunrise refresh data function - pulling fresh data every 24hrs and scheduling recurring profiles
-    function refreshSunData() {
-
-        refreshService.sunData();
-        console.log('Daily sunrise/sunset data update. SUNRISE: ' + new Date($rootScope.sun_data.sunrise) + ' / SUNSET: ' + new Date($rootScope.sun_data.sunset));
-
-    }
+    //function refreshSunData() {
+    //
+    //    refreshService.sunData();
+    //    console.log('Daily sunrise/sunset data update. SUNRISE: ' + new Date($rootScope.sun_data.sunrise) + ' / SUNSET: ' + new Date($rootScope.sun_data.sunset));
+    //
+    //}
 
     function runActiveProfiles() {
 
@@ -668,29 +675,29 @@ app.factory('jobService', ['$http', '$rootScope', function($http, $rootScope){
 
     //Running refreshTimeOut function when the associated ID on first page load, then scheduling recurring profiles
 
-    if($rootScope.refreshSunDataID === undefined) {
-
-        $rootScope.refreshSunDataID = $timeout(function() {
-
-            refreshService.sunData();
-
-            var tmp = $timeout(function () {
-
-                refreshService.sunData();
-
-                console.log('sunset/sunrise data refresh after initial delay. SUNRISE: ' + new Date($rootScope.sun_data.sunrise) + ' / SUNSET: ' + new Date($rootScope.sun_data.sunset));
-
-                $interval(refreshSunData, 86400000);
-
-                $timeout.cancel(tmp);
-
-            }, delay);
-
-
-            $timeout.cancel($rootScope.refreshSunDataID);
-        });
-
-    }
+    //if($rootScope.refreshSunDataID === undefined) {
+    //
+    //    $rootScope.refreshSunDataID = $timeout(function() {
+    //
+    //        refreshService.sunData();
+    //
+    //        var tmp = $timeout(function () {
+    //
+    //            refreshService.sunData();
+    //
+    //            console.log('sunset/sunrise data refresh after initial delay. SUNRISE: ' + new Date($rootScope.sun_data.sunrise) + ' / SUNSET: ' + new Date($rootScope.sun_data.sunset));
+    //
+    //            $interval(refreshSunData, 86400000);
+    //
+    //            $timeout.cancel(tmp);
+    //
+    //        }, delay);
+    //
+    //
+    //        $timeout.cancel($rootScope.refreshSunDataID);
+    //    });
+    //
+    //}
 
     $scope.newState = function(){
 

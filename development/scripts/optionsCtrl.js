@@ -54,10 +54,10 @@ app.controller('optionsCtrl',['$scope', '$rootScope', '$http', '$location', '$md
                     //check if new profiles is to be created before scheduling individual job
                     if(this.form.active){
                         if(this.form.onAtSunset){
-                            this.form.sunset = true;
+                            this.form.set = true;
                         }
                         if(this.form.offAtSunrise){
-                            this.form.sunrise = true;
+                            this.form.rise = true;
                         }
                         $http.post('/profiles/add', this.form)
                             .then(function(response){

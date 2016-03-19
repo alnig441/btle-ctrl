@@ -6,6 +6,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var http = require('http');
 
+
 var pg = require('pg'),
     connectionString = process.env.DATABASE_URL || 'postgres://localhost:5432/btle-ctrl';
 
@@ -19,6 +20,7 @@ var options = require('./routes/options');
 var profiles = require('./routes/profiles');
 var cronjobs  = require('./routes/cronjobs');
 var jobs = require('./routes/jobs');
+var sundata = require('./routes/sundata');
 
 var app = express();
 
@@ -43,6 +45,7 @@ app.use('/options', options);
 app.use('/profiles', profiles);
 app.use('/cronjobs', cronjobs);
 app.use('/jobs', jobs);
+app.use('/sundata', sundata);
 
 
 // catch 404 and forward to error handler
@@ -88,12 +91,12 @@ var delay = date - new Date();
 
 var incr = 0;
 
-var options = {
+var optionsSunDate = {
   host: 'api.sunrise-sunset.org',
   path: '/json?lat=44.891123.7201600&lng=-93.359752&formatted=0'
 };
 
-callback = function(response){
+sunData_cb = function(response){
   var obj = {};
   var props = [];
   var values = [];
@@ -102,35 +105,58 @@ callback = function(response){
     obj = JSON.parse(data);
   });
 
-  response.on('end', function(){
+  response.on('end', function(event){
 
     for(var prop in obj.results){
       var x = "'";
-        if(obj.results[prop] !== null ){
+        if(typeof obj.results[prop] === 'string' ){
+          var temp = obj.results[prop].slice(0,-6);
           props.push(prop);
-          x += obj.results[prop];
+          x += temp;
           x += "'";
           values.push(x);
         }
-        if(obj.results[prop] === null){
+        else if(obj.results[prop] === null){
           props.push(prop);
           values.push('null');
+        }
+        else {
+        props.push(prop);
+        x += obj.results[prop];
+        x += "'";
+        values.push(x);
         }
 
     }
 
-    if(incr <= 1 ){
+    //console.log(props, values);
+
+    if(incr === 1 ){
+
+      console.log('inserting');
 
       pg.connect(connectionString, function(err, client, done){
 
-        var query = client.query("INSERT INTO sundata ("+ props.toString()+") values("+values.toString()+")", function(error, result){
+        var query = client.query("DELETE FROM sundata *", function(error, result){
           if(error){res.send(error);}
+        })
+
+        query.on('end', function(response){
+
+          pg.connect(connectionString, function(err, client, done){
+
+            var query = client.query("INSERT INTO sundata ("+ props.toString()+") values("+values.toString()+")", function(error, result){
+              if(error){res.send(error);}
+            })
+          })
+
         })
       })
 
+
     }
     else {
-
+      console.log('updating');
       pg.connect(connectionString, function(err, client, done){
 
         var query = client.query("UPDATE sundata SET ("+ props.toString()+") = ("+values.toString()+")", function(error, result){
@@ -147,13 +173,13 @@ callback = function(response){
 
 function refreshSunData(){
   console.log('refreshing sundata daily: ', new Date());
-  http.get(options, callback).end();
+  http.get(optionsSunDate, sunData_cb).end();
 
 }
 
 var outer = setTimeout(function(){
   console.log('refreshing sundata on load: ', new Date());
-  http.get(options, callback).end();
+  http.get(optionsSunDate, sunData_cb).end();
 
   var inner = setTimeout(function(){
     console.log('refreshing sundata after initial delay: ', new Date());
@@ -163,6 +189,90 @@ var outer = setTimeout(function(){
   }, delay);
 
   clearTimeout(outer);
+});
+
+var optionsActiveProfiles = {
+  port: process.env.PORT || '3000',
+  path: '/options/profile',
+  method: 'POST',
+  headers: {
+    'Content-Type':'application/x-www-form-urlencoded'
+    //'Content-Length': postData.length
+  }
+};
+
+setTimeout(function(){
+
+  var obj = {};
+  var activeProfiles = {};
+  var i;
+
+  http.get({
+    port: process.env.PORT || '3000',
+    path: '/profiles'
+  }, function(response){
+
+    response.on('data', function(data){
+
+      JSON.parse(data).forEach(function(elem, ind, arr){
+        http.get({
+          port: process.env.PORT || '3000',
+          path: '/profiles/' + elem.profile.profile_name
+
+        }, function(response){
+          response.on('data',function(data){
+            activeProfiles[elem.profile.profile_name] = JSON.parse(data);
+
+          });
+          response.on('end', function(){
+
+            for(var prop in activeProfiles){
+
+              for(i = 0 ; i < activeProfiles[prop].length ; i ++){
+                var date;
+
+
+                if(activeProfiles[prop][i].set || activeProfiles[prop][i].rise){
+                  if(activeProfiles[prop][i].set){
+                    date = Date.parse(new Date(activeProfiles[prop][i].sunset));
+                    date += i * 1000;
+                  }
+                  if(activeProfiles[prop][i].rise){
+                    date = Date.parse(new Date(activeProfiles[prop][i].sunrise));
+                    date += i * 1000;
+                  }
+                  var postData = JSON.stringify(activeProfiles[prop][i]);
+
+
+                  var req = http.request(optionsActiveProfiles, function(res){
+                    console.log(`STATUS: ${res.statusCode}`);
+                    res.on('data',function(chunk){
+                      //console.log(`BODY: ${chunk}`);
+                    });
+                    res.on('end', function(chunk){
+                      //console.log('this is the response: ', chunk);
+                    })
+                  });
+
+                  req.on('error', function(e){
+                    console.log('problem with request: ${e.message}');
+                  });
+
+                  req.write(postData);
+                  req.end();
+
+                }
+              }
+            }
+
+          })
+        })
+      });
+
+    });
+
+  });
+
 });
 
 module.exports = app;

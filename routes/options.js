@@ -5,6 +5,7 @@ var spawn = require('child_process').spawn;
 var call = require('../public/scripts/myFunctions.min.js');
 var schedule = require('node-schedule');
 var ayb = require('all-your-base');
+var http = require('http');
 
 
 var connectionString = process.env.DATABASE_URL || 'postgres://localhost:5432/btle-ctrl';
@@ -307,6 +308,15 @@ router.post('/colour', function(req, res, error){
 
 router.post('/profile', function(req, res, error){
 
+    var obj;
+    for(var prop in req.body){
+        console.log('PRINT THIS: ', prop);
+        obj = JSON.parse(prop);
+    }
+
+    console.log('HER ER VI LIGE NU - options/profile:' , obj.id);
+    req.body = obj;
+
     var on = '58010301ff00ffffff';
     var off = '58010301ff00000000';
     var arg;
@@ -320,26 +330,32 @@ router.post('/profile', function(req, res, error){
 
     //console.log('priting gattArgs: ', gattArgs);
 
-    if(typeof req.body.sunset === 'number' || typeof req.body.sunrise === 'number'){
-        //console.log('we have sun related data', req.body);
+    //if(typeof req.body.sunset === 'number' || typeof req.body.sunrise === 'number'){
+    if(req.body.set === true || req.body.rise === true){
 
-        if(new Date() > new Date(req.body.sunrise) && new Date() > new Date(req.body.sunset)){
-            //console.log('date is in the past - sun data');
+
+        //if(new Date() > new Date(req.body.sunrise) && new Date() > new Date(req.body.sunset)){
+        //    //console.log('date is in the past - sun data');
+        //    res.status(200).send('invalid date');
+        //
+        //}
+
+        if(req.body.set === true && new Date() > new Date(req.body.sunset)){
+
             res.status(200).send('invalid date');
 
         }
+
+        else if(req.body.rise === true && new Date() > new Date(req.body.sunrise)){
+
+            res.status(200).send('invalid date');
+        }
+
         else{
 
-            if(!req.body.sunrise){
-                setpoint = new Date(req.body.sunset);
-                //console.log('SUNSET HIT!', setpoint)
-            }
+            req.body.set ? setpoint = new Date(req.body.sunset) : setpoint = new Date(req.body.sunrise);
 
-            if(!req.body.sunset){
-                setpoint = new Date(req.body.sunrise);
-                //console.log('SUNRISE HIT!', setpoint)
-
-            }
+            console.log('billerballer: ', setpoint, new Date(req.body.sunset));
 
             var job = schedule.scheduleJob('PROFILE: ' + req.body.profile_name +'   ID_' + req.body.id + '_' + Date.parse(setpoint), setpoint, function(){
 
@@ -403,11 +419,11 @@ router.post('/profile', function(req, res, error){
 
     else{
         setpoint = new Date();
-        setpoint.setHours(parseInt(req.body.hour));
-        setpoint.setMinutes(parseInt(req.body.minute));
-        setpoint.setSeconds(req.body.second);
+        setpoint.setHours(req.body.hour);
+        setpoint.setMinutes(req.body.minute);
+        //setpoint.setSeconds(req.body.second);
 
-        //console.log('we have regular data', req.body, setpoint);
+        console.log('we have regular data', req.body.second, setpoint);
 
 
         if(new Date() > setpoint){
@@ -419,41 +435,41 @@ router.post('/profile', function(req, res, error){
             var job = schedule.scheduleJob('PROFILE: ' + req.body.profile_name +'   ID_' + req.body.id + '_' + Date.parse(setpoint), setpoint, function(){
 
 
-                var child = spawn('gatttool', gattArgs);
-
-                child.stdout.on('data', function(data){
-
-                    res.send(data);
-
-                    child.kill();
-                });
-
-                child.on('exit', function (code) {
-                    console.log('spawned process ended on exit code: ', code);
-                    if (code === 0) {
-                        console.log('gatttool run success');
-
-                        pg.connect(connectionString, function (err, client, done) {
-
-                            var query = client.query("UPDATE devices SET device_on='" + req.body.turn_on + "' where mac='" + req.body.id + "'", function (error, result) {
-                                if (error) {
-                                    console.log('there was an error ', error);
-                                }
-                            })
-
-                            query.on('end', function (result) {
-                                client.end();
-                            })
-
-                        });
-
-
-                    }
-                    else {
-                        console.log('check hciconfig');
-                    }
-
-                });
+                //var child = spawn('gatttool', gattArgs);
+                //
+                //child.stdout.on('data', function(data){
+                //
+                //    res.send(data);
+                //
+                //    child.kill();
+                //});
+                //
+                //child.on('exit', function (code) {
+                //    console.log('spawned process ended on exit code: ', code);
+                //    if (code === 0) {
+                //        console.log('gatttool run success');
+                //
+                //        pg.connect(connectionString, function (err, client, done) {
+                //
+                //            var query = client.query("UPDATE devices SET device_on='" + req.body.turn_on + "' where mac='" + req.body.id + "'", function (error, result) {
+                //                if (error) {
+                //                    console.log('there was an error ', error);
+                //                }
+                //            })
+                //
+                //            query.on('end', function (result) {
+                //                client.end();
+                //            })
+                //
+                //        });
+                //
+                //
+                //    }
+                //    else {
+                //        console.log('check hciconfig');
+                //    }
+                //
+                //});
 
 
             }, function(){
