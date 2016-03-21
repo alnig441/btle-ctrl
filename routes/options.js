@@ -310,11 +310,10 @@ router.post('/profile', function(req, res, error){
 
     var obj;
     for(var prop in req.body){
-        console.log('PRINT THIS: ', prop);
+        //console.log('PRINT THIS: ', prop);
         obj = JSON.parse(prop);
     }
 
-    console.log('HER ER VI LIGE NU - options/profile:' , obj.id);
     req.body = obj;
 
     var on = '58010301ff00ffffff';
@@ -355,11 +354,12 @@ router.post('/profile', function(req, res, error){
 
             req.body.set ? setpoint = new Date(req.body.sunset) : setpoint = new Date(req.body.sunrise);
 
-            console.log('billerballer: ', setpoint, new Date(req.body.sunset));
+            //console.log('billerballer: ', setpoint, new Date(req.body.sunset));
 
             var job = schedule.scheduleJob('PROFILE: ' + req.body.profile_name +'   ID_' + req.body.id + '_' + Date.parse(setpoint), setpoint, function(){
 
 
+/*
                 var child = spawn('gatttool', gattArgs);
 
                 child.stdout.on('data', function(data){
@@ -395,6 +395,7 @@ router.post('/profile', function(req, res, error){
                     }
 
                 });
+*/
 
 
             }, function(){
@@ -423,7 +424,7 @@ router.post('/profile', function(req, res, error){
         setpoint.setMinutes(req.body.minute);
         //setpoint.setSeconds(req.body.second);
 
-        console.log('we have regular data', req.body.second, setpoint);
+        //console.log('we have regular data', req.body.second, setpoint);
 
 
         if(new Date() > setpoint){

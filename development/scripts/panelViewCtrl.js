@@ -12,6 +12,9 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
     var delay = date - new Date();
 
     $rootScope.sun_data = refreshService.sunData();
+    refreshService.panels();
+    jobService.getJobs();
+    profilesService.rebuildActive();
 
     //Sunset/sunrise refresh data function - pulling fresh data every 24hrs and scheduling recurring profiles
     //function refreshSunData() {
@@ -21,13 +24,16 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
     //
     //}
 
+/*
     function runActiveProfiles() {
 
         console.log('Executing active profiles - daily');
         profilesService.runActive();
 
     }
+*/
 
+/*
     if($rootScope.recurDailyID === undefined) {
 
         refreshService.panels();
@@ -51,6 +57,7 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
         },1000); //adding delay to allow for $rootScope.activeProfiles to build
 
     }
+*/
 
 
     //Running refreshTimeOut function when the associated ID on first page load, then scheduling recurring profiles

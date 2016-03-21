@@ -91,10 +91,25 @@ var delay = date - new Date();
 
 var incr = 0;
 
-var optionsSunDate = {
-  host: 'api.sunrise-sunset.org',
-  path: '/json?lat=44.891123.7201600&lng=-93.359752&formatted=0'
+var HTTPoptions = {
+  sun_data: {
+    host: 'api.sunrise-sunset.org',
+    path: '/json?lat=44.891123.7201600&lng=-93.359752&formatted=0'
+    },
+  run_profiles: {
+    port: process.env.PORT || '3000',
+    path: '/options/profile',
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  },
+  get_profiles: {
+    port: process.env.PORT || '3000',
+    path: '/profiles'
+  }
 };
+
 
 sunData_cb = function(response){
   var obj = {};
@@ -173,15 +188,16 @@ sunData_cb = function(response){
 
 function refreshSunData(){
   console.log('refreshing sundata daily: ', new Date());
-  http.get(optionsSunDate, sunData_cb).end();
+  http.get(HTTPoptions.sun_data, sunData_cb).end();
 
 }
 
 var outer = setTimeout(function(){
   console.log('refreshing sundata on load: ', new Date());
-  http.get(optionsSunDate, sunData_cb).end();
+  http.get(HTTPoptions.sun_data, sunData_cb).end();
 
   var inner = setTimeout(function(){
+    http.get(HTTPoptions.sun_data, sunData_cb).end();
     console.log('refreshing sundata after initial delay: ', new Date());
     setInterval(refreshSunData, 86400000);
     clearTimeout(inner);
@@ -191,26 +207,25 @@ var outer = setTimeout(function(){
   clearTimeout(outer);
 });
 
-var optionsActiveProfiles = {
-  port: process.env.PORT || '3000',
-  path: '/options/profile',
-  method: 'POST',
-  headers: {
-    'Content-Type':'application/x-www-form-urlencoded'
-    //'Content-Length': postData.length
-  }
-};
+var profileTimer = setTimeout(function(){
+  runActiveProfiles();
 
-setTimeout(function(){
+  var x = setTimeout(function(){
+    runActiveProfiles();
+    setInterval(runActiveProfiles, 86400000);
+    clearTimeout(x);
+  }, delay);
+  clearTimeout(profileTimer);
+}, 5000);
+
+function runActiveProfiles(){
+  console.log('running active profiles', new Date());
 
   var obj = {};
   var activeProfiles = {};
   var i;
 
-  http.get({
-    port: process.env.PORT || '3000',
-    path: '/profiles'
-  }, function(response){
+  http.get(HTTPoptions.get_profiles, function(response){
 
     response.on('data', function(data){
 
@@ -218,7 +233,6 @@ setTimeout(function(){
         http.get({
           port: process.env.PORT || '3000',
           path: '/profiles/' + elem.profile.profile_name
-
         }, function(response){
           response.on('data',function(data){
             activeProfiles[elem.profile.profile_name] = JSON.parse(data);
@@ -231,37 +245,39 @@ setTimeout(function(){
               for(i = 0 ; i < activeProfiles[prop].length ; i ++){
                 var date;
 
-
-                if(activeProfiles[prop][i].set || activeProfiles[prop][i].rise){
-                  if(activeProfiles[prop][i].set){
+                if(activeProfiles[prop][i].set === true || activeProfiles[prop][i].rise === true) {
+                  if (activeProfiles[prop][i].set === true) {
                     date = Date.parse(new Date(activeProfiles[prop][i].sunset));
                     date += i * 1000;
                   }
-                  if(activeProfiles[prop][i].rise){
+                  if (activeProfiles[prop][i].rise === true) {
                     date = Date.parse(new Date(activeProfiles[prop][i].sunrise));
                     date += i * 1000;
                   }
-                  var postData = JSON.stringify(activeProfiles[prop][i]);
-
-
-                  var req = http.request(optionsActiveProfiles, function(res){
-                    console.log(`STATUS: ${res.statusCode}`);
-                    res.on('data',function(chunk){
-                      //console.log(`BODY: ${chunk}`);
-                    });
-                    res.on('end', function(chunk){
-                      //console.log('this is the response: ', chunk);
-                    })
-                  });
-
-                  req.on('error', function(e){
-                    console.log('problem with request: ${e.message}');
-                  });
-
-                  req.write(postData);
-                  req.end();
 
                 }
+                var postData = JSON.stringify(activeProfiles[prop][i]);
+
+                var req = http.request(HTTPoptions.run_profiles, function(res){
+                  console.log(`STATUS: ${res.statusCode}`);
+                  res.on('data',function(chunk){
+                    //console.log(`BODY: ${chunk}`);
+                  });
+                  res.on('end', function(chunk){
+                    //console.log('this is the response: ', chunk);
+                  })
+                });
+
+                req.on('error', function(e){
+                  console.log('problem with request: ${e.message}');
+                });
+
+                //console.log('HER ER JEG: ', activeProfiles);
+
+                req.write(postData);
+                req.end();
+
+                //}
               }
             }
 
@@ -272,7 +288,6 @@ setTimeout(function(){
     });
 
   });
-
-});
+}
 
 module.exports = app;

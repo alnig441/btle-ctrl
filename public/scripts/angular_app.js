@@ -632,6 +632,9 @@ app.factory('jobService', ['$http', '$rootScope', function($http, $rootScope){
     var delay = date - new Date();
 
     $rootScope.sun_data = refreshService.sunData();
+    refreshService.panels();
+    jobService.getJobs();
+    profilesService.rebuildActive();
 
     //Sunset/sunrise refresh data function - pulling fresh data every 24hrs and scheduling recurring profiles
     //function refreshSunData() {
@@ -641,13 +644,16 @@ app.factory('jobService', ['$http', '$rootScope', function($http, $rootScope){
     //
     //}
 
+/*
     function runActiveProfiles() {
 
         console.log('Executing active profiles - daily');
         profilesService.runActive();
 
     }
+*/
 
+/*
     if($rootScope.recurDailyID === undefined) {
 
         refreshService.panels();
@@ -671,6 +677,7 @@ app.factory('jobService', ['$http', '$rootScope', function($http, $rootScope){
         },1000); //adding delay to allow for $rootScope.activeProfiles to build
 
     }
+*/
 
 
     //Running refreshTimeOut function when the associated ID on first page load, then scheduling recurring profiles
