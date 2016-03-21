@@ -259,9 +259,9 @@ function runActiveProfiles(){
                 var postData = JSON.stringify(activeProfiles[prop][i]);
 
                 var req = http.request(HTTPoptions.run_profiles, function(res){
-                  console.log(`STATUS: ${res.statusCode}`);
+                  console.log('STATUS: ${res.statusCode}');
                   res.on('data',function(chunk){
-                    //console.log(`BODY: ${chunk}`);
+                    //console.log('BODY: ${chunk}');
                   });
                   res.on('end', function(chunk){
                     //console.log('this is the response: ', chunk);
