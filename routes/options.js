@@ -310,7 +310,6 @@ router.post('/profile', function(req, res, error){
 
     var obj;
     for(var prop in req.body){
-        //console.log('PRINT THIS: ', prop);
         obj = JSON.parse(prop);
     }
 
@@ -342,9 +341,8 @@ router.post('/profile', function(req, res, error){
 
         else{
 
-            req.body.set ? setpoint = new Date(req.body.sunset) : setpoint = new Date(req.body.sunrise);
-
-            //console.log('billerballer: ', setpoint, new Date(req.body.sunset));
+            //req.body.set ? setpoint = new Date(req.body.sunset) : setpoint = new Date(req.body.sunrise);
+            setpoint = new Date(req.body.setpoint);
 
             var job = schedule.scheduleJob('PROFILE: ' + req.body.profile_name +'   ID_' + req.body.id + '_' + Date.parse(setpoint), setpoint, function(){
 
@@ -407,10 +405,8 @@ router.post('/profile', function(req, res, error){
     //SUN RELATED DATA END
 
     else{
-        setpoint = new Date();
-        setpoint.setHours(req.body.hour);
-        setpoint.setMinutes(req.body.minute);
-        setpoint.setSeconds(req.body.second);
+        setpoint = new Date(req.body.setpoint);
+        console.log('options/profile - setpoint: ', setpoint);
 
 
         if(new Date() > setpoint){

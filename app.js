@@ -249,11 +249,22 @@ function runActiveProfiles(){
                   if (activeProfiles[prop][i].set === true) {
                     date = Date.parse(new Date(activeProfiles[prop][i].sunset));
                     date += i * 1000;
+                    activeProfiles[prop][i].setpoint = date;
                   }
                   if (activeProfiles[prop][i].rise === true) {
                     date = Date.parse(new Date(activeProfiles[prop][i].sunrise));
                     date += i * 1000;
+                    activeProfiles[prop][i].setpoint = date;
                   }
+                }
+
+                else {
+                  date = new Date();
+                  date.setHours(activeProfiles[prop][i].hour);
+                  date.setMinutes(activeProfiles[prop][i].minute);
+                  date = Date.parse(date);
+                  date += i*1000;
+                  activeProfiles[prop][i].setpoint = date;
                 }
                 var postData = JSON.stringify(activeProfiles[prop][i]);
 
