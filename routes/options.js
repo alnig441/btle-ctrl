@@ -406,7 +406,7 @@ router.post('/profile', function(req, res, error){
 
     else{
         setpoint = new Date(req.body.setpoint);
-        console.log('options/profile - setpoint: ', setpoint);
+        //console.log('options/profile - setpoint: ', setpoint);
 
 
         if(new Date() > setpoint){

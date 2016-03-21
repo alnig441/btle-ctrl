@@ -80,7 +80,7 @@ app.use(function(err, req, res, next) {
 });
 
 
-// set up app to pull sunrise/sunset data
+// SET UP TIMER FUNCTIONALITY TO RETRIEVE SUNDATA AND RUN ACTIVE PROFILES
 var date = new Date();
 date.setDate(date.getDate()+1);
 date.setHours(1);
@@ -192,7 +192,7 @@ function refreshSunData(){
 
 }
 
-var outer = setTimeout(function(){
+var sunDataTimer = setTimeout(function(){
   console.log('refreshing sundata on load: ', new Date());
   http.get(HTTPoptions.sun_data, sunData_cb).end();
 
@@ -204,7 +204,7 @@ var outer = setTimeout(function(){
 
   }, delay);
 
-  clearTimeout(outer);
+  clearTimeout(sunDataTimer);
 });
 
 var profileTimer = setTimeout(function(){
@@ -269,7 +269,7 @@ function runActiveProfiles(){
                 var postData = JSON.stringify(activeProfiles[prop][i]);
 
                 var req = http.request(HTTPoptions.run_profiles, function(res){
-                  console.log('STATUS: ', res.statusCode);
+                  //console.log('STATUS: ', res.statusCode);
                   res.on('data',function(chunk){
                     //console.log('BODY: ${chunk}');
                   });
