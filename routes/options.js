@@ -327,17 +327,7 @@ router.post('/profile', function(req, res, error){
 
     //SUN RELATED DATA
 
-    //console.log('priting gattArgs: ', gattArgs);
-
-    //if(typeof req.body.sunset === 'number' || typeof req.body.sunrise === 'number'){
     if(req.body.set === true || req.body.rise === true){
-
-
-        //if(new Date() > new Date(req.body.sunrise) && new Date() > new Date(req.body.sunset)){
-        //    //console.log('date is in the past - sun data');
-        //    res.status(200).send('invalid date');
-        //
-        //}
 
         if(req.body.set === true && new Date() > new Date(req.body.sunset)){
 
@@ -359,7 +349,6 @@ router.post('/profile', function(req, res, error){
             var job = schedule.scheduleJob('PROFILE: ' + req.body.profile_name +'   ID_' + req.body.id + '_' + Date.parse(setpoint), setpoint, function(){
 
 
-/*
                 var child = spawn('gatttool', gattArgs);
 
                 child.stdout.on('data', function(data){
@@ -395,7 +384,6 @@ router.post('/profile', function(req, res, error){
                     }
 
                 });
-*/
 
 
             }, function(){
@@ -422,13 +410,10 @@ router.post('/profile', function(req, res, error){
         setpoint = new Date();
         setpoint.setHours(req.body.hour);
         setpoint.setMinutes(req.body.minute);
-        //setpoint.setSeconds(req.body.second);
-
-        //console.log('we have regular data', req.body.second, setpoint);
+        setpoint.setSeconds(req.body.second);
 
 
         if(new Date() > setpoint){
-            //console.log('date is in the past - regular data');
             res.status(200).send('invalid date');
         }
 
@@ -436,41 +421,41 @@ router.post('/profile', function(req, res, error){
             var job = schedule.scheduleJob('PROFILE: ' + req.body.profile_name +'   ID_' + req.body.id + '_' + Date.parse(setpoint), setpoint, function(){
 
 
-                //var child = spawn('gatttool', gattArgs);
-                //
-                //child.stdout.on('data', function(data){
-                //
-                //    res.send(data);
-                //
-                //    child.kill();
-                //});
-                //
-                //child.on('exit', function (code) {
-                //    console.log('spawned process ended on exit code: ', code);
-                //    if (code === 0) {
-                //        console.log('gatttool run success');
-                //
-                //        pg.connect(connectionString, function (err, client, done) {
-                //
-                //            var query = client.query("UPDATE devices SET device_on='" + req.body.turn_on + "' where mac='" + req.body.id + "'", function (error, result) {
-                //                if (error) {
-                //                    console.log('there was an error ', error);
-                //                }
-                //            })
-                //
-                //            query.on('end', function (result) {
-                //                client.end();
-                //            })
-                //
-                //        });
-                //
-                //
-                //    }
-                //    else {
-                //        console.log('check hciconfig');
-                //    }
-                //
-                //});
+                var child = spawn('gatttool', gattArgs);
+
+                child.stdout.on('data', function(data){
+
+                    res.send(data);
+
+                    child.kill();
+                });
+
+                child.on('exit', function (code) {
+                    console.log('spawned process ended on exit code: ', code);
+                    if (code === 0) {
+                        console.log('gatttool run success');
+
+                        pg.connect(connectionString, function (err, client, done) {
+
+                            var query = client.query("UPDATE devices SET device_on='" + req.body.turn_on + "' where mac='" + req.body.id + "'", function (error, result) {
+                                if (error) {
+                                    console.log('there was an error ', error);
+                                }
+                            })
+
+                            query.on('end', function (result) {
+                                client.end();
+                            })
+
+                        });
+
+
+                    }
+                    else {
+                        console.log('check hciconfig');
+                    }
+
+                });
 
 
             }, function(){

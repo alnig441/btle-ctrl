@@ -254,7 +254,6 @@ function runActiveProfiles(){
                     date = Date.parse(new Date(activeProfiles[prop][i].sunrise));
                     date += i * 1000;
                   }
-
                 }
                 var postData = JSON.stringify(activeProfiles[prop][i]);
 
