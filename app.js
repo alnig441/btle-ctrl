@@ -153,7 +153,7 @@ sunData_cb = function(response){
       pg.connect(connectionString, function(err, client, done){
 
         var query = client.query("DELETE FROM sundata *", function(error, result){
-          if(error){res.send(error);}
+          if(error){console.log(error);}
         })
 
         query.on('end', function(response){
@@ -161,7 +161,7 @@ sunData_cb = function(response){
           pg.connect(connectionString, function(err, client, done){
 
             var query = client.query("INSERT INTO sundata ("+ props.toString()+") values("+values.toString()+")", function(error, result){
-              if(error){res.send(error);}
+              if(error){console.log(error);}
             })
           })
 
