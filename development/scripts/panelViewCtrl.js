@@ -11,7 +11,7 @@ app.controller('panelViewCtrl',['$scope', '$rootScope', '$http', '$location', '$
 
     var delay = date - new Date();
 
-    $rootScope.sun_data = refreshService.sunData();
+    refreshService.sunData();
     refreshService.panels();
     jobService.getJobs();
     profilesService.rebuildActive();

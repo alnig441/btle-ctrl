@@ -481,6 +481,8 @@ app.factory('jobService', ['$http', '$rootScope', function($http, $rootScope){
     $rootScope.scheduleDevice.today = new Date();
     $rootScope.scheduleDevice.sunset = $rootScope.sun_data.sunset;
     $rootScope.scheduleDevice.sunrise = $rootScope.sun_data.sunrise;
+    $scope.form = {};
+    $scope.form.today = new Date();
 
     $scope.apply = function(option){
 
@@ -631,7 +633,7 @@ app.factory('jobService', ['$http', '$rootScope', function($http, $rootScope){
 
     var delay = date - new Date();
 
-    $rootScope.sun_data = refreshService.sunData();
+    refreshService.sunData();
     refreshService.panels();
     jobService.getJobs();
     profilesService.rebuildActive();
